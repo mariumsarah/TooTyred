@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Users
 from .forms import ExampleForm
 from django.http import HttpResponse
@@ -20,3 +20,15 @@ def login(request):
 
 def register(request):
     return render(request,"user/reg_form.html")
+
+def reserve(request):
+    return render(request,"user/reserve.html")
+
+def reservations(request):
+    return render(request,"user/reservations.html")
+
+def logout(request):
+    return render(request,"user/home.html")
+
+def account(request):
+    return render(request,"user/account.html")

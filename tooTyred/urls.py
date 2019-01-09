@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^home/',include('home.urls',namespace="home")),
     url(r'^$', views.welcome_redirect,name='welcome_redirect'),
+    url(r'^employee/',include('empApp.urls',namespace="employee")),
 ]

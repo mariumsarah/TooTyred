@@ -1,3 +1,27 @@
 body{
-  background-color: purple;
+  background-color: #AFABAA;
+  padding-top: 70px;
+font-family: 'Poppins', sans-serif;
+}
+#map-canvas
+{
+    /* height of these elements */
+    height: 100%;
+
+    /* no margin around these elements */
+    margin: 0;
+
+    /* disable scrollbars */
+    overflow: hidden;
+
+    /* no padding within these elements */
+    padding: 0;
+}
+a, a:active, a:visited { color: #AFABAA; }
+a:hover {color: black; }
+.navbar-dark .navbar-toggle {
+  border-color: transparent; /* Removes border color */
+}
+.navbar-dark .navbar-toggle .icon-bar {
+  background-color:  #3d3a3a; /* Changes regular toggle color */
 }
