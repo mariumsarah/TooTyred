@@ -25,7 +25,7 @@ SECRET_KEY = '&wu^h*s^#5(*1i3ab=cbo&*6+f+qph3s5(peuc-7&g79h*cqc('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tootyred.com']
+ALLOWED_HOSTS = ['tootyred.com','127.0.0.1']
 
 # Application definition
 
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'tooTyred.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tootyred',
+        'USER':'root',
+        'PASSWORD':'tootyred',
+        'HOST':'localhost',
+        'PORT':''
     }
 }
 

@@ -7,13 +7,25 @@
 {% endblock %}
 {% block body %}
 <div class="container">
+  <form class="ExampleForm" method="post">
+     {% csrf_token %}
+     {{ form.as_p }}
+     <input type="submit" value="Submit" />
+ </form>
+
   <h1>Welcome</h1>
+  {% for post in user %}
+  <h1>{{ post.id }}</h1>
+  {% endfor %}
   <button class="btn btn-default" type="button" name="button">CLICK THIS FOR NOTHING</button>
 <h1>{{ name }}</h1>
 <ul>
 {% for number in num %}
 <li>{{ number }}</li>
 {% endfor %}
+{% if is_false %}
+{{ field1 }}
+{% endif %}
 </ul>
 <div id="home">This is the page that appears when you click the logo or come on the page for the first time</div>
 <div id="howitworks">This is the howitworks part of the page</div>
