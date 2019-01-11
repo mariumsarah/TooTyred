@@ -5,12 +5,16 @@
 {% block body %}
   <div class="container">
     <h1>Welcome to log in page</h1>
-    <p> you can log in here</p>
+    <p> You can log in here</p>
+    {% if message %}
+    <h1>You successfully registered your account! log in now!</h1>
+    {% endif %}
     <p> FORGOT PASSWORD OPTION</p>
-    <p> LINK to register page</p>
+    <p> LINK TO SIGN UP PAGE</p>
     <h2>Log in </h2>
-    {{ field1 }}
     <form method = "post">
+      {% csrf_token %}
+      {{ form.as_p }}
       <button type="submit">Login</button>
     </form>
   </div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Users
+from .models import Users,Stationstable
 from .forms import ExampleForm
-from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 def home(request):
     if request.method == 'POST':
@@ -15,14 +15,23 @@ def home(request):
         form = ExampleForm()
         return render(request, 'user/home.html', {'form': form,'user':Users.objects.all(),'is_false': False})
 
-def login(request):
-    return render(request,"user/login.html")
 
 def register(request):
-    return render(request,"user/reg_form.html")
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            #----------------------REDIRECT AND DISPLAY A MESSAGE HOW DO YOU DO THAT------------------
+            return redirect('/home/login/')
+        #--------------------NO VALIDATION HOW TO PUT VALIDATION-------------
+        else:
+            return render(request,'user/reg_form.html',{'form':UserCreationForm()})
+    else:
+        form = UserCreationForm()
+        return render(request,'user/reg_form.html',{'form': form})
 
 def reserve(request):
-    return render(request,"user/reserve.html")
+    return render(request, 'user/reserve.html', {'stations':Stationstable.objects.all()})
 
 def reservations(request):
     return render(request,"user/reservations.html")
