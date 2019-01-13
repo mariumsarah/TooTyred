@@ -2,7 +2,7 @@
 {% load static %}
 {% block head %}
 <meta charset='utf-8' />
-   <title></title>
+   <title>Reserve</title>
    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
@@ -13,33 +13,109 @@
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Launch demo modal
 </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Make a reservation</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
           </div>
           <div class="modal-body">
-        ...
-          </div>
+<div>
+  <li id="startloc"></li>
+  <li id="endloc"></li>
+  <p>What is your priority time or the type of bike?</p>
+  <p id="info"></p>
+  </div>
+
+
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a onclick="resetSelect()" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Time</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bike</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <table class="table" style="text-align: center;">
+        <tbody>
+          <tr>
+      <td><button onclick="resetSelect()" type="button" class="btn btn-outline-dark btn-sm">
+        <span >&times;</span>
+      </button></td>
+      </tr>
+    <tr><td><select class="custom-select custom-select-lg mb-3" id="select_start_date"></select></td></tr>
+      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_end_date"></select></td></tr>
+      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_start_time"></select></td></tr>
+      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_end_time"></select></td></tr>
+      <tr><td><button id="confirm" onclick="bikeSelect()" type="button" class="btn btn-primary">
+        <span>Confirm & Proceed</span>
+      </button></td>
+        </tr>
+      </tbody>
+      </table>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-2">
+              <button onclick="addBike('bike1')">+</button>
+              Av<h5 id="available1">4<h5>
+                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                  <h5 id="bike1">  Bike1</h5>
+              Qu<h5 id="quantity1">0<h5>
+              <button onclick="removeBike('bike1')">-</button>
+            </div>
+            <div class="col-sm-2">
+              <button onclick="addBike('bike2')">+</button>
+              <h5 id="available2">4<h5>
+                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                  <h5 id="bike2">  Bike1</h5>
+                  <h5 id="quantity2">0<h5>
+              <button onclick="removeBike('bike2')">-</button>
+            </div>
+            <div class="col-sm-2">
+              <button onclick="addBike('bike3')">+</button>
+              <h5 id="available3">4<h5>
+                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                  <h5 id="bike3">  Bike1</h5>
+                  <h5 id="quantity3">0<h5>
+              <button onclick="removeBike('bike3')">-</button>
+            </div>
+            <div class="col-sm-2">
+              <button onclick="addBike('bike4')">+</button>
+              <h5 id="available4">4<h5>
+                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                <h5 id="bike4">  Bike1</h5>
+                  <h5 id="quantity4">1<h5>
+              <button onclick="removeBike('bike4')">-</button>
+            </div>
+            <div class="col-sm-2">
+              <button id="confirm2" onclick="timeSelect()" type="button" class="btn btn-primary">
+                <span>Confirm & Proceed</span>
+              </button>
+            </div>
+            </div>
+        </div>
+    </div>
+  </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <h4 style="text-align:left;">Cost: </h4>
+            <button type="button" onclick="reset()" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
     </div>
+    <!--This script tags covers the map and the opening of the dialog box-->
     <script>
     document.getElementById('modalButton').style.display="none";
     mapboxgl.accessToken = 'pk.eyJ1IjoibWFyaXVtc2FyYWgiLCJhIjoiY2pxcW01MGN1MGNxODQ4cWdyeGcxYmg4bSJ9.6FZ55yUsUcY9I6H6DC4_9Q';
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/dark-v9',
-      center: [-3.1883,55.9533],
-      zoom: 11
+      center: [-3.18470478,55.94136542],
+      zoom: 12.3
     });
     map.doubleClickZoom.disable();
     // code from the next step will go here!
@@ -59,13 +135,16 @@
             numdocksavailable: "{{ station.num_docks_available }}",
             stationid: "{{ station.station_id }}",
             isrenting: "{{ station.is_renting }}",
-            isreturning: "{{ station.is_returning }}"
+            isreturning: "{{ station.is_returning }}",
+            images: "{{ station.image }}"
         }
     {% endfor %}
     ]
     var x = 0
-    var startlocation;
-    var endlocation;
+    var startlocationid;
+    var endlocationid;
+    var startlocationname;
+    var endlocationname;
     // add markers to map
 geojson.forEach(function(marker) {
 
@@ -79,25 +158,221 @@ geojson.forEach(function(marker) {
         el.style.backgroundColor = "red";
         el.style.width = "25px";
          el.style.height = "25px";
+         endlocationid=marker.station_id;
+         endlocationname=marker.name;
          document.getElementById("modalButton").click();
-         endlocation=marker.station_id;
        }
        else{
          el.style.backgroundColor = "green";
          el.style.width = "25px";
          el.style.height = "25px";
-         startlocation=marker.station_id;
+         startlocationid=marker.station_id;
+         startlocationname=marker.name;
        }
        x=x+1;
      }
   );
   // make a marker for each feature and add to the map
+  var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker.images);
   new mapboxgl.Marker(el)
     .setLngLat([marker.lon,marker.lat])
     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.address + '</h3><p>Name: ' + marker.name +'<br>Number of bikes available:'+ marker.numbikesavailable +'<br>Number of docks available:'+ marker.numdocksavailable +'<br>Capacity:'+ marker.capacity + '</p>'))
+    .setHTML('<h5>' + marker.address +"</h5><img height='60' width='80' src='"+url_mask+"' />"))
     .addTo(map);
 });
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    modal.find('.modal-title').text('Make a reservation')
+    modal.find('.modal-body').find('#startloc').text("Start Station: "+startlocationname);
+    modal.find('.modal-body').find('#endloc').text("End Station: "+ endlocationname);
+});
+function reset() {
+ window.location.reload();
+}
     </script>
+  <script>
+    document.getElementById("confirm2").style.display="none";
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var startTime;
+    var endTime;
+    var startDate;
+    var endDate;
+    var bike1=0;
+    var bike2=0;
+    var bike3=0;
+    var bike4=0;
+    var bikesselected=false;
+    var timesselected=false;
+    var done=0;
+    function disable(selector) {
+      document.getElementById(selector).selectedIndex=0;
+      document.getElementById(selector).style.color= "grey" ;
+      document.getElementById(selector).disabled = true;
+    }
+    function enable(selector) {
+          document.getElementById(selector).selectedIndex=0;
+          document.getElementById(selector).style.color= "black" ;
+          document.getElementById(selector).disabled = false;
+    }
+    function removeBike(selector) {
+           var num = selector[selector.length -1];
+           if($('#quantity'+num).text()>0)
+            {
+               $('#available'+num).text(Number($('#available'+num).text())+1);
+                $('#quantity'+num).text(($('#quantity'+num).text())-1);
+            }
+    }
+    function addBike(selector) {
+      document.getElementById("confirm2").style.display="block";
+      var num = selector[selector.length -1];
+      if($('#available'+num).text()>0)
+       {
+         $('#available'+num).text(($('#available'+num).text())-1);
+         $('#quantity'+num).text(Number($('#quantity'+num).text())+1);
+       }
+    }
+    //https://stackoverflow.com/questions/32890938/next-7-days-in-drop-down-list
+    function formatDate(date) {
+              var d = new Date(date),
+                      day = '' + d.getDate(),
+                      month = '' + (d.getMonth() + 1),
+                      year = '' +d.getFullYear();
+              if (day.length < 2)
+                  day = '0' + day;
+              return [day,monthNames[month-1],year].join(' ');
+          }
+
+    function resetSelect(selector){
+      populate('#select_start_time','Select start time',0); // use selector for your select
+      populate('#select_end_time','Select end time',0); // use selector for your select
+      populateDate('#select_start_date','Select start date',7,new Date); // use selector for your select
+      populateDate('#select_end_date','Select end date',8,new Date); // use selector for your select
+      disable("select_end_date");
+      disable("select_end_time");
+      disable("select_start_time");
+       document.getElementById("confirm").style.display="none";
+    }
+    function timeSelect(){
+
+      bike1=Number($('#quantity1').text());
+      bike2=Number($('#quantity2').text());
+      bike3=Number($('#quantity3').text());
+      bike4=Number($('#quantity4').text());
+      if((bike1+bike2+bike3+bike4)>0)
+      {
+        $('#info').text(bike1+' '+bike2+' '+bike3+' '+bike4);
+        document.getElementById("home-tab").click();
+        bikesselected=true;
+      }
+      if(bikesselected==true && timesselected==true)
+      {
+        alert("Done1");
+      }
+    }
+    function bikeSelect() {
+      //select all times from all dates that are not full
+
+      startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
+      endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
+      startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
+      endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
+      $('#info').text(startDate+' '+startTime+' '+endDate+' '+endTime);
+      timesselected=true;
+      if(bikesselected==true && timesselected==true)
+      {
+        alert("Done2");
+      }
+      document.getElementById("profile-tab").click();
+  }
+    function populateDate(selector,text,days,curr)
+    {
+      var x;
+      //book today too unless its 11
+      if(((curr.getMinutes()+(curr.getHours()*60))>= (1440-60) && selector=='#select_start_date' && curr.toDateString() == new Date().toDateString()) || (curr.getMinutes()+(curr.getHours()*60))>= (1440-60-60) && selector=='#select_end_date' && curr.toDateString() == new Date().toDateString())
+      {
+          x=1;
+          days=days+1;
+      }
+      else {
+        x=0;
+      }
+      var options = "";
+      var first = curr.getDate();
+      var firstday = (new Date(curr.setDate(first))).toString();
+        $(selector).empty().append('<option disabled selected value>' +text+ '</option>');
+      for (var i = x; i < days; i++) {
+          var next = new Date(curr.getTime());
+          next.setDate(first + i);
+          $(selector).append('<option>' + formatDate((next.toString())) + '</option>');
+      }
+    }
+    //https://stackoverflow.com/questions/8918168/javascript-dynamic-time-drop-down
+    function populate(selector,text,x) {
+      //select all times from all dates that are not full
+      var select = $(selector);
+      var hours, minutes, ampm;
+      select.empty().append($('<option disabled selected value>'+text+'</option>'));
+      for(var i = x; i <= 1425; i += 15){
+          hours = Math.floor(i / 60);
+          minutes = i % 60;
+          if (minutes < 10){
+              minutes = '0' + minutes; // adding leading zero
+            }
+          ampm = hours % 24 < 12 ? 'AM' : 'PM';
+          hours = hours % 12;
+          if (hours === 0){
+              hours = 12;
+            }
+          select.append($('<option></option>')
+          .attr('value', i)
+          .text(hours + ':' + minutes + ' ' + ampm));
+    }
+  }
+
+  $('#select_start_date').change(function() {
+    //change selectstarttime to all times available for that day
+    //change end date to that specific same day and tomorrow
+    //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+
+    var parts = $(this).val().split(' ');
+    dateselected=new Date(parts[2],monthNames.indexOf(parts[1]),parts[0]);
+    populateDate("#select_end_date",'Select end date',2,dateselected);
+    if(dateselected.toDateString() == new Date().toDateString())
+    {
+       populate('#select_start_time','Select start time',((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15)+60+720);
+    }
+    enable("select_end_date");
+    disable("select_end_time");
+    disable("select_start_time");
+    document.getElementById("confirm").style.display="none";
+  });
+
+  $('#select_end_date').change(function() {
+  //change selectstarttime to all times available for that day
+  //change end date to that specific same day and tomorrow
+  //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+     disable("select_end_time");
+     enable("select_start_time");
+     document.getElementById("confirm").style.display="none";
+   });
+
+   $('#select_start_time').change(function() {
+  //change selectstarttime to all times available for that day
+  //change end date to that specific same day and tomorrow
+  //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+    enable("select_end_time");
+    document.getElementById("confirm").style.display="none";
+  });
+
+  $('#select_end_time').change(function() {
+ //change selectstarttime to all times available for that day
+ //change end date to that specific same day and tomorrow
+ //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+    document.getElementById("confirm").style.display="block";
+ });
+
+
+  </script>
 
 {% endblock %}

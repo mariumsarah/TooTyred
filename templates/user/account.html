@@ -1,12 +1,86 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 {% block head %}
-  <title>Login page</title>
+  <title>Account</title>
+     {% bootstrap_javascript %}
+     {% bootstrap_messages %}
 {% endblock %}
 {% block body %}
   <div class="container">
-    <h1>edit profile option </h1>
-    <p>add/edit credit card details option</p>
-    <p>change password option</p>
-    <p> reset password page</p>
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6">
+          <h1>Account Information</h1>
+          <ul>
+            <li>Username: {{ user.username }}</li>
+            <li>Email Address: {{ user.email }}</li>
+            <li>First Name:    {{ user.first_name }}</li>
+            <li>Last Name:     {{ user.last_name }}</li>
+          </ul>
+          <button type="submit" onclick="editprof()" class="btn btn-success btn-block">Edit Profile</button>
+          <button type="submit" onclick="changepass()" class="btn btn-success btn-block">Change Password</button>
+          <button type="submit" onclick="deleteaccount()" class="btn btn-success btn-block">Delete Account</button>
+        </div>
+      </div>
   </div>
+  <div class="container" id="editprofile">
+      <div class="row">
+          <div class="col-sm-offset-3 col-sm-6">
+            <h1>Edit Account Details</h1>
+              <form  action="/home/changeaccount/" method="post">
+                  {% csrf_token %}
+                  {% bootstrap_form form1 %}
+                  {% buttons %}
+                  <button type="submit" class="btn btn-success btn-block">Change</button>
+                  {% endbuttons %}
+              </form>
+          </div>
+      </div>
+  </div>
+  <div class="container" id="changepassword">
+      <div class="row">
+          <div class="col-sm-offset-3 col-sm-6">
+            <h1>Change Password</h1>
+              <form action="/home/changepassword/" method="post">
+                  {% csrf_token %}
+                  {% bootstrap_form form2 %}
+                  {% buttons %}
+                  <button type="submit" class="btn btn-success btn-block">Change</button>
+                  {% endbuttons %}
+              </form>
+          </div>
+      </div>
+  </div>
+  <div class="container" id="deleteacc">
+      <div class="row">
+          <div class="col-sm-offset-3 col-sm-6">
+            <h1>Are you sure you want to delete your account?</h1>
+              <form action="/home/deleteaccount/" method="post">
+                {% csrf_token %}
+                  {% buttons %}
+                  <button type="submit" class="btn btn-success btn-block">Confirm</button>
+                  {% endbuttons %}
+              </form>
+          </div>
+      </div>
+  </div>
+  <script>
+    document.getElementById("changepassword").style.display='none';
+    document.getElementById("editprofile").style.display='none';
+    document.getElementById("deleteacc").style.display='none';
+    function changepass() {
+    document.getElementById("changepassword").style.display='block';
+document.getElementById("editprofile").style.display='none';
+document.getElementById("deleteacc").style.display='none';
+  }
+  function editprof() {
+  document.getElementById("editprofile").style.display='block';
+  document.getElementById("changepassword").style.display='none';
+  document.getElementById("deleteacc").style.display='none';
+}
+function deleteaccount() {
+document.getElementById("editprofile").style.display='none';
+document.getElementById("changepassword").style.display='none';
+document.getElementById("deleteacc").style.display='block';
+}
+  </script>
 {% endblock %}

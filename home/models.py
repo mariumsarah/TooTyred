@@ -48,6 +48,7 @@ class Stationstable(models.Model):
     station_id = models.IntegerField(primary_key=True)
     is_renting = models.TextField(blank=True, null=True)  # This field type is a guess.
     is_returning = models.TextField(blank=True, null=True)  # This field type is a guess.
+    image = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False

@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding: 0;
+    padding-top: 70px;
 }
 
 #map {
@@ -9,6 +9,7 @@ body {
   bottom: 0;
   width: 100%;
 }
+
 .mapboxgl-marker {
 width: 15px;
 height: 15px;

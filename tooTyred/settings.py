@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'bootstrap3'
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tooTyred.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'tooTyred.urls'
@@ -127,3 +129,19 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL='/home/reserve/'
 
 LOGOUT_REDIRECT_URL='/home/'
+
+LOGIN_URL = '/home/login/'
+
+LOGIN_EXEMPT_URL = (
+    r'^home/logout$',
+    r'^home/register/$',
+    r'^home/$',
+    r'^home/reset-password/$',
+    r'^home/reset-password/done/$',
+    r'^home/reset-password/confirm/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$',
+    r'^home/reset-password/complete/$',
+    r'^home/termsandconditions/$',
+    r'^employee/$',
+)
+EMAIL_HOST='localhost'
+EMAIL_PORT=1025

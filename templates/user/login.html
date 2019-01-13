@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 {% block head %}
   <title>Login page</title>
+     {% bootstrap_javascript %}
+     {% bootstrap_messages %}
 {% endblock %}
 {% block body %}
   <div class="container">
-    <h1>Welcome to log in page</h1>
-    <p> You can log in here</p>
-    {% if message %}
-    <h1>You successfully registered your account! log in now!</h1>
-    {% endif %}
-    <p> FORGOT PASSWORD OPTION</p>
-    <p> LINK TO SIGN UP PAGE</p>
-    <h2>Log in </h2>
-    <form method = "post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Login</button>
-    </form>
+    <div class="row">
+      <div class="col-sm-offset-3 col-sm-6">
+        <h1>Log in</h1>
+        <p> If you don't already have an account. <a href="/home/register/" style="color:black;">Sign up now!</a></p>
+        <form  method="post">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <p> <a href="/home/reset-password/" style="color:black;">Forgot username or password?</a></p>
+          {% buttons %}
+          <button type="submit" class="btn btn-success btn-block">Login</button>
+          {% endbuttons %}
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}
