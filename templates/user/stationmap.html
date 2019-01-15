@@ -1,0 +1,63 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+<head>
+  <title>Station Locations</title>
+  <style>
+    .map {height: 550px;
+      width:100%;}
+
+    html, body {height: 100%; margin: 0; padding: 0;}
+  </style>
+<head>
+<body>
+
+
+  <div class="map"></div>
+<!--
+ <form enctype='application/json'>
+
+        <input  type="hidden" name="geometry[type]" id="type" value="Point"/>
+
+
+        <label >Latitude</label>
+        <input  type="number" name="geometry[coordinates][1]" />
+        <label >Longitude</label>
+        <input  type="number" name="geometry[coordinates][0]" />
+
+ <input  type="hidden" name="type" value="Feature"/>
+
+        <label >Name</label>
+        <input type="text" name="properties[name]" id="name" />
+
+
+      <label>Address</label>
+      <input type="text" name="properties[address]" id="address" />
+
+      <label>Phone</label>
+      <input type="text" name="properties[phone]" id="phone" />
+
+    <p>
+        <input type="submit" value="Send" class="btn btn-primary btn-block" />
+    </p>
+</form> -->
+
+  <script src="stationmap.js"></script>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
+  </script>
+</body>
+</html>

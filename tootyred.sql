@@ -373,7 +373,7 @@ CREATE TABLE `stationstable` (
   `station_id` int(11) DEFAULT NULL,
   `is_renting` bit(1) DEFAULT NULL,
   `is_returning` bit(1) DEFAULT NULL,
-  `image` varchar(20) DEFAULT NULL
+  `image` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -383,7 +383,20 @@ CREATE TABLE `stationstable` (
 
 LOCK TABLES `stationstable` WRITE;
 /*!40000 ALTER TABLE `stationstable` DISABLE KEYS */;
-INSERT INTO `stationstable` VALUES (-3.1883110727223993,'George Square',15,'George Square',55.943084063011130,10,1547134338,_binary '',9,171,_binary '',_binary '','georgesquare.jpg'),(-3.1914209989898836,'Waverley Bridge',15,'Waverley Bridge',55.951344398844620,4,1547134338,_binary '',15,183,_binary '',_binary '','waverlybridge.jpg'),(-3.1902577700938080,'High Street',15,'City Chambers',55.950109330178990,4,1547134338,_binary '',9,189,_binary '',_binary '','citychambers.jpg'),(-3.1841785354060903,'Waverley Court, East Market Street',15,'Waverley Court',55.951734496983440,4,1547134338,_binary '',2,225,_binary '',_binary '','waverlycourt.jpg'),(-3.1739235543155930,'Dalkeith Road, Edinburgh EH16 5BB',15,'Royal Commonwealth Pool',55.939000247888764,2,1547134338,_binary '',8,246,_binary '',_binary '','royalcommon.JPG'),(-3.2071011721072864,'Charlotte Square',15,'Charlotte Square',55.952335461616390,0,1547134338,_binary '',11,247,_binary '',_binary '','charlottesquare.jpg'),(-3.1886654928728150,'Bristo Square, Potterrow',15,'Bristo Square',55.946004189640780,5,1547134338,_binary '',31,248,_binary '',_binary '','bristosquare.jpg'),(-3.2092475016246453,'116 Fountainbridge',15,'Fountainbridge',55.943356927645510,2,1547134338,_binary '',7,249,_binary '',_binary '','fountainbridge.jpg'),(-3.1875269194623570,'Waverley Station Concourse',15,'Waverley Station',55.952641035774384,11,1547134338,_binary '',4,251,_binary '',_binary '','waverlystation.jpg'),(-3.1738308300878090,'James Hutton Road',15,'Kings Buildings 1',55.924185406676960,4,1547134338,_binary '',3,252,_binary '',_binary '','kingsbuildings1.jpg'),(-3.1716462453634904,'Entrance to Sanderson Building',15,'Kings Building 2',55.923202155166640,1,1547134338,_binary '',8,253,_binary '',_binary '','kingsbuildings1.jpg'),(-3.1753845849070785,'James Dewar Road',15,'Kings Building 3',55.923478807846635,10,1547134338,_binary '',16,254,_binary '',_binary '','kingsbuildings1.jpg'),(-3.1769018141649212,'Kings Buildings Bus Stop and turning circle',15,'Kings Buildings 4',55.922000870606260,2,1547134338,_binary '',5,255,_binary '',_binary '','kingsbuildings1.jpg'),(-3.1816823409318430,'Regent Road',15,'St Andrews House',55.953164332423840,7,1547134338,_binary '',9,256,_binary '',_binary '','standrewhouse.jpg'),(-3.1927736686587878,'St Andrew Square',15,'St Andrew Square',55.954748812176420,2,1547134338,_binary '',7,259,_binary '',_binary '','standrewsquare.jpg');
+INSERT INTO `stationstable` VALUES   (-3.21358,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Braidburn Valley Park',55.9191,7,1547134338,_binary '',8,1,_binary '',_binary '','BraidburnValleyPark.jpg'),
+  (-3.21438,'Edinburgh EH3 5PA, UK',15,'Inverleith Park',55.96653,7,1547134338,_binary '',8,2,_binary '',binary '','inverleithpark.jpg'),
+  (-3.19839,'Princes St, Edinburgh EH2 2HG, UK',15,'Princes Street Gardens',55.951752,7,1547134338,_binary '',8,3,_binary '',binary '','princesstreetgardens.jpg'),
+  (-3.19186,'Melville Dr, Edinburgh EH9 1ND, UK',15,'The Meadows',55.93994,7,1547134338,_binary '',8,4,_binary '',binary '','themeadows.JPG'),
+  (-3.15847,'Lochend Rd S, Edinburgh EH7 6BP, UK',15,'Lochend Park',55.96131,7,1547134338,_binary '',8,5,_binary '',binary '','lochendpark.jpg'),
+  (-3.16212,'Links Gardens, Edinburgh EH6 7QR, UK',15,'Leith Links',55.97174,7,1547134338,_binary '',8,6,_binary '',binary '','leithlinks.jpg'),
+  (-3.14636,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',15,'Dr Neil''s Garden',55.94172,7,1547134338,_binary '',8,7,_binary '',binary '','DrNeilGarden.jpg'),
+  (-3.16834,'Stanedykehead, Alnwickhill EH16 6TN, UK',15,'Seven Acre Park',55.90584,7,1547134338,_binary '',8,8,_binary '',binary '','SevenAcrePark.jpg'),
+  (-3.248529,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Saughton Park And Gardens',55.934132,7,1547134338,_binary '',8,9,_binary '',binary '','SaughtonParkAndGardens.jpg'),
+  (-3.30343,'73 Glasgow Rd, Edinburgh EH12 8LJ, UK',15,'Gyle Park',55.94155,7,1547134338,_binary '',8,10,_binary '',binary '','GylePark.jpg'),
+  (-3.13123,'Mountcastle Dr N, Edinburgh EH8 7SE, UK',15,'Figgate Park',55.95157,7,1547134338,_binary '',8,11,_binary '',binary '','figgatepark.jpg'),
+  (-3.30092,'32 Barnton Ave, Edinburgh EH4 6JH, UK',15,'The Bruntsfield Links Golfing Society',55.96843,7,1547134338,_binary '',8,12,_binary '',binary '','TheBruntsfieldLinksGolfing.jpg'),
+ (-3.25772,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',15,'Ravelston Golf Club',55.95435,7,1547134338,_binary '',8,13,_binary '',binary '','ravelstongolfclub.jpg'),
+(-3.13853,'Craigmillar Castle Rd, Edinburgh EH16 4SY, UK',15,'Craigmillar Castle',55.92638,7,1547134338,_binary '',8,14,_binary '',binary '','craigmillarcastle.jpg');
 /*!40000 ALTER TABLE `stationstable` ENABLE KEYS */;
 UNLOCK TABLES;
 

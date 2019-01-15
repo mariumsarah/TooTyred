@@ -1,0 +1,233 @@
+{ 
+  "type": "FeatureCollection",
+  "icon": "img/icon.png",
+  "features": [
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.213580,
+          55.919100
+        ]
+      },
+      "type": "Feature",
+      "properties": { 
+        "stationnumber" : 1,
+        "name": "Braidburn Valley Park",
+        "address": "1 Greenbank Cres, Edinburgh EH10 5TE, UK",
+        "phone": "+44 131 469 3920"
+      }
+    },
+
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.214380,
+          55.966530
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+ "stationnumber" : 2,
+       "name": "Inverleith Park",
+       "address": "Edinburgh EH3 5PA, UK",
+        "phone": "+44 131 332 2368"
+      }
+    },
+
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.198390,
+          55.951752
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+ "stationnumber" : 3,
+       "name": "Princes Street Gardens",
+       "address": "Princes St, Edinburgh EH2 2HG, UK",
+        "phone": "+44 1603 123456"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.191860,
+          55.939940
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 4,
+       "name": "The Meadows",
+       "address": "Melville Dr, Edinburgh EH9 1ND, UK",
+        "phone": "+44 131 529 5151"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.158470,
+          55.961310
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 5,
+        "name": "Lochend Park",
+        "address": "Lochend Rd S, Edinburgh EH7 6BP, UK",
+        "phone": "+44 131 469 3356"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.162120,
+          55.971740
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 6,
+        "name": "Leith Links",
+        "address": "Links Gardens, Edinburgh EH6 7QR, UK",
+        "phone": "+44 131 529 7061"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         -3.146360,
+          55.941720
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 7,
+        "name": "Dr Neil's Garden",
+        "address": "Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK",
+        "phone": "+44 7849 187995"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.168340,
+          55.905840
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+ "stationnumber" : 8,
+       "name": "Seven Acre Park",
+       "address": "Stanedykehead, Alnwickhill EH16 6TN, UK",
+        "phone": "+44 131 529 5151"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.248529,
+          55.934132
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 9,
+       "name": "Saughton Park And Gardens",
+       "address": "1 Greenbank Cres, Edinburgh EH10 5TE, UK",
+        "phone": "+44 8888 88888"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.303430,
+          55.941550
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+   "stationnumber" : 10,
+       "name": "Gyle Park",
+       "address": "73 Glasgow Rd, Edinburgh EH12 8LJ, UK",
+        "phone": "+44 131 529 7440"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         -3.131230,
+          55.951570
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 11,
+        "name": "Figgate Park",
+        "address": "Mountcastle Dr N, Edinburgh EH8 7SE, UK",
+        "phone": "+44 131 529 3111"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.300920,
+          55.968430
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+"stationnumber" : 12,
+        "name": "The Bruntsfield Links Golfing Society",
+        "address": "32 Barnton Ave, Edinburgh EH4 6JH, UK",
+        "phone": "+44 1414 141414"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.257720,
+          55.954350
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+    "stationnumber" : 13,
+        "name": "Ravelston Golf Club",
+        "address": "24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK",
+        "phone": "+44 1717 17171"
+      }
+    },
+    {
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.138530,
+          55.926380
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+     "stationnumber" : 14,
+        "name": "Craigmillar Castle",
+        "address": "Craigmillar Castle Rd, Edinburgh EH16 4SY, UK",
+        "phone": "+44 1717 55664"
+      }
+    }
+     
+  ]
+}
