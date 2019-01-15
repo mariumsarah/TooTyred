@@ -12,7 +12,7 @@ mmm12345
 
 THINGS YOU NEED TO HAVE DOWNLOADED:
 MYSQL
-PYTHON
+PYTHONN
 py -m pip install mysql (if this doesnot work then download visual studio and python x64)
 py -m pip install django-bootstrap3
 ----------------------------------------------------------------------------

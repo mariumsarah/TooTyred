@@ -11,8 +11,7 @@
     {% block body %}
     <div id='map'></div>
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
+    </button>
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -20,93 +19,112 @@
             <h5 class="modal-title" id="exampleModalLabel">Make a reservation</h5>
           </div>
           <div class="modal-body">
-<div>
-  <li id="startloc"></li>
-  <li id="endloc"></li>
-  <p>What is your priority time or the type of bike?</p>
-  <p id="info"></p>
-  </div>
-
-
+            <div>
+            <li id="startloc"></li>
+            <li id="endloc"></li>
+            <p>What is your priority time or the type of bike?</p>
+            <p id="info"></p>
+            </div>
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-    <li class="nav-item">
-      <a onclick="resetSelect()" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Time</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bike</a>
-    </li>
-  </ul>
-  <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-      <table class="table" style="text-align: center;">
-        <tbody>
-          <tr>
-      <td><button onclick="resetSelect()" type="button" class="btn btn-outline-dark btn-sm">
-        <span >&times;</span>
-      </button></td>
-      </tr>
-    <tr><td><select class="custom-select custom-select-lg mb-3" id="select_start_date"></select></td></tr>
-      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_end_date"></select></td></tr>
-      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_start_time"></select></td></tr>
-      <tr><td><select class="custom-select custom-select-lg mb-3" id="select_end_time"></select></td></tr>
-      <tr><td><button id="confirm" onclick="bikeSelect()" type="button" class="btn btn-primary">
-        <span>Confirm & Proceed</span>
-      </button></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-      <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-2">
-              <button onclick="addBike('bike1')">+</button>
-              Av<h5 id="available1">4<h5>
-                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
-                  <h5 id="bike1">  Bike1</h5>
-              Qu<h5 id="quantity1">0<h5>
-              <button onclick="removeBike('bike1')">-</button>
-            </div>
-            <div class="col-sm-2">
-              <button onclick="addBike('bike2')">+</button>
-              <h5 id="available2">4<h5>
-                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
-                  <h5 id="bike2">  Bike1</h5>
-                  <h5 id="quantity2">0<h5>
-              <button onclick="removeBike('bike2')">-</button>
-            </div>
-            <div class="col-sm-2">
-              <button onclick="addBike('bike3')">+</button>
-              <h5 id="available3">4<h5>
-                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
-                  <h5 id="bike3">  Bike1</h5>
-                  <h5 id="quantity3">0<h5>
-              <button onclick="removeBike('bike3')">-</button>
-            </div>
-            <div class="col-sm-2">
-              <button onclick="addBike('bike4')">+</button>
-              <h5 id="available4">4<h5>
-                  <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
-                <h5 id="bike4">  Bike1</h5>
-                  <h5 id="quantity4">1<h5>
-              <button onclick="removeBike('bike4')">-</button>
-            </div>
-            <div class="col-sm-2">
-              <button id="confirm2" onclick="timeSelect()" type="button" class="btn btn-primary">
-                <span>Confirm & Proceed</span>
-              </button>
-            </div>
-            </div>
-        </div>
-    </div>
-  </div>
-          <div class="modal-footer">
-            <h4 style="text-align:left;">Cost: </h4>
-            <button type="button" onclick="reset()" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <li class="nav-item">
+                <a onclick="resetSelect()" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Time</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bike</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <table class="table" style="text-align: center;">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <button onclick="resetSelect()" type="button" class="btn btn-outline-dark btn-sm">
+                          <span >&times;</span>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select class="custom-select custom-select-lg mb-3" id="select_start_date"></select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select class="custom-select custom-select-lg mb-3" id="select_end_date"></select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select class="custom-select custom-select-lg mb-3" id="select_start_time"></select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select class="custom-select custom-select-lg mb-3" id="select_end_time"></select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <button id="confirm" onclick="bikeSelect()" type="button" class="btn btn-primary">
+                          <span>Confirm & Proceed</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <button onclick="addBike('bike1')">+</button>
+                        Av<h5 id="available1">4<h5>
+                            <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                            <h5 id="bike1">  Bike1</h5>
+                        Qu<h5 id="quantity1">0<h5>
+                        <button onclick="removeBike('bike1')">-</button>
+                      </div>
+                      <div class="col-sm-2">
+                        <button onclick="addBike('bike2')">+</button>
+                        <h5 id="available2">4<h5>
+                            <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                            <h5 id="bike2">  Bike1</h5>
+                            <h5 id="quantity2">0<h5>
+                        <button onclick="removeBike('bike2')">-</button>
+                      </div>
+                      <div class="col-sm-2">
+                        <button onclick="addBike('bike3')">+</button>
+                        <h5 id="available3">4<h5>
+                            <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                            <h5 id="bike3">  Bike1</h5>
+                            <h5 id="quantity3">0<h5>
+                        <button onclick="removeBike('bike3')">-</button>
+                      </div>
+                      <div class="col-sm-2">
+                        <button onclick="addBike('bike4')">+</button>
+                        <h5 id="available4">4<h5>
+                            <img height="30" width="30" src="https://lh3.googleusercontent.com/P-QqdKAc0Ew0IXYHsNZieVzF-Z8VJBhOq5qmv0GYyhNWjmdOQ52FQ7GC9ytrxjHVP9CieW7-9eGIaHaNGN6FebSgkmLoQwLMrw">
+                          <h5 id="bike4">  Bike1</h5>
+                            <h5 id="quantity4">1<h5>
+                        <button onclick="removeBike('bike4')">-</button>
+                      </div>
+                      <div class="col-sm-2">
+                        <button id="confirm2" onclick="timeSelect()" type="button" class="btn btn-primary">
+                          <span>Confirm & Proceed</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <h4 style="text-align:left;">Cost: </h4>
+                <button type="button" onclick="reset()" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </div>
           </div>
         </div>
       </div>
-    </div>
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
     document.getElementById('modalButton').style.display="none";
