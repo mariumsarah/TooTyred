@@ -1,8 +1,5 @@
 1. go to tooTyred/settings.py and change the password in DATABASES to your mysql password
-2. go to mysql cmd and fill in the following commands
-3. create database tootyred;(drop database tootyred; if you have one already)
-4. use tootyred;
-5. ALTER DATABASE tootyred CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+2. go to sql and type this
 6. source C:/Users/sarah/Desktop/tooTyred/tootyred.sql;(change it to your filepath, make sure its front slash)
 7. I created a superuser with username tootyredsuperuser and password tootyred so use it if you want to log in
 make sure you are able to log in
@@ -20,7 +17,7 @@ py -m pip install mysql (if this doesnot work then download visual studio and py
 py -m pip install django-bootstrap3
 ----------------------------------------------------------------------------
 TO TEST THE FORGOT PASSWORD FEATURE:
-1. OPEN GIT CMD AT THE SAME TIME AS py manage.py runserver is RUNNING 
+1. OPEN GIT CMD AT THE SAME TIME AS py manage.py runserver is RUNNING
 2. TYPE THIS IN py -m smtpd -n -c DebuggingServer localhost:1025
 3. GO TO FORGOT PASSWORD AND ENTER EMAIL
 4. YOU WILL SEE THE EMAIL ON GIT CMD COPY THE LINK AND PASTE IT ON BROWSER
@@ -34,4 +31,7 @@ py manage.py migrate
 ----------------------------------------------------------------------------
 IF YOU MADE A SQL DATABASE AND YOU WANT TO MAKE THE MODEL FOR IT FOR MODELS.py
 py manage.py inspectdb
+----------------------------------------------------------------------------
+IF THERE IS A PROBLEM WITH THE CSS file
+py manage.py collectstatic --noinput --clear
 ----------------------------------------------------------------------------

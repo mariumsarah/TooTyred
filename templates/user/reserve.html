@@ -222,6 +222,10 @@ function reset() {
                $('#available'+num).text(Number($('#available'+num).text())+1);
                 $('#quantity'+num).text(($('#quantity'+num).text())-1);
             }
+            if((Number($('#quantity1').text()))+(Number($('#quantity2').text()))+(Number($('#quantity3').text()))+(Number($('#quantity4').text()))==0)
+            {
+document.getElementById("confirm2").style.display="none";
+            }
     }
     function addBike(selector) {
       document.getElementById("confirm2").style.display="block";
