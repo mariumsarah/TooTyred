@@ -19,6 +19,7 @@ class EditProfileForm(UserChangeForm):
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField();
     termsofservice = forms.BooleanField(label=mark_safe('Agree to <a href="/home/termsandconditions/" target="_blank" style="color:black;">Terms and Conditions</a>'));
+
     class Meta:
         model = User
         fields = [
@@ -45,11 +46,6 @@ class RegistrationForm(UserCreationForm):
 #This code is used to validate the passwords are same and the email is not already registered
     def clean(self):
         cleaned_data=super(RegistrationForm, self).clean()
-        password1 = cleaned_data['password1']
-        password2 = cleaned_data['password2']
-        if password1 and password2:
-            if password1 != password2:
-                self.add_error('password1', 'Passwords must match')
         email = cleaned_data['email']
         try:
             match = User.objects.get(email=email)

@@ -6,12 +6,63 @@
    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href= "{% static 'main/reserve.css' %}" type="text/css">
+    <style>
+      body {
+        margin: 0;
+          padding-top: 70px;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      .fab {
+   width: 40px;
+   height: 40px;
+   background-color: #3dcacd;
+   border-radius: 45%;
+   box-shadow: 0 6px 10px 0 #666;
+   transition: all 0.1s ease-in-out;
+
+   font-size: 50px;
+   color: white;
+   text-align: center;
+   line-height: 35px;
+
+   position: fixed;
+   right: 20px;
+   bottom: 20px;
+}
+.fab2 {
+width: 100px;
+height: 35px;
+border-radius: 6px;
+background-color: #3dcacd;
+box-shadow: 0 6px 10px 0 #666;
+transition: all 0.1s ease-in-out;
+
+font-size: 12px;
+color:  black;
+text-align: left;
+padding-left:4px;
+position: fixed;
+left: 15px;
+bottom: 20px;
+}
+.fab:hover {
+   box-shadow: 0 6px 14px 0 #666;
+   transform: scale(1.05);
+}
+    </style>
     {% endblock %}
     {% block body %}
     <div id='map'></div>
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
     </button>
+    <div class="fab"><img width="20px" height="20px" src="{% static 'icons/location.png' %}"></div>
+    <div class="fab2"><img style="text-align=right;" src="{% static 'icons/line.png' %}"> Trails<br><img style="text-align=right;" src="{% static 'icons/dotted.png' %}"> Bike Lanes</div>
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -128,83 +179,126 @@
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
     document.getElementById('modalButton').style.display="none";
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWFyaXVtc2FyYWgiLCJhIjoiY2pxcW01MGN1MGNxODQ4cWdyeGcxYmg4bSJ9.6FZ55yUsUcY9I6H6DC4_9Q';
-    var map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/dark-v9',
-      center: [-3.18470478,55.94136542],
-      zoom: 11.5
-    });
-    map.doubleClickZoom.disable();
-    // code from the next step will go here!
-    var geojson = [
-    {% for station in stations %}
-        {% if not forloop.first %},{% endif %}
-        {
-            station_id: "{{ station.station_id }}",
-            address: "{{ station.address }}",
-            capacity: "{{ station.capacity }}",
-            lat: "{{ station.lat }}",
-            lon: "{{ station.lon }}",
-            name: "{{ station.name }}",
-            numbikesavailable: "{{ station.num_bikes_available }}",
-            lastreported: "{{ station.last_reported }}",
-            isintalled: "{{ station.is_installed }}",
-            numdocksavailable: "{{ station.num_docks_available }}",
-            stationid: "{{ station.station_id }}",
-            isrenting: "{{ station.is_renting }}",
-            isreturning: "{{ station.is_returning }}",
-            images: "{{ station.image }}"
-        }
-    {% endfor %}
-    ]
-    var x = 0
+    var x = 0;
     var startlocationid;
     var endlocationid;
     var startlocationname;
     var endlocationname;
-    // add markers to map
-geojson.forEach(function(marker) {
+// Initialize and add the map
+function initMap() {
+// The map, centered at Edinburgh
+var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat:55.94136542,lng:-3.18470478},
+          zoom: 12,
+          zoomControl: false,
+          streetViewControl:false,
+          styles:
+          [
+            {
+                "featureType": "all",
+                "elementType": "all",
+                "stylers": [
+                    {
+                        "hue": "#ff0000"
+                    },
+                    {
+                        "saturation": -100
+                    },
+                    {
+                        "lightness": -30
+                    }
+                ]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#353535"
+                    }
+                ]
+            },
+          ]
+        });
+        var bikeLayer = new google.maps.BicyclingLayer();
+        bikeLayer.setMap(map);
 
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
-  el.addEventListener('dblclick', () =>
-     {
-       if(x==1)
+// The marker, positioned at Uluru
+var geojson = [
+{% for station in stations %}
+    {% if not forloop.first %},{% endif %}
+    {
+        station_id: "{{ station.station_id }}",
+        address: "{{ station.address }}",
+        capacity: "{{ station.capacity }}",
+        lat: "{{ station.lat }}",
+        lon: "{{ station.lon }}",
+        name: "{{ station.name }}",
+        numbikesavailable: "{{ station.num_bikes_available }}",
+        lastreported: "{{ station.last_reported }}",
+        isintalled: "{{ station.is_installed }}",
+        numdocksavailable: "{{ station.num_docks_available }}",
+        stationid: "{{ station.station_id }}",
+        isrenting: "{{ station.is_renting }}",
+        isreturning: "{{ station.is_returning }}",
+        images: "{{ station.image }}"
+    }
+{% endfor %}
+]
+// The marker, positioned at Uluru
+geojson.forEach(function(marker1) {
+     // make a marker for each feature and add to the map
+  var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker1.images);
+  var contentString = '<div id="content">'+'<h5>' + marker1.name+"<br>"+ marker1.address +"</h5><img height='60' width='80' src='"+url_mask+"' />"+'</div>';
+  var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+  var Marker = new google.maps.Marker({
+      map: map,
+      icon: "{% static 'icons/marker.png' %}",
+     position: {lat:Number(marker1.lat),lng:Number(marker1.lon)}
+    });
+      Marker.addListener('click', function() {
+        infowindow.open(map, Marker);
+    });
+    //var touchtime = 0;
+    Marker.addListener('dblclick', () =>
        {
-        el.style.backgroundColor = "red";
-        el.style.width = "25px";
-         el.style.height = "25px";
-         endlocationid=marker.station_id;
-         endlocationname=marker.name;
-         document.getElementById("modalButton").click();
+           if(x==1)
+           {
+             Marker.setIcon("{% static 'icons/red.png' %}");
+             endlocationid=marker1.station_id;
+             endlocationname=marker1.name;
+             document.getElementById("modalButton").click();
+           }
+           else{
+             Marker.setIcon("{% static 'icons/green.png' %}");
+             startlocationid=marker1.station_id;
+             startlocationname=marker1.name;
+           }
+           x=x+1;
        }
-       else{
-         el.style.backgroundColor = "green";
-         el.style.width = "25px";
-         el.style.height = "25px";
-         startlocationid=marker.station_id;
-         startlocationname=marker.name;
-       }
-       x=x+1;
-     }
-  );
-  // make a marker for each feature and add to the map
-  var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker.images);
-  new mapboxgl.Marker(el)
-    .setLngLat([marker.lon,marker.lat])
-    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h5>' + marker.address +"</h5><img height='60' width='80' src='"+url_mask+"' />"))
-    .addTo(map);
+    );
 });
+var opt = { minZoom: 11.5, maxZoom: 15 };
+map.setOptions(opt);
+}
 
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var modal = $(this)
-    modal.find('.modal-title').text('Make a reservation')
-    modal.find('.modal-body').find('#startloc').text("Start Station: "+startlocationname);
-    modal.find('.modal-body').find('#endloc').text("End Station: "+ endlocationname);
-});
+     $('#exampleModal').on('show.bs.modal', function (event) {
+         var modal = $(this)
+         modal.find('.modal-title').text('Make a reservation')
+         modal.find('.modal-body').find('#startloc').text("Start Station: "+startlocationname);
+         modal.find('.modal-body').find('#endloc').text("End Station: "+ endlocationname);
+     });
 function reset() {
  window.location.reload();
 }
@@ -242,7 +336,7 @@ function reset() {
             }
             if((Number($('#quantity1').text()))+(Number($('#quantity2').text()))+(Number($('#quantity3').text()))+(Number($('#quantity4').text()))==0)
             {
-document.getElementById("confirm2").style.display="none";
+    document.getElementById("confirm2").style.display="none";
             }
     }
     function addBike(selector) {
@@ -306,7 +400,7 @@ document.getElementById("confirm2").style.display="none";
         alert("Done2");
       }
       document.getElementById("profile-tab").click();
-  }
+    }
     function populateDate(selector,text,days,curr)
     {
       var x;
@@ -350,9 +444,9 @@ document.getElementById("confirm2").style.display="none";
           .attr('value', i)
           .text(hours + ':' + minutes + ' ' + ampm));
     }
-  }
+    }
 
-  $('#select_start_date').change(function() {
+    $('#select_start_date').change(function() {
     //change selectstarttime to all times available for that day
     //change end date to that specific same day and tomorrow
     //IF THIS IS THE FIRST THING SELECTED IS START_DATE
@@ -368,33 +462,36 @@ document.getElementById("confirm2").style.display="none";
     disable("select_end_time");
     disable("select_start_time");
     document.getElementById("confirm").style.display="none";
-  });
+    });
 
-  $('#select_end_date').change(function() {
-  //change selectstarttime to all times available for that day
-  //change end date to that specific same day and tomorrow
-  //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+    $('#select_end_date').change(function() {
+    //change selectstarttime to all times available for that day
+    //change end date to that specific same day and tomorrow
+    //IF THIS IS THE FIRST THING SELECTED IS START_DATE
      disable("select_end_time");
      enable("select_start_time");
      document.getElementById("confirm").style.display="none";
-   });
+    });
 
-   $('#select_start_time').change(function() {
-  //change selectstarttime to all times available for that day
-  //change end date to that specific same day and tomorrow
-  //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+    $('#select_start_time').change(function() {
+    //change selectstarttime to all times available for that day
+    //change end date to that specific same day and tomorrow
+    //IF THIS IS THE FIRST THING SELECTED IS START_DATE
     enable("select_end_time");
     document.getElementById("confirm").style.display="none";
-  });
+    });
 
-  $('#select_end_time').change(function() {
- //change selectstarttime to all times available for that day
- //change end date to that specific same day and tomorrow
- //IF THIS IS THE FIRST THING SELECTED IS START_DATE
+    $('#select_end_time').change(function() {
+    //change selectstarttime to all times available for that day
+    //change end date to that specific same day and tomorrow
+    //IF THIS IS THE FIRST THING SELECTED IS START_DATE
     document.getElementById("confirm").style.display="block";
- });
+    });
 
 
+    </script>
+
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
   </script>
-
 {% endblock %}

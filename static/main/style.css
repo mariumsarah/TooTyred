@@ -1,9 +1,10 @@
 body{
-  background-color: #AFABAA;
+  background-color: #696969;
   padding-top: 70px;
   font-family: 'Poppins', sans-serif;
+  color:white;
 }
-a, a:active, a:visited { color: #AFABAA; }
+a, a:active, a:visited { color: #ffffff; }
 #navbar a:hover {color: black; background-color: #3dcacd;
   border-radius:3px; }
 #navbar a:focus{ color: black; background-color: #3dcacd;
@@ -22,7 +23,7 @@ a, a:active, a:visited { color: #AFABAA; }
 #home,#howitworks,#whycycle,#cycles,#stationmap,#pricing,#aboutus,#contact
 {
   padding-top:50px;height:530px;
-  box-shadow:-10px 8px 15px gray, 10px 8px 15px gray;
+  box-shadow:-10px 8px 15px #808080, 10px 8px 15px #808080;
 }
 #home {color: #000000; background-color: #C0C0C0;}
 #howitworks{color: #fff; background-color: #f4a688;}
