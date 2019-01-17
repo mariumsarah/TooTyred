@@ -9,60 +9,63 @@
     <style>
       body {
         margin: 0;
-          padding-top: 70px;
+        padding-top: 70px;
+        color:black;
       }
-
       #map {
         position: absolute;
         top: 0;
         bottom: 0;
         width: 100%;
       }
-      .fab {
-   width: 40px;
-   height: 40px;
-   background-color: #3dcacd;
-   border-radius: 45%;
-   box-shadow: 0 6px 10px 0 #666;
-   transition: all 0.1s ease-in-out;
-
-   font-size: 50px;
-   color: white;
-   text-align: center;
-   line-height: 35px;
-
-   position: fixed;
-   right: 20px;
-   bottom: 20px;
-}
-.fab2 {
-width: 100px;
-height: 35px;
-border-radius: 6px;
-background-color: #3dcacd;
-box-shadow: 0 6px 10px 0 #666;
-transition: all 0.1s ease-in-out;
-
-font-size: 12px;
-color:  black;
-text-align: left;
-padding-left:4px;
-position: fixed;
-left: 15px;
-bottom: 20px;
-}
-.fab:hover {
-   box-shadow: 0 6px 14px 0 #666;
-   transform: scale(1.05);
-}
+      .location {
+        width: 40px;
+        height: 40px;
+        background-color: #3dcacd;
+        border-radius: 45%;
+        box-shadow: 0 6px 10px 0 #666;
+        transition: all 0.1s ease-in-out;
+        font-size: 50px;
+        color: white;
+        text-align: center;
+        line-height: 35px;
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+      }
+      .mapinfo {
+        width: 100px;
+        height: 35px;
+        border-radius: 6px;
+        background-color: #3dcacd;
+        box-shadow: 0 6px 10px 0 #666;
+        transition: all 0.1s ease-in-out;
+        font-size: 12px;
+        color:  black;
+        text-align: left;
+        padding-left:4px;
+        position: fixed;
+        left: 15px;
+        bottom: 20px;
+      }
+      .location:hover {
+        box-shadow: 0 6px 14px 0 #666;
+        transform: scale(1.05);
+      }
     </style>
     {% endblock %}
     {% block body %}
     <div id='map'></div>
-    <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    </button>
-    <div class="fab"><img width="20px" height="20px" src="{% static 'icons/location.png' %}"></div>
-    <div class="fab2"><img style="text-align=right;" src="{% static 'icons/line.png' %}"> Trails<br><img style="text-align=right;" src="{% static 'icons/dotted.png' %}"> Bike Lanes</div>
+    <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
+    <div class="location">
+      <img width="20px" height="20px" src="{% static 'icons/location.png' %}">
+    </div>
+    <div class="mapinfo">
+      <img style="text-align=right;" src="{% static 'icons/line.png' %}">
+      Trails<br>
+      <img style="text-align=right;" src="{% static 'icons/dotted.png' %}">
+      Bike Lanes
+    </div>
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -71,10 +74,10 @@ bottom: 20px;
           </div>
           <div class="modal-body">
             <div>
-            <li id="startloc"></li>
-            <li id="endloc"></li>
-            <p>What is your priority time or the type of bike?</p>
-            <p id="info"></p>
+              <li id="startloc"></li>
+              <li id="endloc"></li>
+              <p>What is your priority time or the type of bike?</p>
+              <p id="info"></p>
             </div>
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
               <li class="nav-item">
@@ -184,16 +187,24 @@ bottom: 20px;
     var endlocationid;
     var startlocationname;
     var endlocationname;
+    var map;
+    var markerlist=[];
+    var i=0;
 // Initialize and add the map
 function initMap() {
+
 // The map, centered at Edinburgh
-var map = new google.maps.Map(document.getElementById('map'), {
+map = new google.maps.Map(document.getElementById('map'), {
           center: {lat:55.94136542,lng:-3.18470478},
           zoom: 12,
           zoomControl: false,
           streetViewControl:false,
           styles:
           [
+        {
+          "featureType": 'poi',
+          "stylers": [{"visibility": 'off'}]
+        },
             {
                 "featureType": "all",
                 "elementType": "all",
@@ -232,6 +243,31 @@ var map = new google.maps.Map(document.getElementById('map'), {
         var bikeLayer = new google.maps.BicyclingLayer();
         bikeLayer.setMap(map);
 
+        var allowedBounds = new google.maps.LatLngBounds(
+
+        		new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
+            	new google.maps.LatLng(56.042897365961046,-2.918450843462324));
+        // Define the rectangle and set its editable property to true.
+        google.maps.event.addListener(map, 'dragend', function() {
+            if (allowedBounds.contains(map.getCenter())) return;
+
+            // Out of bounds - Move the map back within the bounds
+
+            var c = map.getCenter(),
+                x = c.lng(),
+                y = c.lat(),
+                maxX = allowedBounds.getNorthEast().lng(),
+                maxY = allowedBounds.getNorthEast().lat(),
+                minX = allowedBounds.getSouthWest().lng(),
+                minY = allowedBounds.getSouthWest().lat();
+
+            if (x < minX) x = minX;
+            if (x > maxX) x = maxX;
+            if (y < minY) y = minY;
+            if (y > maxY) y = maxY;
+
+            map.setCenter(new google.maps.LatLng(y, x));
+          });
 // The marker, positioned at Uluru
 var geojson = [
 {% for station in stations %}
@@ -254,6 +290,8 @@ var geojson = [
     }
 {% endfor %}
 ]
+var prev_infowindow=false;
+var prev_window;
 // The marker, positioned at Uluru
 geojson.forEach(function(marker1) {
      // make a marker for each feature and add to the map
@@ -268,6 +306,13 @@ geojson.forEach(function(marker1) {
      position: {lat:Number(marker1.lat),lng:Number(marker1.lon)}
     });
       Marker.addListener('click', function() {
+        if( prev_infowindow ) {
+           prev_window.close();
+
+        }
+
+        prev_infowindow=true;
+        prev_window = infowindow;
         infowindow.open(map, Marker);
     });
     //var touchtime = 0;
@@ -278,6 +323,7 @@ geojson.forEach(function(marker1) {
              Marker.setIcon("{% static 'icons/red.png' %}");
              endlocationid=marker1.station_id;
              endlocationname=marker1.name;
+             prev_window.close();
              document.getElementById("modalButton").click();
            }
            else{
@@ -288,9 +334,12 @@ geojson.forEach(function(marker1) {
            x=x+1;
        }
     );
+    markerlist[i]=Marker;
+    i=i+1;
 });
-var opt = { minZoom: 11.5, maxZoom: 15 };
+var opt = { minZoom: 11.5, maxZoom: 18 };
 map.setOptions(opt);
+
 }
 
      $('#exampleModal').on('show.bs.modal', function (event) {
@@ -299,9 +348,16 @@ map.setOptions(opt);
          modal.find('.modal-body').find('#startloc').text("Start Station: "+startlocationname);
          modal.find('.modal-body').find('#endloc').text("End Station: "+ endlocationname);
      });
-function reset() {
- window.location.reload();
-}
+     function reset() {
+      startlocationname = "";
+      endlocationname="";
+      x = 0;
+      startlocationid="";
+      endlocationid="";
+      for(var d=0;d<markerlist.length;d++){
+        markerlist[d].setIcon("{% static 'icons/marker.png' %}");
+      }
+     }
     </script>
   <script>
     document.getElementById("confirm2").style.display="none";
@@ -487,9 +543,7 @@ function reset() {
     //IF THIS IS THE FIRST THING SELECTED IS START_DATE
     document.getElementById("confirm").style.display="block";
     });
-
-
-    </script>
+  </script>
 
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">

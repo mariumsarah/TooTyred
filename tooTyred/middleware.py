@@ -37,4 +37,4 @@ class LoginRequiredMiddleware:
         elif request.user.is_authenticated or url_is_exempt:
             return None
         else:
-            return redirect(settings.LOGIN_URL)
+            return redirect(settings.LOGOUT_REDIRECT_URL)
