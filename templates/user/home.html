@@ -6,7 +6,7 @@
 {% endblock %}
 {% block body %}
 <div class="container">
-  <div id="home" class="container-fluid">
+  <div id="home">
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -24,14 +24,6 @@
           <img src="{% static 'homepage/img-home-2.jpg' %}" alt="New york" style="width:100%;height: 500px;">
         </div>
       </div>
-      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#myCarousel" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-        <span class="sr-only">Next</span>
-      </a>
     </div>
   </div>
   <div id="howitworks" class="container-fluid">
@@ -59,7 +51,7 @@
               <img src="{% static 'homepage/order.png' %}" style="width:50%;height:50%;">
             </div>
             <div class="flip-box-back">
-              <p>The user gets to choose the location, bike types, amount, the cost of rental per hour start time and end time of the reservation from a list of available timings .</p>
+              <p>The user chooses the location, bike types, the cost of rental per hour, start time and end time of the reservation from a list of available timings .</p>
             </div>
           </div>
         </div>
@@ -105,21 +97,76 @@
         </div>
       </div>
     </div>
-    <p>TooTyred enables its users to register at one's convenience.The hiring system works on first come and first serve bases.</p>
-    <p> The reservation cannot be changed 12 hours before the time of reservation and it will be cancelled in case the user fails to claim it 15 minutes after the start time. </p>
-  </div>
-
-  <div id="whycycle" class="container-fluid">
-    <center>
-      <h1>Why Cycles?</h1>
-    </center>
-    <p>This is the whycycles of the page.</p>
+    <br>
+    <p>TooTyred enables its users to register at one's convenience.</p>
+    <p>The hiring system works on first come and first serve bases.</p>
+    <p> The reservation cannot be changed 12 hours before the time of reservation </p>
+    <p>The system does not allow the user to make two reservations with the same date and time</p>
+    <p> The reservation will be cancelled in case the user fails to claim it 15 minutes after the start time. </p>
+    <p>The system removes reservation if user does not arrive after 15 minutes of reservation time.</p>
+    <p>All the payment/ credit card procedures are conducted via a payment gateway to insure legality and protecting of privacy</p>
   </div>
   <div id="cycles" class="container-fluid">
     <center>
       <h1>Cycle?</h1>
     </center>
-    <p>This is thecycles of the page.</p>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Bike Types</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in">
+          <div class="panel-body" style="background-color:#F0FFFF;color:black;width:100%;">
+            <h2> Hybrid Bike </h2>
+            <p> A bicycle ideal for fitness, and long distance touring is a hybrid bicycle. Hybrid bicycles are basically a combination of a road bike (700c road bicycle wheels) and a mountain bike (flat handlebars). These bikes are more towards performance and offer an efficient riding position. There are a wide variety of hybrid bicycles available in the market. Some have wider tires and a suspension fork up front, to take the sting out of rough roads, while others have narrower tires and a rigid fork for more efficient tarmac riding. </p>
+            <br>
+            <h2>Road Bike </h2>
+            <p> Designed for performance and speed, road bikes are light and meant to be ridden on paved roads. The geometry of these bikes offers a short wheelbase, low bottom bracket, and the steep headtube that lets the rider to react instantly. The bike also offers a low centre of gravity which is suitable for turning. Other characteristics of these bicycles are the thin tyres 20-25mm width placed on 700C wheels. The bike also comes with a drop bar handlebar that positions the rider in an aero position. </p>
+            <br>
+            <h2> Mountain Bike </h2>
+            <p> If you are looking for a bicycle that can be ridden with ease on city and off-road, mountain bike is what you should be looking at. As the bicycle comes with wide tyres that offer extra traction and an upright frame offering higher clearance, it is easy to ride on a variety of surfaces, including gravel, dirt, rock and sand. Besides, these type of cycles also has a wide range of gearing that offers a variety of gears to choose while riding on flat or steep terrains. MTB’s are usually available in 2 types; the hardtail (front suspension) and a dual suspension bicycle (front and rear suspension). </p>
+            <br>
+            <h2> Fat Bike </h2>
+            <p> These type of cycles comes with fat tyres which are oversized. Such types of bicycles are meant to be ridden on snow, sand, dirt tracks and on rocky terrains. The wide tires are what make it possible to offer the rider more traction and cushioning. Also, the versatile bikes come with wide tires that make carrying loads much easier </p>
+            <br>
+            <h2> Time Trial Bike </h2>
+            <p> These bikes are a modulated version of road bikes with more emphasis on an aerodynamic frame design and also an addition of time trail specific handlebar extension to make the riding posture aero </p>
+            <br>
+            <h2> BMX Biker </h2>
+            <p> If you are looking to perform stunts on a bicycle, a BMX bicycle is what you should be looking at. These types of cycles come with small frame and wheels. They also have a flat handlebar and no gears. In spite of their small size, the bikes are strong and can handle the weight of an average adult while performing the stunts. The best part about BMX bikes is the 360° rotational axis and extension tubes from the front and back tire hub flanges which are all used to perform tricks. </p>
+            <br>
+            <h2> Folding Bike </h2>
+            <p>Dislike commuting by public transport? Get yourself a foldable bicycle. The bicycles are designed specifically for commuting. The bikes are light can be easily folded into a compact form (size of a suitcase) that can be carried around easily on public buses or trains.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Why Cycle?</a>
+        </h4>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse in">
+          <div class="panel-body" style="background-color:#F0FFFF;color:black;width:100%;">
+            <p> 1. Cycling improves mental well-being </p>
+            <p> 2. Cycling promotes weight loss </p>
+            <p> 3. Cycling builds muscle </p>
+            <p> 4. Enjoy second breakfasts </p>
+            <p> 5. Better lung health </p>
+            <p> 6. Cuts heart disease and cancer risk </p>
+            <p> 7. Cycling is low impact </p>
+            <p> 8. Cycling saves time </p>
+            <p> 9. Cycling improves navigational skills </p>
+            <p> 10. Sleep better </p>
+            <p> 11. Boost your brain power </p>
+            <p> 12. Improve handling and spacial awareness </p>
+            <p> 13. Strengthen your immune system </p>
+          </div>
+      </div>
+    </div>
   </div>
   <div id="stationmap" class="container-fluid">
     <center>
@@ -151,6 +198,20 @@
   </div>
 </div>
 <script>
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight){
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  }
 $(document).ready(function(){
   // Add scrollspy to <body>
   $('body').scrollspy({target: ".navbar", offset: 50});
