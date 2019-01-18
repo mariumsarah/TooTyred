@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Users,Stationstable
+from .models import Users,Station, TypeOfBike
 from .forms import ExampleForm, RegistrationForm, EditProfileForm
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -42,8 +42,9 @@ def reserve(request):
     for i in range(15):
         startdates.append((datetime.now()+timedelta(days=i)).date())
         i=i+1
-
-    return render(request, 'user/reserve.html', {'stations':Stationstable.objects.all(),'startdates':startdates})
+    cost=20;
+    reservationdays = 14;
+    return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost})
 
 
 def reservations(request):

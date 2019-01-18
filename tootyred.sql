@@ -94,7 +94,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add users',7,'add_users'),(26,'Can change users',7,'change_users'),(27,'Can delete users',7,'delete_users'),(28,'Can view users',7,'view_users'),(29,'Can add user profile',8,'add_userprofile'),(30,'Can change user profile',8,'change_userprofile'),(31,'Can delete user profile',8,'delete_userprofile'),(32,'Can view user profile',8,'view_userprofile'),(33,'Can add stationstable',9,'add_stationstable'),(34,'Can change stationstable',9,'change_stationstable'),(35,'Can delete stationstable',9,'delete_stationstable'),(36,'Can view stationstable',9,'view_stationstable');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add users',7,'add_users'),(26,'Can change users',7,'change_users'),(27,'Can delete users',7,'delete_users'),(28,'Can view users',7,'view_users'),(29,'Can add user profile',8,'add_userprofile'),(30,'Can change user profile',8,'change_userprofile'),(31,'Can delete user profile',8,'delete_userprofile'),(32,'Can view user profile',8,'view_userprofile');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(9,'home','stationstable'),(8,'home','userprofile'),(7,'home','users'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(8,'home','userprofile'),(7,'home','users'),(6,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +270,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2019-01-09 13:47:15.448537'),(2,'auth','0001_initial','2019-01-09 13:47:55.538450'),(3,'admin','0001_initial','2019-01-09 13:48:05.896131'),(4,'admin','0002_logentry_remove_auto_add','2019-01-09 13:48:06.041491'),(5,'admin','0003_logentry_add_action_flag_choices','2019-01-09 13:48:06.174982'),(6,'contenttypes','0002_remove_content_type_name','2019-01-09 13:48:14.386457'),(7,'auth','0002_alter_permission_name_max_length','2019-01-09 13:48:19.254579'),(8,'auth','0003_alter_user_email_max_length','2019-01-09 13:48:20.016108'),(9,'auth','0004_alter_user_username_opts','2019-01-09 13:48:20.113928'),(10,'auth','0005_alter_user_last_login_null','2019-01-09 13:48:31.244265'),(11,'auth','0006_require_contenttypes_0002','2019-01-09 13:48:31.323119'),(12,'auth','0007_alter_validators_add_error_messages','2019-01-09 13:48:31.472839'),(13,'auth','0008_alter_user_username_max_length','2019-01-09 13:48:36.139624'),(14,'auth','0009_alter_user_last_name_max_length','2019-01-09 13:48:48.318172'),(15,'sessions','0001_initial','2019-01-09 13:48:52.593941'),(16,'home','0001_initial','2019-01-09 15:36:51.572408'),(17,'home','0002_userprofile','2019-01-10 05:44:46.392227'),(18,'home','0003_userprofile_creditcardexpirationdate','2019-01-10 05:45:35.366400'),(19,'home','0004_userprofile_creditcardtype','2019-01-10 05:47:39.365758'),(20,'home','0005_stationstable','2019-01-12 14:31:56.419726');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2019-01-09 13:47:15.448537'),(2,'auth','0001_initial','2019-01-09 13:47:55.538450'),(3,'admin','0001_initial','2019-01-09 13:48:05.896131'),(4,'admin','0002_logentry_remove_auto_add','2019-01-09 13:48:06.041491'),(5,'admin','0003_logentry_add_action_flag_choices','2019-01-09 13:48:06.174982'),(6,'contenttypes','0002_remove_content_type_name','2019-01-09 13:48:14.386457'),(7,'auth','0002_alter_permission_name_max_length','2019-01-09 13:48:19.254579'),(8,'auth','0003_alter_user_email_max_length','2019-01-09 13:48:20.016108'),(9,'auth','0004_alter_user_username_opts','2019-01-09 13:48:20.113928'),(10,'auth','0005_alter_user_last_login_null','2019-01-09 13:48:31.244265'),(11,'auth','0006_require_contenttypes_0002','2019-01-09 13:48:31.323119'),(12,'auth','0007_alter_validators_add_error_messages','2019-01-09 13:48:31.472839'),(13,'auth','0008_alter_user_username_max_length','2019-01-09 13:48:36.139624'),(14,'auth','0009_alter_user_last_name_max_length','2019-01-09 13:48:48.318172'),(15,'sessions','0001_initial','2019-01-09 13:48:52.593941'),(16,'home','0001_initial','2019-01-09 15:36:51.572408'),(17,'home','0002_userprofile','2019-01-10 05:44:46.392227'),(18,'home','0003_userprofile_creditcardexpirationdate','2019-01-10 05:45:35.366400'),(19,'home','0004_userprofile_creditcardtype','2019-01-10 05:47:39.365758');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,54 +353,8 @@ INSERT INTO `home_userprofile` VALUES (8,'',10,NULL,NULL);
 /*!40000 ALTER TABLE `home_userprofile` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `stationstable`
---
 
-DROP TABLE IF EXISTS `stationstable`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `stationstable` (
-  `lon` decimal(30,16) DEFAULT NULL,
-  `address` varchar(50) DEFAULT NULL,
-  `capacity` int(11) DEFAULT NULL,
-  `name` varchar(30) DEFAULT NULL,
-  `lat` decimal(30,15) DEFAULT NULL,
-  `num_bikes_available` int(11) DEFAULT NULL,
-  `last_reported` int(11) DEFAULT NULL,
-  `is_installed` bit(1) DEFAULT NULL,
-  `num_docks_available` int(11) DEFAULT NULL,
-  `station_id` int(11) DEFAULT NULL,
-  `is_renting` bit(1) DEFAULT NULL,
-  `is_returning` bit(1) DEFAULT NULL,
-  `image` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `stationstable`
---
-
-LOCK TABLES `stationstable` WRITE;
-/*!40000 ALTER TABLE `stationstable` DISABLE KEYS */;
-INSERT INTO `stationstable` VALUES   (-3.21358,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Braidburn Valley Park',55.9191,7,1547134338,_binary '',8,1,_binary '',_binary '','BraidburnValleyPark.jpg'),
-  (-3.21438,'Edinburgh EH3 5PA, UK',15,'Inverleith Park',55.96653,7,1547134338,_binary '',8,2,_binary '',binary '','inverleithpark.jpg'),
-  (-3.19839,'Princes St, Edinburgh EH2 2HG, UK',15,'Princes Street Gardens',55.951752,7,1547134338,_binary '',8,3,_binary '',binary '','princesstreetgardens.jpg'),
-  (-3.19186,'Melville Dr, Edinburgh EH9 1ND, UK',15,'The Meadows',55.93994,7,1547134338,_binary '',8,4,_binary '',binary '','themeadows.JPG'),
-  (-3.15847,'Lochend Rd S, Edinburgh EH7 6BP, UK',15,'Lochend Park',55.96131,7,1547134338,_binary '',8,5,_binary '',binary '','lochendpark.jpg'),
-  (-3.16212,'Links Gardens, Edinburgh EH6 7QR, UK',15,'Leith Links',55.97174,7,1547134338,_binary '',8,6,_binary '',binary '','leithlinks.jpg'),
-  (-3.14636,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',15,'Dr Neil''s Garden',55.94172,7,1547134338,_binary '',8,7,_binary '',binary '','DrNeilGarden.jpg'),
-  (-3.16834,'Stanedykehead, Alnwickhill EH16 6TN, UK',15,'Seven Acre Park',55.90584,7,1547134338,_binary '',8,8,_binary '',binary '','SevenAcrePark.jpg'),
-  (-3.248529,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Saughton Park And Gardens',55.934132,7,1547134338,_binary '',8,9,_binary '',binary '','SaughtonParkAndGardens.jpg'),
-  (-3.30343,'73 Glasgow Rd, Edinburgh EH12 8LJ, UK',15,'Gyle Park',55.94155,7,1547134338,_binary '',8,10,_binary '',binary '','GylePark.jpg'),
-  (-3.13123,'Mountcastle Dr N, Edinburgh EH8 7SE, UK',15,'Figgate Park',55.95157,7,1547134338,_binary '',8,11,_binary '',binary '','figgatepark.jpg'),
-  (-3.30092,'32 Barnton Ave, Edinburgh EH4 6JH, UK',15,'The Bruntsfield Links Golfing Society',55.96843,7,1547134338,_binary '',8,12,_binary '',binary '','TheBruntsfieldLinksGolfing.jpg'),
- (-3.25772,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',15,'Ravelston Golf Club',55.95435,7,1547134338,_binary '',8,13,_binary '',binary '','ravelstongolfclub.jpg'),
-(-3.13853,'Craigmillar Castle Rd, Edinburgh EH16 4SY, UK',15,'Craigmillar Castle',55.92638,7,1547134338,_binary '',8,14,_binary '',binary '','craigmillarcastle.jpg');
-/*!40000 ALTER TABLE `stationstable` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `users`
 --
 
@@ -433,3 +387,201 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-01-14 10:42:27
+
+
+CREATE TABLE acc_status(
+acc_status_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+status_name VARCHAR(20) NOT NULL
+)ENGINE = INNODB;
+
+
+CREATE TABLE customer(
+customer_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+cfirst_name VARCHAR(20) NOT NULL,
+clast_name VARCHAR(20) NOT NULL,
+c_email VARCHAR(20) NOT NULL,
+c_contact_no int(11) NOT NULL,
+c_username VARCHAR(20) NOT NULL UNIQUE,
+c_password VARCHAR(20) NOT NULL,
+c_acc_status ENUM('active', 'blocked'),
+c_acc_creation_date DATETIME
+CONSTRAINT fk_c_acc_status_id FOREIGN KEY (c_acc_status) REFERENCES acc_status(acc_status_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+
+
+CREATE TABLE operator(
+operator_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+ofirst_name VARCHAR(20) NOT NULL,
+olast_name VARCHAR(20) NOT NULL,
+o_email VARCHAR(20) NOT NULL,
+o_contact_no int(11) NOT NULL,
+o_username VARCHAR(20) NOT NULL UNIQUE,
+o_password VARCHAR(20) NOT NULL
+)ENGINE = INNODB;
+
+
+
+CREATE TABLE manager(
+manager_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+mfirst_name VARCHAR(20) NOT NULL,
+mlast_name VARCHAR(20) NOT NULL,
+m_email VARCHAR(20) NOT NULL,
+m_contact_no int(11) NOT NULL,
+m_username VARCHAR(20) NOT NULL UNIQUE,
+m_password VARCHAR(20) NOT NULL
+)ENGINE = INNODB;
+
+-- we might not use this one since svet said we aint storing credit card details but ill include it just in case
+CREATE TABLE creditcardinfo(
+card_id INTEGER(5) AUTO_INCREMENT PRIMARY KEY,
+card_info INTEGER(16) NOT NULL,
+card_exp_date DATE NOT NULL
+)ENGINE = INNODB;
+
+CREATE TABLE complaints(
+complaint_id INTEGER(5) AUTO_INCREMENT PRIMARY KEY,
+complaint_type VARCHAR(20) NOT NULL,
+complaint_desc VARCHAR(50) NOT NULL
+)ENGINE = INNODB;
+
+CREATE TABLE reservation_type(
+res_type_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+res_type_name VARCHAR(20) NOT NULL
+)ENGINE = INNODB;
+
+CREATE TABLE equipment_gear(
+gear_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+gear_name VARCHAR(20) NOT NULL,
+gear_cost INTEGER(11) NOT NULL
+)ENGINE = INNODB;
+
+CREATE TABLE customer_rating(
+rating_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+rating_value INTEGER(1) NOT NULL
+)ENGINE = INNODB;
+
+CREATE TABLE reservation(
+reservation_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+res_type INTEGER(11) NOT NULL,
+res_cost INTEGER(11) NOT NULL,
+gear_type INTEGER(11) NOT NULL,
+res_date VARCHAR(50) NOT NULL,
+starttime DATETIME NOT NULL,
+endtime DATETIME NOT NULL,
+totalduration INTEGER(5) NOT NULL,
+c_rating INTEGER(11),
+CONSTRAINT fk_res_type FOREIGN KEY (res_type) REFERENCES reservation_type(res_type_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_gear_type FOREIGN KEY (gear_type) REFERENCES equipment_gear(gear_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_c_rating FOREIGN KEY (c_rating) REFERENCES customer_rating(rating_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+
+CREATE TABLE station(
+station_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+address VARCHAR(100) NOT NULL,
+rack_capacity INTEGER(11) NOT NULL,
+num_racks_available INTEGER(11) NOT NULL,
+info VARCHAR(100) NOT NULL,
+name VARCHAR(50) NOT NULL,
+lon DECIMAL(30,16) NOT NULL,
+lat DECIMAL(30,15) NOT NULL,
+is_active BOOLEAN NOT NULL,
+image VARCHAR(30) NOT NULL,
+fine_cost DECIMAL(11,2), -- can be null if no fine, combined the fine table from the er diagram into the station since its a one to one relationship anyways
+fine_desc VARCHAR(50)
+)ENGINE = INNODB;
+
+INSERT INTO `station` (lon,address,rack_capacity,name,lat,num_racks_available,image,info,is_active) VALUES
+  (-3.21358,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Braidburn Valley Park',55.9191,7,'BraidburnValleyPark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.21438,'Edinburgh EH3 5PA, UK',15,'Inverleith Park',55.96653,7,'inverleithpark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.19839,'Princes St, Edinburgh EH2 2HG, UK',15,'Princes Street Gardens',55.951752,7,'princesstreetgardens.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.19186,'Melville Dr, Edinburgh EH9 1ND, UK',12,'The Meadows',55.93994,7,'themeadows.JPG','THIS IS THE INFO PART',TRUE),
+  (-3.15847,'Lochend Rd S, Edinburgh EH7 6BP, UK',25,'Lochend Park',55.96131,10,'lochendpark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.16212,'Links Gardens, Edinburgh EH6 7QR, UK',8,'Leith Links',55.97174,3,'leithlinks.png','THIS IS THE INFO PART',TRUE),
+  (-3.14636,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',15,'Dr Neil''s Garden',55.94172,7,'DrNeilGarden.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.16834,'Stanedykehead, Alnwickhill EH16 6TN, UK',15,'Seven Acre Park',55.90584,7,'SevenAcrePark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.248529,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Saughton Park And Gardens',55.934132,7,'SaughtonParkAndGardens.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.30343,'73 Glasgow Rd, Edinburgh EH12 8LJ, UK',15,'Gyle Park',55.94155,7,'GylePark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.13123,'Mountcastle Dr N, Edinburgh EH8 7SE, UK',12,'Figgate Park',55.95157,5,'figgatepark.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.30092,'32 Barnton Ave, Edinburgh EH4 6JH, UK',15,'The Bruntsfield Links Golfing Society',55.96843,7,'TheBruntsfieldLinksGolfing.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.25772,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',15,'Ravelston Golf Club',55.95435,7,'ravelstongolfclub.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.13853,'Craigmillar Castle Rd, Edinburgh EH16 4SY, UK',10,'Craigmillar Castle',55.92638,4,'craigmillarcastle.jpg','THIS IS THE INFO PART',TRUE);
+
+CREATE TABLE checkuplog(
+ clog_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+ clog_count INTEGER(11) NOT NULL,
+ checkup_date DATETIME NOT NULL,
+ checkup_desc VARCHAR(50) NOT NULL,
+ checkuplog_station_id INTEGER(11) NOT NULL,
+ CONSTRAINT fk_checkuplog_station_id FOREIGN KEY (checkuplog_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+
+
+CREATE TABLE stationfootage(
+footage_id INTEGER(5) AUTO_INCREMENT PRIMARY KEY,
+footage_date VARCHAR(20) NOT NULL,
+footage_link VARCHAR(20) NOT NULL,
+footage_station_id INTEGER(11) NOT NULL,
+CONSTRAINT fk_footage_station_id FOREIGN KEY (footage_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+CREATE TABLE type_of_bike(
+bike_type_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+bike_info VARCHAR(100) NOT NULL,
+bike_model VARCHAR(20) NOT NULL, -- im not sure what we refered "bike model" in the requirements, but if its the brand for the bike, then just change to ENUM and put your values on it
+bike_type VARCHAR(20) NOT NULL, -- used this website for the types, add or remove values if you want https://thebicycleescape.com/resources/types-of-bikes/
+bike_cost DECIMAL(11,2) NOT NULL,
+bike_image VARCHAR(30) NOT NULL
+)ENGINE = INNODB;
+
+INSERT INTO `type_of_bike` (bike_info,bike_model,bike_type,bike_cost,bike_image) VALUES
+  ('This is the info about the bike','Shimano XT','Mountain Bike',2,'shimano.jpg'),
+  ('Size weight blah blahThis is the info about the bike','Fuji X','Tandem Bike',4,'tandem.png'),
+  ('This is the info about the bike','Fuji Crank T ','Road Bike',1.25,'fui.png'),
+  ('This is the info about the bike','VeloPlus','Wheelchair Bike',3.5,'veloplus.png');
+
+CREATE TABLE status_of_bike(
+  bike_status_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+  bike_status_name VARCHAR(20) NOT NULL
+  )ENGINE = INNODB;
+
+CREATE TABLE bike(
+bike_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+bike_type INTEGER(11) NOT NULL, -- im not sure what we refered "bike model" in the requirements, but if its the brand for the bike, then just change to ENUM and put your values on it
+travel_count DECIMAL(8,2) NOT NULL, -- up to you to what you want this to be (km, miles, etc), also change the values for decimal to your liking
+bike_status INTEGER(11) NOT NULL,
+bike_stationedat INTEGER(11),
+CONSTRAINT fk_bike_station_id FOREIGN KEY (bike_stationedat) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_bike_type FOREIGN KEY (bike_type) REFERENCES type_of_bike(bike_type_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_bike_status FOREIGN KEY (bike_status) REFERENCES status_of_bike(bike_status_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+CREATE TABLE maintenancelog(
+ mlog_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+ mlog_count INTEGER(11) NOT NULL,
+ maintenance_date DATETIME NOT NULL,
+ maintenance_desc VARCHAR(50) NOT NULL,
+ mechanic_name VARCHAR(50)  NOT NULL, -- dont know if we need this but i added it just in case, delete if you want to
+ maintenance_bike_id INTEGER(11) NOT NULL,
+ CONSTRAINT fk_maintenance_bike_id FOREIGN KEY (maintenance_bike_id) REFERENCES bike(bike_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+CREATE TABLE bike_on_reservation(
+bor_bike_id INTEGER(11) NOT NULL,
+bor_reservation_id INTEGER(11) NOT NULL,
+PRIMARY KEY (bor_bike_id, bor_reservation_id),
+CONSTRAINT fk_bor_bike_id FOREIGN KEY (bor_bike_id) REFERENCES bike(bike_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_bor_reservation_id FOREIGN KEY (bor_reservation_id) REFERENCES reservation(reservation_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+CREATE TABLE station_on_reservation(
+sor_start_station_id INTEGER(11) NOT NULL,
+sor_end_station_id INTEGER(11) NOT NULL,
+sor_reservation_id INTEGER(11) NOT NULL,
+PRIMARY KEY (sor_start_station_id, sor_end_station_id, sor_reservation_id),
+CONSTRAINT fk_start_station_id FOREIGN KEY (sor_start_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_end_station_id FOREIGN KEY (sor_end_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_sor_reservation_id FOREIGN KEY (sor_reservation_id) REFERENCES reservation(reservation_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;

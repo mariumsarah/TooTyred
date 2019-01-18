@@ -35,21 +35,52 @@ def create_profile(sender,**kwargs):
 
 post_save.connect(create_profile,sender=User)
 
-class Stationstable(models.Model):
-    lon = models.DecimalField(max_digits=30, decimal_places=16, blank=True, null=True)
-    address = models.CharField(max_length=50, blank=True, null=True)
-    capacity = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=30, blank=True, null=True)
-    lat = models.DecimalField(max_digits=30, decimal_places=15, blank=True, null=True)
-    num_bikes_available = models.IntegerField(blank=True, null=True)
-    last_reported = models.IntegerField(blank=True, null=True)
-    is_installed = models.TextField(blank=True, null=True)  # This field type is a guess.
-    num_docks_available = models.IntegerField(blank=True, null=True)
-    station_id = models.IntegerField(primary_key=True)
-    is_renting = models.TextField(blank=True, null=True)  # This field type is a guess.
-    is_returning = models.TextField(blank=True, null=True)  # This field type is a guess.
-    image = models.CharField(max_length=20, blank=True, null=True)
+
+class Station(models.Model):
+    station_id = models.AutoField(primary_key=True)
+    address = models.CharField(max_length=100)
+    rack_capacity = models.IntegerField()
+    num_racks_available = models.IntegerField()
+    info = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    lon = models.DecimalField(max_digits=30, decimal_places=16)
+    lat = models.DecimalField(max_digits=30, decimal_places=15)
+    is_active = models.IntegerField()
+    image = models.CharField(max_length=30)
+    fine_cost = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
+    fine_desc = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'stationstable'
+        db_table = 'station'
+
+class TypeOfBike(models.Model):
+    bike_type_id = models.AutoField(primary_key=True)
+    bike_info = models.CharField(max_length=100)
+    bike_model = models.CharField(max_length=20)
+    bike_type = models.CharField(max_length=20)
+    bike_cost = models.DecimalField(max_digits=11, decimal_places=2)
+    bike_image = models.CharField(max_length=30)
+
+    class Meta:
+        managed = False
+        db_table = 'type_of_bike'
+
+class StatusOfBike(models.Model):
+    bike_status_id = models.AutoField(primary_key=True)
+    bike_status_name = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'status_of_bike'
+
+class Bike(models.Model):
+    bike_id = models.AutoField(primary_key=True)
+    bike_type = models.ForeignKey('TypeOfBike', TypeOfBike, db_column='bike_type')
+    travel_count = models.DecimalField(max_digits=8, decimal_places=2)
+    bike_status = models.ForeignKey('StatusOfBike', StatusOfBike, db_column='bike_status')
+    bike_stationedat = models.ForeignKey('Station', Station, db_column='bike_stationedat', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'bike'
