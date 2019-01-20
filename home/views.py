@@ -44,7 +44,8 @@ def reserve(request):
         i=i+1
     cost=20;
     reservationdays = 14;
-    return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost})
+    maxbikes=3;
+    return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost,'maxbikes':maxbikes})
 
 
 def reservations(request):

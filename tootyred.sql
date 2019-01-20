@@ -449,6 +449,10 @@ CREATE TABLE reservation_type(
 res_type_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 res_type_name VARCHAR(20) NOT NULL
 )ENGINE = INNODB;
+INSERT INTO `reservation_type` (res_type_name) VALUES
+    ('past'),
+    ('ongoing'),
+    ('future');
 
 CREATE TABLE equipment_gear(
 gear_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
@@ -460,13 +464,19 @@ CREATE TABLE customer_rating(
 rating_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 rating_value INTEGER(1) NOT NULL
 )ENGINE = INNODB;
+INSERT INTO `customer_rating` (rating_value) VALUES
+    (1),
+    (2),
+    (3),
+    (4),
+    (5);
 
 CREATE TABLE reservation(
 reservation_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 res_type INTEGER(11) NOT NULL,
 res_cost INTEGER(11) NOT NULL,
 gear_type INTEGER(11) NOT NULL,
-res_date VARCHAR(50) NOT NULL,
+res_date DATETIME NOT NULL,
 starttime DATETIME NOT NULL,
 endtime DATETIME NOT NULL,
 totalduration INTEGER(5) NOT NULL,
@@ -497,14 +507,10 @@ INSERT INTO `station` (lon,address,rack_capacity,name,lat,num_racks_available,im
   (-3.21438,'Edinburgh EH3 5PA, UK',15,'Inverleith Park',55.96653,7,'inverleithpark.jpg','THIS IS THE INFO PART',TRUE),
   (-3.19839,'Princes St, Edinburgh EH2 2HG, UK',15,'Princes Street Gardens',55.951752,7,'princesstreetgardens.jpg','THIS IS THE INFO PART',TRUE),
   (-3.19186,'Melville Dr, Edinburgh EH9 1ND, UK',12,'The Meadows',55.93994,7,'themeadows.JPG','THIS IS THE INFO PART',TRUE),
-  (-3.15847,'Lochend Rd S, Edinburgh EH7 6BP, UK',25,'Lochend Park',55.96131,10,'lochendpark.jpg','THIS IS THE INFO PART',TRUE),
-  (-3.16212,'Links Gardens, Edinburgh EH6 7QR, UK',8,'Leith Links',55.97174,3,'leithlinks.png','THIS IS THE INFO PART',TRUE),
   (-3.14636,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',15,'Dr Neil''s Garden',55.94172,7,'DrNeilGarden.jpg','THIS IS THE INFO PART',TRUE),
-  (-3.16834,'Stanedykehead, Alnwickhill EH16 6TN, UK',15,'Seven Acre Park',55.90584,7,'SevenAcrePark.jpg','THIS IS THE INFO PART',TRUE),
   (-3.248529,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',15,'Saughton Park And Gardens',55.934132,7,'SaughtonParkAndGardens.jpg','THIS IS THE INFO PART',TRUE),
   (-3.30343,'73 Glasgow Rd, Edinburgh EH12 8LJ, UK',15,'Gyle Park',55.94155,7,'GylePark.jpg','THIS IS THE INFO PART',TRUE),
-  (-3.13123,'Mountcastle Dr N, Edinburgh EH8 7SE, UK',12,'Figgate Park',55.95157,5,'figgatepark.jpg','THIS IS THE INFO PART',TRUE),
-  (-3.30092,'32 Barnton Ave, Edinburgh EH4 6JH, UK',15,'The Bruntsfield Links Golfing Society',55.96843,7,'TheBruntsfieldLinksGolfing.jpg','THIS IS THE INFO PART',TRUE),
+  (-3.13123,'Mountcastle Dr N, Edinburgh EH8 7SE, UK',12,'Figgate Park',55.95157,7,'figgatepark.jpg','THIS IS THE INFO PART',TRUE),
   (-3.25772,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',15,'Ravelston Golf Club',55.95435,7,'ravelstongolfclub.jpg','THIS IS THE INFO PART',TRUE),
   (-3.13853,'Craigmillar Castle Rd, Edinburgh EH16 4SY, UK',10,'Craigmillar Castle',55.92638,4,'craigmillarcastle.jpg','THIS IS THE INFO PART',TRUE);
 
@@ -545,7 +551,12 @@ INSERT INTO `type_of_bike` (bike_info,bike_model,bike_type,bike_cost,bike_image)
 CREATE TABLE status_of_bike(
   bike_status_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
   bike_status_name VARCHAR(20) NOT NULL
-  )ENGINE = INNODB;
+)ENGINE = INNODB;
+
+INSERT INTO `status_of_bike` (bike_status_name) VALUES
+    ('stationed'),
+    ('outofservice'),
+    ('active');
 
 CREATE TABLE bike(
 bike_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
@@ -557,6 +568,81 @@ CONSTRAINT fk_bike_station_id FOREIGN KEY (bike_stationedat) REFERENCES station(
 CONSTRAINT fk_bike_type FOREIGN KEY (bike_type) REFERENCES type_of_bike(bike_type_id) ON DELETE RESTRICT ON UPDATE CASCADE,
 CONSTRAINT fk_bike_status FOREIGN KEY (bike_status) REFERENCES status_of_bike(bike_status_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE = INNODB;
+
+INSERT INTO `bike` (bike_type,travel_count,bike_status,bike_stationedat) VALUES
+  (3,0,1,1),
+  (3,0,1,1),
+  (3,0,1,1),
+  (4,0,1,1),
+  (1,0,1,1),
+  (1,0,1,1),
+  (2,0,1,1),
+  (2,0,1,1),
+  (3,0,1,2),
+  (3,0,1,2),
+  (3,0,1,2),
+  (4,0,1,2),
+  (1,0,1,2),
+  (1,0,1,2),
+  (2,0,1,2),
+  (2,0,1,2),
+  (3,0,1,3),
+  (3,0,1,3),
+  (3,0,1,3),
+  (4,0,1,3),
+  (1,0,1,3),
+  (1,0,1,3),
+  (2,0,1,3),
+  (2,0,1,3),
+  (3,0,1,4),
+  (3,0,1,4),
+  (4,0,1,4),
+  (1,0,1,4),
+  (2,0,1,4),
+  (3,0,1,5),
+  (3,0,1,5),
+  (3,0,1,5),
+  (4,0,1,5),
+  (1,0,1,5),
+  (1,0,1,5),
+  (2,0,1,5),
+  (2,0,1,5),
+  (3,0,1,6),
+  (3,0,1,6),
+  (3,0,1,6),
+  (4,0,1,6),
+  (1,0,1,6),
+  (1,0,1,6),
+  (2,0,1,6),
+  (2,0,1,6),
+  (3,0,1,7),
+  (3,0,1,7),
+  (3,0,1,7),
+  (4,0,1,7),
+  (1,0,1,7),
+  (1,0,1,7),
+  (2,0,1,7),
+  (2,0,1,7),
+  (3,0,1,8),
+  (3,0,1,8),
+  (4,0,1,8),
+  (1,0,1,8),
+  (2,0,1,8),
+  (3,0,1,9),
+  (3,0,1,9),
+  (3,0,1,9),
+  (4,0,1,9),
+  (1,0,1,9),
+  (1,0,1,9),
+  (2,0,1,9),
+  (2,0,1,9),
+  (3,0,1,10),
+  (3,0,1,10),
+  (3,0,1,10),
+  (4,0,1,10),
+  (1,0,1,10),
+  (2,0,1,10);
+
 
 CREATE TABLE maintenancelog(
  mlog_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,

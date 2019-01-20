@@ -248,6 +248,14 @@ text-align:center;
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div>
                     <ul class="list-group">
+                      <li class="list-group-item bike">
+                        <div style="float:right; font-size:20px">
+                          Quantity left: <span id="left"></span>
+                          </div>
+                        <button onclick="resetSelectBike()" type="button" class="links">
+                          <span >Reset</span>
+                        </button>
+                      </li>
                       {% for bike in bike_type %}
                         <li class="list-group-item bike">
                           <div class="row">
@@ -261,9 +269,9 @@ text-align:center;
                               </div>
                             </div>
                             <div class="column-2">
-                              Available:<span id="available{{ bike.bike_type_id }}">4</span>
+                              Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span><br>
                               Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span><br>
-                              Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}"></span>
+                              Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span><br>
                               Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span><br>
                               Bike Type:<span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
                               Bike Model:<span>{{ bike.bike_model }}</span>
@@ -455,7 +463,7 @@ map.setOptions(opt);
          $('#startloc').text(startlocationname);
          $('#endloc').text(endlocationname);
      });
-
+     $("#left").text("{{ maxbikes }}");
     document.getElementById("confirm2").style.display="none";
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var startTime;
@@ -467,6 +475,7 @@ map.setOptions(opt);
       {% endfor %}
     var bikesselected=false;
     var timesselected=false;
+    var repeat = false;
     var done=0;
     function reset() {
         startlocationname = "";
@@ -526,7 +535,7 @@ map.setOptions(opt);
                 $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
                 $('#cyclecost').text(Number($('#cyclecost').text())-(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
                 }
-
+                $("#left").text(Number($("#left").text())+1);
                 $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
 
             }
@@ -541,7 +550,7 @@ map.setOptions(opt);
     function addBike(selector) {
       document.getElementById("confirm2").style.display="block";
       var num = selector[selector.length -1];
-      if($('#available'+num).text()>0)
+      if($('#available'+num).text()>0 && $("#left").text()>0)
        {
          var cost = {{ costperhour }}/4;
          $('#available'+num).text(($('#available'+num).text())-1);
@@ -549,6 +558,7 @@ map.setOptions(opt);
          if((Number($('#cost').text()))==0)
          {
          $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*(Number($('#costperfifteen'+num).text()))));
+         $("#left").text(Number($("#left").text())-1);
          $('#cyclecost').text(Number($('#cyclecost').text())+(Number($('#costperfifteen'+num).text())));
        }
        else {
@@ -569,7 +579,20 @@ map.setOptions(opt);
                   day = '0' + day;
               return [day,monthNames[month-1],year].join(' ');
           }
-
+    function resetSelectBike()
+    {
+      {% for bike in bike_type %}
+           bike{{ bike.bike_type_id }} = 0;
+        {% endfor %}
+        {% for bike in bike_type %}
+          for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
+          {
+            removeBike('bike{{ bike.bike_type_id }}');
+          }
+        {% endfor %}
+        $("#totalcost").text($("#totalcost").text()-(Number($("#cyclecost").text())));
+        $("#cyclecost").text("0");
+    }
     function resetSelect(){
       populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
       disable("select_end_date");
@@ -582,17 +605,9 @@ map.setOptions(opt);
     function resetHomeSelect(){
       if(timesselected==true)
       {
-        {% for bike in bike_type %}
-             bike{{ bike.bike_type_id }} = 0;
-          {% endfor %}
-          {% for bike in bike_type %}
-            for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
-            {
-              removeBike('bike{{ bike.bike_type_id }}');
-            }
-          {% endfor %}
-          $("#totalcost").text($("#totalcost").text()-(Number($("#cyclecost").text())));
-          $("#cyclecost").text("0");
+        resetSelectBike();
+        timesselected = false;
+        alert("back to time select page");
       }
       else {
         populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
@@ -600,22 +615,15 @@ map.setOptions(opt);
         disable("select_end_time");
         disable("select_start_time");
          document.getElementById("confirm").style.display="none";
-         if(bikesselected==false)
+         if(bikesselected==false || (bikesselected== true && repeat==false))
          {
-              {% for bike in bike_type %}
-                bike{{ bike.bike_type_id }} = 0;
-             {% endfor %}
-             {% for bike in bike_type %}
-                for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
-                  {
-                    removeBike('bike{{ bike.bike_type_id }}');
-                  }
-             {% endfor %}
-             $("#totalcost").text("0");
-             $("#cost").text("0");
+           alert("reset home select");
+              resetSelectBike();
              $("#cyclecost").text("0");
          }
          else {
+           alert("bikes selected now going to time");
+           repeat=false;
             $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
             $("#cost").text("0");
          }
@@ -627,11 +635,16 @@ map.setOptions(opt);
         {
           $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
             $("#cost").text("0");
-
+            if(bikesselected==false)
+            {
+                alert("reset bike select");
+            }
+            else {
+              alert("back to bike select page");
+            }
         }
         else
         {
-
           {% for bike in bike_type %}
             bike{{ bike.bike_type_id }} = 0;
           {% endfor %}
@@ -665,11 +678,11 @@ map.setOptions(opt);
       {
         alert("Done1");
       }
+      repeat=true;
       document.getElementById("home-tab").click();
     }
     function bikeSelect() {
       //select all times from all dates that are not full
-
       startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
       endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
       startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
@@ -680,6 +693,7 @@ map.setOptions(opt);
       {
         alert("Done2");
       }
+      alert("time selected now going to bikes");
       document.getElementById("profile-tab").click();
     }
     function populateDate(selector,text,days,curr)
@@ -826,6 +840,14 @@ map.setOptions(opt);
     $('#cost').text(Number(cost));
     $('#totalcost').text(Number(cost)+Number($('#cyclecost').text()));
     });
+    $(document).ready(function(){
+   setInterval(function(){ reload_page(); },10000);
+    });
+
+    function reload_page()
+    {
+      window.location.reload(true);
+    }
   </script>
 
   <script async defer
