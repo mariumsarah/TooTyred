@@ -8,7 +8,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.http import HttpResponse
-import datetime
 # Create your views here.
 def home(request):
     if request.method == 'POST':
