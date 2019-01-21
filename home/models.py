@@ -27,7 +27,8 @@ class UserProfile(models.Model):
         ('A','American Express'),
     )
     creditcardtype=models.CharField(max_length=1,choices=CREDITCARD_TYPE,null=True,blank=True)
-
+    def __str__(self):
+        return self.user.username
 #This part of the code when once a user is created the extended user profile for that user is also created
 def create_profile(sender,**kwargs):
     if kwargs['created']:
@@ -35,44 +36,42 @@ def create_profile(sender,**kwargs):
 
 post_save.connect(create_profile,sender=User)
 
-
 class Station(models.Model):
     station_id = models.AutoField(primary_key=True)
     address = models.CharField(max_length=100)
     rack_capacity = models.IntegerField()
     num_racks_available = models.IntegerField()
-    info = models.CharField(max_length=100)
+    info = models.TextField()
     name = models.CharField(max_length=50)
     lon = models.DecimalField(max_digits=30, decimal_places=16)
     lat = models.DecimalField(max_digits=30, decimal_places=15)
     is_active = models.IntegerField()
     image = models.CharField(max_length=30)
     fine_cost = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
-    fine_desc = models.CharField(max_length=50, blank=True, null=True)
+    fine_desc = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'station'
 
 class TypeOfBike(models.Model):
     bike_type_id = models.AutoField(primary_key=True)
-    bike_info = models.CharField(max_length=100)
+    bike_info = models.TextField()
     bike_model = models.CharField(max_length=20)
     bike_type = models.CharField(max_length=20)
     bike_cost = models.DecimalField(max_digits=11, decimal_places=2)
     bike_image = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'type_of_bike'
+
 
 class StatusOfBike(models.Model):
     bike_status_id = models.AutoField(primary_key=True)
     bike_status_name = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
         db_table = 'status_of_bike'
+
 
 class Bike(models.Model):
     bike_id = models.AutoField(primary_key=True)
@@ -82,5 +81,4 @@ class Bike(models.Model):
     bike_stationedat = models.ForeignKey('Station', Station, db_column='bike_stationedat', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'bike'

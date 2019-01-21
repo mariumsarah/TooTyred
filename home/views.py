@@ -7,6 +7,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.http import HttpResponse
+import datetime
 # Create your views here.
 def home(request):
     if request.method == 'POST':
@@ -37,15 +39,18 @@ def register(request):
 
 
 def reserve(request):
-    startdates = []
-    i=0
-    for i in range(15):
-        startdates.append((datetime.now()+timedelta(days=i)).date())
-        i=i+1
-    cost=20;
-    reservationdays = 14;
-    maxbikes=3;
-    return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost,'maxbikes':maxbikes})
+    if request.method == 'POST':
+        return HttpResponse(request.POST.get("inputendstation",""))
+    else:
+        startdates = []
+        i=0
+        for i in range(15):
+            startdates.append((datetime.now()+timedelta(days=i)).date())
+            i=i+1
+        cost=20;
+        reservationdays = 14;
+        maxbikes=3;
+        return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost,'maxbikes':maxbikes})
 
 
 def reservations(request):

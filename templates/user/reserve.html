@@ -6,173 +6,258 @@
    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
-    <style>
-      body {
-        margin: 0;
-        padding-top: 70px;
-        color:black;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
-      .location {
-        width: 40px;
-        height: 40px;
-        background-color: #3dcacd;
-        border-radius: 45%;
-        box-shadow: 0 6px 10px 0 #666;
-        transition: all 0.1s ease-in-out;
-        font-size: 50px;
-        color: white;
-        text-align: center;
-        line-height: 35px;
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-      }
-      .mapinfo {
-        width: 100px;
-        height: 35px;
-        border-radius: 6px;
-        background-color: #3dcacd;
-        box-shadow: 0 6px 10px 0 #666;
-        transition: all 0.1s ease-in-out;
-        font-size: 12px;
-        color:  black;
-        text-align: left;
-        padding-left:4px;
-        position: fixed;
-        left: 15px;
-        bottom: 20px;
-      }
-      .location:hover {
-        box-shadow: 0 6px 14px 0 #666;
-        transform: scale(1.05);
-      }
+   <style>
+     body {
+     margin: 0;
+     padding-top: 70px;
+     color:black;
+   }
+   #map {
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     width: 100%;
+   }
+   .footer{
+     height:80px;
+     background-color:#3d3a3a;
+     z-index: 5;
+     position: absolute;
+     bottom: 0;
+     width: 100%;
+     margin: 0 auto;
+     display: none;
+     padding:15px;
+     display:none;
+     border-top-left-radius:5px;
+     border-top-right-radius:5px;
+   }
+   .footer-4{
+     height:100%;
+     width:100%;
+     background-color:#3d3a3a;
+     display:flex;
+   }
+   * {
+   box-sizing: border-box
+   }
+   .beton {
+   background-color: #3dcacd;
+   display: block;
+   width: 55%;
+   height:100%;
+   float:left;
+   border-radius:12px;
+   font-size:15px;
+   font-weight:bold;
+   }
+   .mid{
+   width:3%;
+   height:100%;
+   float:left;
+   }
+   .closed{
+   width:5%;
+   height:100%;
+   float:left;
+   }
+   .location {
+     width: 40px;
+     height: 40px;
+     background-color: #3dcacd;
+     border-radius: 45%;
+     box-shadow: 0 6px 10px 0 #666;
+     transition: all 0.1s ease-in-out;
+     font-size: 50px;
+     color: white;
+     text-align: center;
+     line-height: 35px;
+     position: fixed;
+     right: 10px;
+     bottom: 20px;
+   }
+   .mapinfo {
+     width: 100px;
+     height: 35px;
+     border-radius: 6px;
+     background-color: #3dcacd;
+     box-shadow: 0 6px 10px 0 #666;
+     transition: all 0.1s ease-in-out;
+     font-size: 12px;
+     color:  black;
+     text-align: left;
+     padding-left:4px;
+     position: fixed;
+     left: 15px;
+     bottom: 20px;
+     z-index:3;
+   }
+   .location:hover {
+     box-shadow: 0 6px 14px 0 #666;
+     transform: scale(1.05);
+   }
 
-      .modal-body,.modal-header,.modal-dialog,.modal-content
-      {
-        background-color: #3d3a3a;
-        color: #3dcacd;
-        border-radius:5px;
-      }
-      .modal-title{
-        font-size: 15px;
-        font-weight:bold;
-        border-bottom:2px solid;
-        border-top:2px solid;
-        margin-bottom:4px;
-      }
-      .modal-content{
-        display:flex;
-      }
-      .column-4, .column-8 {
-        float: left;
-        position: relative;
+   .bod,.header,.dia,.modal-content
+   {
+     background-color: #3d3a3a;
+     color: #3dcacd;
+     border-radius:5px;
+   }
+   .tit{
+     font-size: 15px;
+     font-weight:bold;
+     border-bottom:2px solid;
+     border-top:2px solid;
+     margin-bottom:4px;
+   }
+   .modal-content{
+     display:flex;
+   }
+   .column-4, .column-8 {
+     float: left;
+     position: relative;
 
-      }
-      .column-4 {
-        width: 33%;
-        border: 1px solid;
-        border-radius:10px;
-      }
-      .column-8 {
-        width: 70%;
-        text-align:right;
+   }
+   .column-4 {
+     width: 33%;
+     border: 1px solid;
+     border-radius:10px;
+   }
+   .column-8 {
+     width: 70%;
+     text-align:right;
 
-      }
-      .column-1 {
-        width: 20%;
-        float: left;
-        position: relative;
-      }
-      .col1 {
-        height: 80%;
-        float: left;
-        position: relative;
-      }
-      .col2 {
-        height: 20%;
-        float: left;
-        position: relative;
-      }
-      .column-2 {
-        width: 80%;
-        float: left;
-        position: relative;
-      }
-      .start,.end{
-        border:1px solid;
-        text-align:center;
-        border-radius:5px;
-        font-size:12px;
-      }
-      .start{
-        border:1px solid #7CFC00;
-        color:	#7CFC00;
-        margin-bottom:2px;
-      }
-      .end{
-        border:1px solid #FF0000;
-        color: #FF0000;
-        border-color:red;
-      }
-      .priority{
-        font-size:10px;
-      }
-      .list-group-item{
-        background-color: #3d3a3a;
-        border-style:none!important;
-        color:black;
-      }
-      .information
-      {
-        font-weight:bold;
-        font-size:12px;
-      }
-      .styled-select select {
+   }
+   .column-1 {
+     width: 20%;
+     float: left;
+     position: relative;
+   }
+   .col1 {
+     height: 80%;
+     float: left;
+     position: relative;
+   }
+   .col2 {
+     height: 20%;
+     float: left;
+     position: relative;
+   }
+   .column-2 {
+     width: 80%;
+     float: left;
+     position: relative;
+   }
+   .start,.end{
+     border:1px solid;
+     text-align:center;
+     border-radius:5px;
+     font-size:12px;
+   }
+   .start{
+     border:1px solid #7CFC00;
+     color:	#7CFC00;
+     margin-bottom:2px;
+   }
+   .end{
+     border:1px solid #FF0000;
+     color: #FF0000;
+     border-color:red;
+   }
+   .priority{
+     font-size:10px;
+   }
+   .list-group-item{
+     background-color: #3d3a3a;
+     border-style:none!important;
+     color:black;
+   }
+   .information
+   {
+     font-weight:bold;
+     font-size:12px;
+   }
+   .styled-select select {
    background: transparent;
    border: none;
    font-size: 14px;
    height: 29px;
    padding: 15px; /* If you add too much padding here, the options won't show in IE */
    width: 268px;
-}
-.rounded {
+   }
+   .num1{
+     background-color:white;
+     position:relative;
+   }
+   .dx{
+     font-size:15px;
+     font-weight:bold;
+
+   }
+   .cont{
+     display:block;
+   }
+   .titles{
+     font-size:20px;
+     font-weight:bold;
+   }
+   .cq,.cm,.av,.qu{
+    border: 1px solid #3dcacd;
+    padding:2px;
+    border-radius:4px;
+     height:100%;
+     width:50%;
+     float:left;
+   }
+   .context{
+     font-size:15px;
+   }
+   .ci{
+    font-size:10px;
+    padding:4px;
+   }
+   .rounded {
    -webkit-border-radius: 15px;
    -moz-border-radius: 15px;
    border-radius: 15px;
-}
-.time{
-text-align:center;
-}
-.bike{
-  color: #3dcacd;
-  text-align:left;
-  font-size:12px;
-}
-.black   { background-color: #3dcacd; }
-      a, a:active, a:visited { color: #3dcacd;}
-      #myTab a, a:active, a:visited{border:1px solid #3dcacd;box-shadow: 2px 2px 1px grey;}
-      #myTab a:hover {color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
-        border-radius:3px; }
-      #myTab a:focus{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
-        border-radius:3px; }
-        .links{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
-          border-radius:3px;box-shadow: 2px 2px 1px grey;
+   }
+   .time{
+   text-align:center;
+   }
+   .bike{
+   color: #3dcacd;
+   text-align:left;
+   font-size:12px;
+   }
+   .black   { background-color: #3dcacd; }
+   a, a:active, a:visited { color: #3dcacd;}
+   #myTab a, a:active, a:visited{border:1px solid #3dcacd;box-shadow: 2px 2px 1px grey;}
+   #myTab a:hover {color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
+     border-radius:3px; }
+   #myTab a:focus{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
+     border-radius:3px; }
+     .links{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
+       border-radius:3px;box-shadow: 2px 2px 1px grey;
 
-        }
-        .button-3 {border-radius: 8px; color:  #3d3a3a; background-color: #3dcacd; margin-left:2px;}
-    </style>
+     }
+     .button-3 {border-radius: 8px; color:  #3d3a3a; background-color: #3dcacd; margin-left:2px;}
+
+     </style>
     {% endblock %}
     {% block body %}
     <div id='map'></div>
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
     <div class="location">
       <img width="20px" height="20px" src="{% static 'icons/location.png' %}">
+    </div>
+    <div class="footer">
+      <div class="footer-4">
+        <button class="beton">Station near me</button>
+        <div class="mid"></div>
+        <button class="beton">Direction to station</button>
+        <button type="button" style="float:left;opacity:9; color:#3dcacd;" class="close closed">
+        <span aria-hidden="true">&times;</span></button>
+      </div>
     </div>
     <div class="mapinfo">
       <img style="text-align=right;" src="{% static 'icons/line.png' %}">
@@ -181,15 +266,15 @@ text-align:center;
       Bike Lanes
     </div>
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog dia" role="document">
         <div class="modal-content">
-          <div class="modal-header column-4">
+          <div class="modal-header header column-4">
             <button type="button" style="float:left;opacity:9; color:#3dcacd;" onclick="reset()" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span></button><br>
-            <h5 class="modal-title" id="exampleModalLabel">Make a reservation</h5>
+            <h5 class="modal-title tit" id="exampleModalLabel">Make a reservation</h5>
             <div>
-              <div class="start" id="startloc" ></div>
-              <div class="end" id="endloc"></div><br>
+              Start Station <br><div class="start" id="startloc" ></div>
+              End Station  <br><div class="end" id="endloc"></div><br>
               <p class="information" id="info"></p>
               <p class="priority" >Select based on priority</p>
               <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -208,7 +293,7 @@ text-align:center;
             <tr><td>Total</td><td> €<span style="text-align:left;" id="totalcost">0</span></td></tr>
             </table>
           </div>
-          <div class="modal-body column-8">
+          <div class="modal-body bod column-8">
 
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade" id="home1" role="tabpanel" aria-labelledby="home-tab">
@@ -239,8 +324,8 @@ text-align:center;
                      </select>
                    </li>
                    <li class="list-group-item">
-                     <button id="confirm" onclick="bikeSelect()" type="button" style="background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
-                       <span>Next</span>
+                     <button id="confirm" onclick="bikeSelect()" type="button" style=" float:right;background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
+                       <span>Confirm and Proceed</span>
                      </button>
                    </li>
                </ul>
@@ -269,21 +354,25 @@ text-align:center;
                               </div>
                             </div>
                             <div class="column-2">
-                              Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span><br>
-                              Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span><br>
-                              Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span><br>
-                              Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span><br>
-                              Bike Type:<span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
-                              Bike Model:<span>{{ bike.bike_model }}</span>
+                              <div class="dx"><span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span></div>
+                              <div class="num1">
+                              <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
+                              <div class="qu">Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
+                              </div>
+                              <div class="num2">
+                              <div class="cq">Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span></div>
+                              <div class="cm">Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span></div>
+                              <div class="ci"><span>{{ bike.bike_model }}</span> is a
                               {{ bike.bike_info }}
+                              </div>
                             </div>
                           </div>
                       </li>
                       {% endfor %}
 
                       <li class="list-group-item bike">
-                        <button id="confirm2" onclick="timeSelect()" type="button"  style="background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
-                          <span>Next</span>
+                        <button id="confirm2" onclick="timeSelect()" type="button"  style="float:right;background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
+                          <span>Confirm and Proceed</span>
                         </button>
                       </li>
                       </ul>
@@ -294,9 +383,59 @@ text-align:center;
               </div>
         </div>
       </div>
+      <!-- Button trigger modal -->
+      <button id="modalButton1" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
+        Launch demo modal
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content cont">
+            <div class="modal-header">
+              <h5 class="modal-title titles" id="exampleModalLabel1">Would you like to confirm the following reservation?</h5>
+            </div>
+            <div class="modal-body context">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <li class="list-group-item" style="color:#3dcacd;">End Station <span style="font-weight:bold" id="ends"></span></li>
+                  <li class="list-group-item" style="color:#3dcacd;">Start Station <span style="font-weight:bold" id="starts"></span></li>
+              <li class="list-group-item" style="color:#3dcacd;">Your reservation will start at <span style="font-weight:bold" id="starting"></span></li>
+              <li class="list-group-item"  style="color:#3dcacd;">Your reservation will end at <span style="font-weight:bold" id="ending"></span></li>
+            <li class="list-group-item"  id="biked" style="color:#3dcacd;">Bikes reserved:<br></li>
+            <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
+          <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
+          <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
+              </ul>
+                <form  method="post" name="myform">
+                  {% csrf_token %}
+               <input type="hidden" name="inputendstation" id="inputendstation" value="why"/>
+                <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
+                 <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
+                  <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
+                  <input type="hidden" name="inputenddate" id="inputenddate" value=""/>
+                  <input type="hidden" name="inputstartdate" id="inputstartdate" value=""/>
+                  <input type="hidden" name="inputtotal" id="inputtotal" value=""/>
+                    {% for bike in bike_type %}
+                  <input type="hidden" name="inputbike{{ bike.bike_type_id }}" id="inputbike{{ bike.bike_type_id }}" value="">
+                  {% endfor %}
+              <button type="button" class="btn btn-secondary" style="color: #3d3a3a;" onclick="reload_page()" data-dismiss="modal">Go back to Reserve Page</button>
+              <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
+            $(".closed").click(function(){
+                $(".footer").slideUp();
+                });
+              $(".location").click(function(){
+                $(".footer").slideDown();
+            });
     document.getElementById('modalButton').style.display="none";
+    document.getElementById('modalButton1').style.display="none";
     var x = 0;
     var startlocationid;
     var endlocationid;
@@ -459,7 +598,7 @@ map.setOptions(opt);
 
      $('#exampleModal').on('show.bs.modal', function (event) {
          var modal = $(this)
-         modal.find('.modal-title').text('Make a reservation')
+         modal.find('.tit').text('Make a reservation')
          $('#startloc').text(startlocationname);
          $('#endloc').text(endlocationname);
      });
@@ -519,6 +658,35 @@ map.setOptions(opt);
           document.getElementById(selector).style.color= "black" ;
           document.getElementById(selector).disabled = false;
     }
+    function confirmed()
+    {
+      $('#exampleModal').fadeOut();
+      $("#hourly").text($("#cost").text());
+      $("#starts").text($('#startloc').text());
+      $("#ends").text($('#endloc').text());
+      $("#bikebased").text($("#cyclecost").text());
+      $("#finaltotal").text($("#totalcost").text());
+      {% for bike in bike_type %}
+      if(Number($("#quantity{{ bike.bike_type_id }}").text())!=0)
+            $("#biked").append(($("#quantity{{ bike.bike_type_id }}").text())+" of {{ bike.bike_type }}  "+"<br>");
+        {% endfor %}
+      $("#ending").text(convertMinutes(endTime)+" on "+endDate);
+      $("#starting").text(convertMinutes(startTime)+" on "+startDate);
+      document.getElementById("modalButton1").click();
+    }
+    function send()
+    {
+      document.getElementById("inputstartstation").value=($('#startloc').text());
+      document.getElementById("inputendstation").value=($('#endloc').text());
+                          {% for bike in bike_type %}
+      document.getElementById("inputbike{{ bike.bike_type_id }}").value=($("#quantity{{ bike.bike_type_id }}").text());
+                            {% endfor %}
+      document.getElementById("inputstarttime").value=(convertMinutes(endTime));
+      document.getElementById("inputendtime").value=(convertMinutes(startTime));
+      document.getElementById("inputstartdate").value=(startDate);
+      document.getElementById("inputenddate").value=(endDate);
+      document.myform.submit();
+    }
     function removeBike(selector) {
            var num = selector[selector.length -1];
            if($('#quantity'+num).text()>0)
@@ -558,14 +726,13 @@ map.setOptions(opt);
          if((Number($('#cost').text()))==0)
          {
          $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*(Number($('#costperfifteen'+num).text()))));
-         $("#left").text(Number($("#left").text())-1);
          $('#cyclecost').text(Number($('#cyclecost').text())+(Number($('#costperfifteen'+num).text())));
-       }
-       else {
+          }
+          else {
          $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
          $('#cyclecost').text(Number($('#cyclecost').text())+(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
-
-       }
+        }
+        $("#left").text(Number($("#left").text())-1);
        $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
           }
     }
@@ -657,6 +824,22 @@ map.setOptions(opt);
           $('#cyclecost').text("0");
         }
     }
+    function convertMinutes(i)
+    {
+      var hours,minutes,ampm,text;
+      hours = Math.floor(i / 60);
+      minutes = i % 60;
+      if (minutes < 10){
+          minutes = '0' + minutes; // adding leading zero
+        }
+      ampm = hours % 24 < 12 ? 'AM' : 'PM';
+      hours = hours % 12;
+      if (hours === 0){
+          hours = 12;
+        }
+        text=(hours + ':' + minutes + ' ' + ampm);
+        return text;
+    }
     function timeSelect(){
 
       {% for bike in bike_type %}
@@ -676,7 +859,8 @@ map.setOptions(opt);
       }
       if(bikesselected==true && timesselected==true)
       {
-        alert("Done1");
+        confirmed();
+      //  alert("Done1");
       }
       repeat=true;
       document.getElementById("home-tab").click();
@@ -687,11 +871,12 @@ map.setOptions(opt);
       endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
       startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
       endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
-      $('#info').text('Start day: '+ startDate+' '+startTime+'  End day: '+endDate+' '+endTime);
+      $('#info').text('Start day: '+ startDate+' '+convertMinutes(startTime)+'  End day: '+endDate+' '+convertMinutes(endTime));
       timesselected=true;
       if(bikesselected==true && timesselected==true)
       {
-        alert("Done2");
+        confirmed();
+      //  alert('Done2');
       }
       alert("time selected now going to bikes");
       document.getElementById("profile-tab").click();
@@ -841,7 +1026,7 @@ map.setOptions(opt);
     $('#totalcost').text(Number(cost)+Number($('#cyclecost').text()));
     });
     $(document).ready(function(){
-   setInterval(function(){ reload_page(); },10000);
+   setInterval(function(){ reload_page(); },60*60000);
     });
 
     function reload_page()

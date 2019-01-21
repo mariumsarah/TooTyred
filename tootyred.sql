@@ -394,6 +394,9 @@ acc_status_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 status_name VARCHAR(20) NOT NULL
 )ENGINE = INNODB;
 
+INSERT INTO acc_status (status_name) VALUES
+ ('active'),
+ ('blocked');
 
 CREATE TABLE customer(
 customer_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
@@ -403,10 +406,17 @@ c_email VARCHAR(20) NOT NULL,
 c_contact_no int(11) NOT NULL,
 c_username VARCHAR(20) NOT NULL UNIQUE,
 c_password VARCHAR(20) NOT NULL,
-c_acc_status ENUM('active', 'blocked'),
-c_acc_creation_date DATETIME
+c_acc_status INTEGER(11) NOT NULL,
+c_acc_creation_date DATE,
 CONSTRAINT fk_c_acc_status_id FOREIGN KEY (c_acc_status) REFERENCES acc_status(acc_status_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE = INNODB;
+INSERT INTO customer (cfirst_name, clast_name, c_email, c_contact_no, c_username, c_password, c_acc_status, c_acc_creation_date) VALUES
+ ('Edgar', 'Magno', 'asd@email.com', 123456789, 'ejmagno', '12345', 1, '1992-4-17'),
+ ('James', 'Carter', 'qwe@email.com', 987654321, 'jacarter', '12345', 1, '1994-5-12'),
+ ('Roland', 'Bistro', 'zxc@email.com', 132465879, 'zxc123', '12345', 1, '1987-1-10'),
+ ('Carl', 'Bennings', 'vbn@email.com', 999999999, 'bennings', '12345', 1, '1999-2-24'),
+ ('David', 'Shield', 'jkl@email.com', 222222222, 'davshi', '12345', 2, '2000-8-7');
+
 
 
 
@@ -420,6 +430,10 @@ o_username VARCHAR(20) NOT NULL UNIQUE,
 o_password VARCHAR(20) NOT NULL
 )ENGINE = INNODB;
 
+INSERT INTO operator (ofirst_name, olast_name, o_email, o_contact_no, o_username, o_password) VALUES
+ ('Hector', 'Ramirez', 'qeqeqe@email.com', 444444444, 'hramirez', '12345'),
+ ('Yahya', 'Lin', 'wewewe@email.com', 111111111, 'ylin', '12345');
+
 
 
 CREATE TABLE manager(
@@ -431,6 +445,9 @@ m_contact_no int(11) NOT NULL,
 m_username VARCHAR(20) NOT NULL UNIQUE,
 m_password VARCHAR(20) NOT NULL
 )ENGINE = INNODB;
+INSERT INTO manager (mfirst_name, mlast_name, m_email, m_contact_no, m_username, m_password) VALUES
+ ('Lorcan', 'Padilla', 'cxcxcxcx@email.com', 666666666, 'lpadilla', '12345'),
+ ('Tara', 'Miles', 'nmnmnmnmn@email.com', 777777777, 'tmiles', '12345');
 
 -- we might not use this one since svet said we aint storing credit card details but ill include it just in case
 CREATE TABLE creditcardinfo(
@@ -442,13 +459,15 @@ card_exp_date DATE NOT NULL
 CREATE TABLE complaints(
 complaint_id INTEGER(5) AUTO_INCREMENT PRIMARY KEY,
 complaint_type VARCHAR(20) NOT NULL,
-complaint_desc VARCHAR(50) NOT NULL
+complaint_desc TEXT NOT NULL
 )ENGINE = INNODB;
+INSERT INTO complaints (complaint_type, complaint_desc) VALUES ('defective equipment', 'the bike that was given me was defective');
 
 CREATE TABLE reservation_type(
 res_type_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 res_type_name VARCHAR(20) NOT NULL
 )ENGINE = INNODB;
+
 INSERT INTO `reservation_type` (res_type_name) VALUES
     ('past'),
     ('ongoing'),
@@ -459,6 +478,16 @@ gear_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 gear_name VARCHAR(20) NOT NULL,
 gear_cost INTEGER(11) NOT NULL
 )ENGINE = INNODB;
+
+INSERT INTO equipment_gear (gear_name, gear_cost) VALUES
+ ('none', 0),
+ ('helmet', 10),
+ ('armpads', 10),
+ ('kneepads', 10),
+ ('helmetarmpads', 15),
+ ('helmetkneepads', 15),
+ ('armkneepads', 15),
+ ('fullset', 20);
 
 CREATE TABLE customer_rating(
 rating_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
@@ -479,11 +508,13 @@ gear_type INTEGER(11) NOT NULL,
 res_date DATETIME NOT NULL,
 starttime DATETIME NOT NULL,
 endtime DATETIME NOT NULL,
-totalduration INTEGER(5) NOT NULL,
+totalduration TIME NOT NULL,
 c_rating INTEGER(11),
+c_id INTEGER(11) NOT NULL,
 CONSTRAINT fk_res_type FOREIGN KEY (res_type) REFERENCES reservation_type(res_type_id) ON DELETE RESTRICT ON UPDATE CASCADE,
 CONSTRAINT fk_gear_type FOREIGN KEY (gear_type) REFERENCES equipment_gear(gear_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-CONSTRAINT fk_c_rating FOREIGN KEY (c_rating) REFERENCES customer_rating(rating_id) ON DELETE RESTRICT ON UPDATE CASCADE
+CONSTRAINT fk_c_rating FOREIGN KEY (c_rating) REFERENCES customer_rating(rating_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_c_id FOREIGN KEY (c_id) REFERENCES auth_user(id) ON DELETE RESTRICT ON UPDATE CASCADE -- note, deleting a customer account would also delete the foreign key on this table, how to solve?
 )ENGINE = INNODB;
 
 
@@ -492,14 +523,14 @@ station_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
 address VARCHAR(100) NOT NULL,
 rack_capacity INTEGER(11) NOT NULL,
 num_racks_available INTEGER(11) NOT NULL,
-info VARCHAR(100) NOT NULL,
+info TEXT NOT NULL,
 name VARCHAR(50) NOT NULL,
 lon DECIMAL(30,16) NOT NULL,
 lat DECIMAL(30,15) NOT NULL,
 is_active BOOLEAN NOT NULL,
 image VARCHAR(30) NOT NULL,
 fine_cost DECIMAL(11,2), -- can be null if no fine, combined the fine table from the er diagram into the station since its a one to one relationship anyways
-fine_desc VARCHAR(50)
+fine_desc TEXT
 )ENGINE = INNODB;
 
 INSERT INTO `station` (lon,address,rack_capacity,name,lat,num_racks_available,image,info,is_active) VALUES
@@ -517,13 +548,21 @@ INSERT INTO `station` (lon,address,rack_capacity,name,lat,num_racks_available,im
 CREATE TABLE checkuplog(
  clog_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
  clog_count INTEGER(11) NOT NULL,
- checkup_date DATETIME NOT NULL,
- checkup_desc VARCHAR(50) NOT NULL,
+ checkup_date DATE NOT NULL,
+ checkup_desc TEXT NOT NULL,
  checkuplog_station_id INTEGER(11) NOT NULL,
  CONSTRAINT fk_checkuplog_station_id FOREIGN KEY (checkuplog_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE = INNODB;
 
-
+INSERT INTO `checkuplog` (clog_count, checkup_date, checkup_desc, checkuplog_station_id) VALUES
+ (1, '2019-1-02', "slight outward damage on rack no. 12, all racks operating normally", 1),
+ (2, '2019-1-12', "all racks operating normally", 1),
+ (3, '2019-1-18', "all racks operating normally", 1),
+ (1, '2019-1-01', "all racks operating normally", 2),
+ (2, '2019-1-18', "all racks operating normally", 2),
+ (1, '2019-1-04', "racks no. 04 to 08 needs to be cleaned, all racks operating normally", 3),
+ (1, '2019-1-02', "all racks operating normally", 4),
+ (1, '2019-1-02', "all racks operating normally", 5);
 
 CREATE TABLE stationfootage(
 footage_id INTEGER(5) AUTO_INCREMENT PRIMARY KEY,
@@ -535,7 +574,7 @@ CONSTRAINT fk_footage_station_id FOREIGN KEY (footage_station_id) REFERENCES sta
 
 CREATE TABLE type_of_bike(
 bike_type_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
-bike_info VARCHAR(100) NOT NULL,
+bike_info TEXT NOT NULL,
 bike_model VARCHAR(20) NOT NULL, -- im not sure what we refered "bike model" in the requirements, but if its the brand for the bike, then just change to ENUM and put your values on it
 bike_type VARCHAR(20) NOT NULL, -- used this website for the types, add or remove values if you want https://thebicycleescape.com/resources/types-of-bikes/
 bike_cost DECIMAL(11,2) NOT NULL,
@@ -555,7 +594,7 @@ CREATE TABLE status_of_bike(
 
 INSERT INTO `status_of_bike` (bike_status_name) VALUES
     ('stationed'),
-    ('outofservice'),
+    ('OutOfservice'),
     ('active');
 
 CREATE TABLE bike(
@@ -647,12 +686,32 @@ INSERT INTO `bike` (bike_type,travel_count,bike_status,bike_stationedat) VALUES
 CREATE TABLE maintenancelog(
  mlog_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
  mlog_count INTEGER(11) NOT NULL,
- maintenance_date DATETIME NOT NULL,
- maintenance_desc VARCHAR(50) NOT NULL,
+ maintenance_date DATE NOT NULL,
+ maintenance_desc TEXT NOT NULL,
  mechanic_name VARCHAR(50)  NOT NULL, -- dont know if we need this but i added it just in case, delete if you want to
  maintenance_bike_id INTEGER(11) NOT NULL,
  CONSTRAINT fk_maintenance_bike_id FOREIGN KEY (maintenance_bike_id) REFERENCES bike(bike_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE = INNODB;
+
+CREATE TABLE stationroutes(
+route_id INTEGER(11) AUTO_INCREMENT PRIMARY KEY,
+start_station_id INTEGER(11),
+end_station_id INTEGER(11),
+CONSTRAINT fk_start_station_id FOREIGN KEY (start_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_end_station_id FOREIGN KEY (end_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)ENGINE = INNODB;
+
+INSERT INTO `stationroutes` (start_station_id, end_station_id) VALUES
+(1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (1,7), (1,8), (1,9), (1,10),
+(2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10),
+(3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (3,7), (3,8), (3,9), (3,10),
+(4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (4,7), (4,8), (4,9), (4,10),
+(5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (5,7), (5,8), (5,9), (5,10),
+(6,1), (6,2), (6,3), (6,4), (6,5), (6,6), (6,7), (6,8), (6,9), (6,10),
+(7,1), (7,2), (7,3), (7,4), (7,5), (7,6), (7,7), (7,8), (7,9), (7,10),
+(8,1), (8,2), (8,3), (8,4), (8,5), (8,6), (8,7), (8,8), (8,9), (8,10),
+(9,1), (9,2), (9,3), (9,4), (9,5), (9,6), (9,7), (9,8), (9,9), (9,10),
+(10,1), (10,2), (10,3), (10,4), (10,5), (10,6), (10,7), (10,8), (10,9), (10,10);
 
 CREATE TABLE bike_on_reservation(
 bor_bike_id INTEGER(11) NOT NULL,
@@ -663,11 +722,9 @@ CONSTRAINT fk_bor_reservation_id FOREIGN KEY (bor_reservation_id) REFERENCES res
 )ENGINE = INNODB;
 
 CREATE TABLE station_on_reservation(
-sor_start_station_id INTEGER(11) NOT NULL,
-sor_end_station_id INTEGER(11) NOT NULL,
+sor_route_id INTEGER(11) NOT NULL,
 sor_reservation_id INTEGER(11) NOT NULL,
-PRIMARY KEY (sor_start_station_id, sor_end_station_id, sor_reservation_id),
-CONSTRAINT fk_start_station_id FOREIGN KEY (sor_start_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
-CONSTRAINT fk_end_station_id FOREIGN KEY (sor_end_station_id) REFERENCES station(station_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+PRIMARY KEY (sor_route_id, sor_reservation_id),
+CONSTRAINT fk_sor_route_id FOREIGN KEY (sor_route_id) REFERENCES stationroutes(route_id) ON DELETE RESTRICT ON UPDATE CASCADE,
 CONSTRAINT fk_sor_reservation_id FOREIGN KEY (sor_reservation_id) REFERENCES reservation(reservation_id) ON DELETE RESTRICT ON UPDATE CASCADE
 )ENGINE = INNODB;
