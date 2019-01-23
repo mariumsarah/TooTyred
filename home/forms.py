@@ -3,6 +3,9 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.forms import ValidationError
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
+from django.core.validators import validate_email
 
 class ExampleForm(forms.Form):
     field = forms.CharField(label='Message', max_length=80)
@@ -16,9 +19,20 @@ class EditProfileForm(UserChangeForm):
         'email',
         'username')
 
+    def clean(self):
+        cleaned_data=super(EditProfileForm, self).clean()
+        if 'email' not in cleaned_data:
+            return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super(UserChangeForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.required = True
+        del self.fields['password']
+
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField();
-    termsofservice = forms.BooleanField(label=mark_safe('Agree to <a href="/home/termsandconditions/" target="_blank" style="color:black;">Terms and Conditions</a>'));
+    email = forms.EmailField(validators=[validate_email]);
+    termsofservice = forms.BooleanField(label=mark_safe('Agree to <a href="/home/termsandconditions/" target="_blank" style="color:white;"><u>Terms and Conditions</u></a>'));
 
     class Meta:
         model = User
@@ -46,6 +60,8 @@ class RegistrationForm(UserCreationForm):
 #This code is used to validate the passwords are same and the email is not already registered
     def clean(self):
         cleaned_data=super(RegistrationForm, self).clean()
+        if 'email' not in cleaned_data:
+            return cleaned_data
         email = cleaned_data['email']
         try:
             match = User.objects.get(email=email)

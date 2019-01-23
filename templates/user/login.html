@@ -2,6 +2,8 @@
 {% load bootstrap3 %}
 {% block head %}
   <title>Login page</title>
+
+    <style>form{text-shadow:  -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;}</style>
      {% bootstrap_javascript %}
      {% bootstrap_messages %}
 {% endblock %}
@@ -10,11 +12,11 @@
     <div class="row">
       <div class="col-sm-offset-3 col-sm-6">
         <h1>Log in</h1>
-        <p> If you don't already have an account. <a href="/home/register/" style="color:black;">Sign up now!</a></p>
+        <p> If you don't already have an account. <a href="/home/register/" style="color:#3dcacd;">Sign up now!</a></p>
         <form  method="post">
           {% csrf_token %}
           {% bootstrap_form form %}
-          <p> <a href="/home/reset-password/" style="color:black;">Forgot username or password?</a></p>
+          <p> <a href="/home/reset-password/" style="color:#3dcacd;">Forgot username or password?</a></p>
           {% buttons %}
           <button type="submit" class="btn btn-success btn-block">Login</button>
           {% endbuttons %}

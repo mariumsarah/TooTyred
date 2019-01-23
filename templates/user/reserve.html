@@ -41,20 +41,57 @@
    * {
    box-sizing: border-box
    }
+
+   .gm-style-iw {
+     background: #3d3a3d;
+     color:white;
+     box-shadow: -14px 0px 0px #3d3a3a, -14px 9px 0px #3d3a3a, -14px -8px 0px #3d3a3a, 15px -8px 0px #3d3a3a, 15px 9px 0px #3d3a3a;
+   }
+
+   .gm-style-iw {
+     overflow: visible !important;
+
+     div {
+       overflow: visible !important;
+     }
+   }
+
+
+   /*style the arrow*/
+          .gm-style div div div div div div div div {
+               background-color: #3d3a3a !important;
+               padding: 0;
+               margin: 0;
+               top: 0;
+               color: #fff;
+               font-size: 12px;
+           }
+
+
+   .i {
+     float: right;
+     border: 1px solid #ddd;
+     border-radius: 7px;
+     padding: 2px;
+     width: 150px;
+   }
+
    .beton {
    background-color: #3dcacd;
    display: block;
-   width: 55%;
+   width: 100%;
    height:100%;
    float:left;
    border-radius:12px;
    font-size:15px;
    font-weight:bold;
+   border: 2px solid grey;
+   -webkit-transition-duration: 0.4s; /* Safari */
+   transition-duration: 0.4s;
    }
-   .mid{
-   width:3%;
-   height:100%;
-   float:left;
+   .beton:hover {
+     background-color:  #3d3a3a; /* Green */
+     color: #3dcacd;
    }
    .closed{
    width:5%;
@@ -73,7 +110,7 @@
      text-align: center;
      line-height: 35px;
      position: fixed;
-     right: 10px;
+     right: 20px;
      bottom: 20px;
    }
    .mapinfo {
@@ -129,23 +166,27 @@
 
    }
    .column-1 {
-     width: 20%;
+     height: 20%;
+     width:100%;
      float: left;
      position: relative;
    }
    .col1 {
      height: 80%;
      float: left;
+     width:20%;
      position: relative;
    }
    .col2 {
-     height: 20%;
-     float: left;
+     height: 50%;
+     width:70%;
+     float: right;
      position: relative;
    }
    .column-2 {
-     width: 80%;
-     float: left;
+     width:100%;
+     height: 80%;
+     float: right;
      position: relative;
    }
    .start,.end{
@@ -160,8 +201,8 @@
      margin-bottom:2px;
    }
    .end{
-     border:1px solid #FF0000;
-     color: #FF0000;
+     border:1px solid #f44336;
+     color: #f44336;
      border-color:red;
    }
    .priority{
@@ -192,7 +233,10 @@
    .dx{
      font-size:15px;
      font-weight:bold;
-
+     float:right;
+     width:70%;
+     height:50%;
+     position: relative;
    }
    .cont{
      display:block;
@@ -230,7 +274,6 @@
    font-size:12px;
    }
    .black   { background-color: #3dcacd; }
-   a, a:active, a:visited { color: #3dcacd;}
    #myTab a, a:active, a:visited{border:1px solid #3dcacd;box-shadow: 2px 2px 1px grey;}
    #myTab a:hover {color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
      border-radius:3px; }
@@ -252,8 +295,6 @@
     </div>
     <div class="footer">
       <div class="footer-4">
-        <button class="beton">Station near me</button>
-        <div class="mid"></div>
         <button class="beton">Direction to station</button>
         <button type="button" style="float:left;opacity:9; color:#3dcacd;" class="close closed">
         <span aria-hidden="true">&times;</span></button>
@@ -324,29 +365,49 @@
                      </select>
                    </li>
                    <li class="list-group-item">
-                     <button id="confirm" onclick="bikeSelect()" type="button" style=" float:right;background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
-                       <span>Confirm and Proceed</span>
-                     </button>
+                     <form action="/home/reserve/" method="POST" name="time-form" id="timeform">
+                          <button id="confirm" onclick="bikeSelect()" type="submit" style="background-color:#4CAF50;border-color:#4CAF50; color: black" class="btn btn-primary btn-md">
+                            <span>Confirm & Continue</span>
+                          </button>
+                       </form>
                    </li>
                </ul>
             </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div>
                     <ul class="list-group">
-                      <li class="list-group-item bike">
-                        <div style="float:right; font-size:20px">
-                          Quantity left: <span id="left"></span>
-                          </div>
+                        <li class="list-group-item" style="height:50px;">
+                          <div style="text-align:center;" >
+                            <form action="/home/reserve/" method="POST" name="bike-form" id="bikeform">
+                              <button id="confirm2" onclick="timeSelect()" type="submit"  style="background-color:#4CAF50;border-color:#4CAF50; color: black" class="btn btn-primary btn-md">
+                                <span>Confirm & Continue</span>
+                              </button>
+                            </form>
+                      <div style="width:10%;height:100%;">
+                        </li>
+                      <li class="list-group-item">
+
+                            <div style="width:10%;height:100%;">
                         <button onclick="resetSelectBike()" type="button" class="links">
                           <span >Reset</span>
                         </button>
+                          </div>
+                          <div style="width:100%;height:100%;font-size:20px;color:#3dcacd;">
+                            Quantity left: <span id="left"></span>
+                            </div>
                       </li>
                       {% for bike in bike_type %}
                         <li class="list-group-item bike">
                           <div class="row">
                             <div class="column-1">
+                              <div class="dx">
+                                <span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
+                              </div>
                               <div class="col1">
-                                <img style="width:50px;height:50px;" src="{% static 'bikes/'|add:bike.bike_image %}">
+                                <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+                  drop-shadow(-1px -1px 0 white);
+  filter: drop-shadow(1px 1px 0 white)
+          drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
                               </div>
                               <div class="col2">
                                 <button class="button-3" onclick="addBike('bike{{ bike.bike_type_id }}')">+</button>
@@ -354,7 +415,6 @@
                               </div>
                             </div>
                             <div class="column-2">
-                              <div class="dx"><span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span></div>
                               <div class="num1">
                               <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
                               <div class="qu">Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
@@ -369,12 +429,6 @@
                           </div>
                       </li>
                       {% endfor %}
-
-                      <li class="list-group-item bike">
-                        <button id="confirm2" onclick="timeSelect()" type="button"  style="float:right;background-color:#3dcacd; color:black" class="btn btn-primary btn-lg">
-                          <span>Confirm and Proceed</span>
-                        </button>
-                      </li>
                       </ul>
                     </div>
                   </div>
@@ -385,7 +439,6 @@
       </div>
       <!-- Button trigger modal -->
       <button id="modalButton1" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
-        Launch demo modal
       </button>
 
       <!-- Modal -->
@@ -409,7 +462,7 @@
               </ul>
                 <form  method="post" name="myform">
                   {% csrf_token %}
-               <input type="hidden" name="inputendstation" id="inputendstation" value="why"/>
+               <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
                 <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
                  <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
                   <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
@@ -549,7 +602,7 @@ geojson.forEach(function(marker1) {
   if(marker1.is_active==1)
   {
   var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker1.images);
-  var contentString = '<div id="content">'+'<h5>' + marker1.name+"<br>"+ marker1.address +"</h5><p>" + marker1.info + "</p><li>Number of docks: "+marker1.capacity+"</li><img height='60' width='80' src='"+url_mask+"' />"+'</div>';
+  var contentString = '<div id="content">'+'<h5>' + marker1.name+"<br>"+ marker1.address +"</h5><p>" + marker1.info + "</p><li>Number of docks: "+marker1.capacity+"</li><img class='i' src='"+url_mask+"' />"+'</div>';
   var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
@@ -609,8 +662,9 @@ map.setOptions(opt);
     var endTime;
     var startDate;
     var endDate;
+    var bike = {}
       {% for bike in bike_type %}
-            var bike{{ bike.bike_type_id }} = 0;
+            bike[{{ bike.bike_type_id }}] = 0;
       {% endfor %}
     var bikesselected=false;
     var timesselected=false;
@@ -634,7 +688,7 @@ map.setOptions(opt);
         resetSelect();
         done=0;
         {% for bike in bike_type %}
-             bike{{ bike.bike_type_id }} = 0;
+             bike[{{ bike.bike_type_id }}] = 0;
           {% endfor %}
         {% for bike in bike_type %}
           for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
@@ -749,7 +803,7 @@ map.setOptions(opt);
     function resetSelectBike()
     {
       {% for bike in bike_type %}
-           bike{{ bike.bike_type_id }} = 0;
+           bike[{{ bike.bike_type_id }}] = 0;
         {% endfor %}
         {% for bike in bike_type %}
           for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
@@ -813,7 +867,7 @@ map.setOptions(opt);
         else
         {
           {% for bike in bike_type %}
-            bike{{ bike.bike_type_id }} = 0;
+            bike[{{ bike.bike_type_id }}] = 0;
           {% endfor %}
           {% for bike in bike_type %}
             for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
@@ -843,17 +897,17 @@ map.setOptions(opt);
     function timeSelect(){
 
       {% for bike in bike_type %}
-          bike{{ bike.bike_type_id }}=Number($('#quantity{{ bike.bike_type_id }}').text());
+          bike[{{ bike.bike_type_id }}]=Number($('#quantity{{ bike.bike_type_id }}').text());
         {% endfor %}
       var total = 0;
       {% for bike in bike_type %}
-            total = total+bike{{ bike.bike_type_id }};
+            total = total+bike[{{ bike.bike_type_id }}];
         {% endfor %}
       if((total)>0)
       {
         $('#info').text('Number of bikes selected:'+(
         {% for bike in bike_type %}
-              bike{{ bike.bike_type_id }}+
+              bike[{{ bike.bike_type_id }}]+
           {% endfor %}0));
             bikesselected=true;
       }
@@ -878,8 +932,6 @@ map.setOptions(opt);
         confirmed();
       //  alert('Done2');
       }
-      alert("time selected now going to bikes");
-      document.getElementById("profile-tab").click();
     }
     function populateDate(selector,text,days,curr)
     {
@@ -1033,8 +1085,119 @@ map.setOptions(opt);
     {
       window.location.reload(true);
     }
-  </script>
+    $(function() {
 
+
+    // This function gets cookie with a given name
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+    The functions below will create a header with csrftoken
+    */
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+});
+    $('#timeform').on('submit', function(event){
+    event.preventDefault();
+    time_post();
+});
+// AJAX for posting
+function time_post() {
+  $.ajax({
+        url : "/home/reserve/", // the endpoint
+        type : "POST", // http method
+        data : { formtype : 'time', starttime: startTime , endtime: endTime, startdate: startDate, enddate: endDate}, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+          if (
+          //this part checks if all the available bikes added together ==0 if yes then returns 0
+          {% for bike in bike_type %}
+          json.result{{ bike.bike_type_id }} +
+        {% endfor %}0 == 0)
+        {
+          alert("Sorry, there are no bikes available for that timing, try again");
+          document.getElementById("home-tab").click();
+        }
+        //This else loop sets the available bikes for each of the bike types
+        else{
+          {% for bike in bike_type %}
+          $('#available{{ bike.bike_type_id }}').text(json.result{{ bike.bike_type_id }}); // remove the value from the input
+        {% endfor %}
+        document.getElementById("profile-tab").click();
+      }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+                }
+    });
+};
+$('#bikeform').on('submit', function(event){
+event.preventDefault();
+  bike_post();
+});
+// AJAX for posting
+function bike_post() {
+$.ajax({
+    url : "/home/reserve/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'bike', bikes: bike}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+        $('#post-text').val(json.result); // remove the value from the input
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+});
+};
+
+  </script>
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
   </script>

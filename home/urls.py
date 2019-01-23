@@ -19,4 +19,10 @@ urlpatterns = [
     url(r'^reset-password/done/$',PasswordResetDoneView.as_view(template_name='user/reset_password_done.html'),name='password_reset_done'),
     url(r'^reset-password/confirm/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$',PasswordResetConfirmView.as_view(template_name='user/reset_password_confirm.html',success_url= '/home/reset-password/complete/'),name='password_reset_confirm'),
     url(r'^reset-password/complete/$',PasswordResetCompleteView.as_view(template_name='user/reset_password_complete.html'),name='password_reset_complete'),
+    #The following are pages for testing
+    url(r'^station1/$',views.station1),
+    url(r'^station2/$',views.station1),
+    url(r'^station3/$',views.station1),
+    url(r'^station4/$',views.station1),
+    url(r'^station5/$',views.station1)
 ]
