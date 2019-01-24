@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^home/',include('home.urls',namespace="home")),
     url(r'^$', views.welcome_redirect,name='welcome_redirect'),
     url(r'^employee/',include('empApp.urls',namespace="employee")),
+    url(r'^manager/',include('manApp.urls',namespace="maanager")),
+    url(r'^login_success/',views.login_success,name='login_redirect'),
 ]

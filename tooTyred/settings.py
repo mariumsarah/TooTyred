@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'bootstrap3'
+    'bootstrap3',
+    'empApp',
+    'manApp'
 ]
 
 MIDDLEWARE = [
@@ -126,12 +128,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL='/home/reserve/'
-
+LOGIN_REDIRECT_URL='/login_success/'
+LOGIN_REDIRECT_EMP_URL='/employee/log/'
+LOGIN_REDIRECT_MAN_URL='/manager/log/'
 LOGOUT_REDIRECT_URL='/home/'
 
 LOGIN_URL = '/home/login/'
-
 LOGIN_EXEMPT_URL = (
     r'^home/logout$',
     r'^home/register/$',
@@ -142,6 +144,35 @@ LOGIN_EXEMPT_URL = (
     r'^home/reset-password/complete/$',
     r'^home/termsandconditions/$',
     r'^employee/$',
+)
+
+LOGIN_EXEMPT_EMPLOYEE_URL = (
+    r'^home/reservations/$',
+    r'^home/reserve/$',
+    r'^home/account/$',
+    r'^home/changeaccount/$',
+    r'^home/deleteaccount/$',
+    r'^home/changepassword/$',
+    #managers pages come here
+)
+
+LOGIN_EXEMPT_USER_URL = (
+    r'^employee/log/$',
+    r'^employee/bikes/$',
+    r'^employee/reservations/$',
+    r'^employee/stations/$',
+    r'^employee/customerservice/$',
+    r'^employee/checkups/$',
+    #managers pages come here
+)
+
+LOGIN_EXEMPT_MANAGER_URL = (
+    r'^manager/log/$',
+    r'^manager/usagereports/$',
+    r'^manager/statistics/$',
+    r'^manager/database/$',
+    r'^manager/checkups/$',
+    #employee and users come here
 )
 EMAIL_HOST='localhost'
 EMAIL_PORT=1025

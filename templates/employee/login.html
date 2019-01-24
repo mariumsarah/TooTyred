@@ -19,11 +19,11 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-offset-3 col-sm-6">
-            <h1>Log in</h1>
+            <h1>Employee Log in</h1>
+            <h3>Thanks for being part of the TooTyred family!</h3>
             <form  method="post">
               {% csrf_token %}
               {% bootstrap_form form %}
-              <p> <a href="/home/reset-password/" style="color:black;">Forgot username or password?</a></p>
               {% buttons %}
               <button type="submit" class="btn btn-success btn-block">Login</button>
               {% endbuttons %}

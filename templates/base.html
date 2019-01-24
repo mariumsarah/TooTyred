@@ -25,17 +25,46 @@
               <span class="icon-bar"></span>
             </button>
             {% if user.is_authenticated %}
+              {% if user.is_staff and user.is_superuser %}<!--This is the managers page-->
+              <a class="navbar-brand" href="{% url 'manApp:log' %}"><img src="{% static 'icons/logo.png' %}" style="float:left;margin-top: -12px;" width="66" height="45">&nbsp;&nbsp;{{ user.username }}</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="{% url 'manApp:usagereports' %}">Usage Reports</a></li>
+                <li><a href="{% url 'manApp:statistics' %}">Statistics</a></li>
+                <li><a href="{% url 'manApp:database' %}">Database access</a></li>
+                <li><a href="{% url 'manApp:dailyreport' %}">Daily Reports</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'home:logout' %}">Logout</a></li>
+              </ul>
+              {% elif user.is_staff %}<!--This is the employees page-->
+              <a class="navbar-brand" href="{% url 'empApp:log' %}"><img src="{% static 'icons/logo.png' %}" style="float:left;margin-top: -12px;" width="66" height="45">&nbsp;&nbsp;{{ user.username }}</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="{% url 'empApp:bikes' %}">Track Bikes</a></li>
+                <li><a href="{% url 'empApp:reservations' %}">Track Reservations</a></li>
+                <li><a href="{% url 'empApp:stations' %}">Track Stations</a></li>
+                <li><a href="{% url 'empApp:customerservice' %}">Customer Service</a></li>
+                <li><a href="{% url 'empApp:checkups' %}">Check ups</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'home:logout' %}">Logout</a></li>
+              </ul>
+              {% else %}<!--This is the users only  page-->
             <a class="navbar-brand" href="{% url 'home:reserve' %}"><img src="{% static 'icons/logo.png' %}" style="margin-top: -12px;" width="66" height="45"></a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li><a href="{% url 'home:reserve' %}">Make a reservation</a></li>
+              <li><a href="{% url 'home:reserve' %}">Reservations</a></li>
               <li><a href="{% url 'home:reservations' %}">Reservations Log</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="{% url 'home:account' %}">Account</a></li>
               <li><a href="{% url 'home:logout' %}">Logout</a></li>
             </ul>
+              {% endif %}
             {% else %}
             <a class="navbar-brand" href="/home/#home"><img src="{% static 'icons/logo.png' %}" style="margin-top: -12px;" width="66" height="45"></a>
           </div>

@@ -9,12 +9,6 @@ from datetime import datetime, timedelta
 from django.http import HttpResponse,JsonResponse
 import json
 
-# Create your views here.
-def station1(request):
-    if request.user.is_superuser:
-        return render(request, 'user/station1.html')
-
-
 def home(request):
     if request.method == 'POST':
         form = ExampleForm(request.POST)
@@ -45,7 +39,7 @@ def register(request):
 def reserve(request):
     if request.method == 'POST':
             response_data = {}
-            
+
             if request.POST.get('formtype','') == 'bike':
                 return HttpResponse(
                     json.dumps(response_data),
