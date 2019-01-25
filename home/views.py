@@ -44,7 +44,8 @@ def reserve(request):
                 #  biketype[0] will be available bikes of biktype 1
                 #  biketype[1] will be available bikes of biktype 2
                 for i in (range(len(TypeOfBike.objects.all()))):
-                    response_data['result'+str(i+1)] = bikes[i]
+                    response_data['result'+str(i+1)] = 2
+
                 return HttpResponse(
                     json.dumps(response_data),
                     content_type="application/json"
@@ -115,6 +116,7 @@ def reserve(request):
                                     break
                 user = User.objects.get(id=request.user.id)
                 reservation = Reservation.objects.create(res_type=reservationType,res_cost=totalcost,res_date=currentDateTime,starttime=startdatetime,endtime=enddatetime,c=user)
+                reservation.res_code='https://api.qrserver.com/v1/create-qr-code/?data='+str(reservation.reservation_id)+'&size=100x100'
                 stationreservation = StationOnReservation.objects.create(sor_reservation=reservation,sor_route=route)
                 for biken in range(len(biked)):
                     BikeOnReservation.objects.create(bor_bike=biked[biken],bor_reservation_id=reservation.reservation_id)

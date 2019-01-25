@@ -1,10 +1,10 @@
 from django.shortcuts import render
+from django.urls import resolve
+from django.http import HttpResponse
+import json
+# Create your views here.
+# Create your views here.
 
-# Create your views here.
-# Create your views here.
-#def station1(request):
-#    if request.user.is_superuser:
-#        return render(request, 'user/station1.html')
 def emplogin(request):
     if request.method == 'POST':
         return render(request, 'employee/login.html')

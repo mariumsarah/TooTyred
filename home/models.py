@@ -166,7 +166,7 @@ class Reservation(models.Model):
     c = models.ForeignKey(User, models.DO_NOTHING)
     bike_reservation = models.ManyToManyField(Bike, through='BikeOnReservation')
     route_reservation = models.ManyToManyField(Stationroutes, through='StationOnReservation')
-
+    res_code = models.TextField()
     class Meta:
         managed = False
         db_table = 'reservation'
