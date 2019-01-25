@@ -6,13 +6,6 @@ from django.db.models.signals import post_save
 from django.core.validators import RegexValidator
 # Create your models here.
 
-#home.html playing with users folder
-class Users(models.Model):
-    id = models.IntegerField(primary_key=True)
-    class Meta:
-        managed = False
-        db_table = 'users'
-
 #store more infor about usr than provided
 class UserProfile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
@@ -86,72 +79,6 @@ class Bike(models.Model):
         managed = False
         db_table = 'bike'
 
-#EDGAR TEST
-class AccStatus(models.Model):
-    acc_status_id = models.AutoField(primary_key=True)
-    status_name = models.CharField(max_length=20)
-
-    class Meta:
-        managed = False
-        db_table = 'acc_status'
-
-
-
-
-
-class Customer(models.Model):
-    customer_id = models.AutoField(primary_key=True)
-    cfirst_name = models.CharField(max_length=20)
-    clast_name = models.CharField(max_length=20)
-    c_email = models.CharField(max_length=20)
-    c_contact_no = models.IntegerField()
-    c_username = models.CharField(unique=True, max_length=20)
-    c_password = models.CharField(max_length=20)
-    c_acc_status = models.ForeignKey(AccStatus, models.DO_NOTHING, db_column='c_acc_status')
-    c_acc_creation_date = models.DateField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'customer'
-
-
-
-
-
-class Operator(models.Model):
-    operator_id = models.AutoField(primary_key=True)
-    ofirst_name = models.CharField(max_length=20)
-    olast_name = models.CharField(max_length=20)
-    o_email = models.CharField(max_length=20)
-    o_contact_no = models.IntegerField()
-    o_username = models.CharField(unique=True, max_length=20)
-    o_password = models.CharField(max_length=20)
-
-    class Meta:
-        managed = False
-        db_table = 'operator'
-
-
-
-
-
-class Manager(models.Model):
-    manager_id = models.AutoField(primary_key=True)
-    mfirst_name = models.CharField(max_length=20)
-    mlast_name = models.CharField(max_length=20)
-    m_email = models.CharField(max_length=20)
-    m_contact_no = models.IntegerField()
-    m_username = models.CharField(unique=True, max_length=20)
-    m_password = models.CharField(max_length=20)
-
-    class Meta:
-        managed = False
-        db_table = 'manager'
-
-
-
-
-
 class Creditcardinfo(models.Model):
     card_id = models.AutoField(primary_key=True)
     card_info = models.IntegerField()
@@ -160,10 +87,6 @@ class Creditcardinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'creditcardinfo'
-
-
-
-
 
 class Complaints(models.Model):
     complaint_id = models.AutoField(primary_key=True)
@@ -174,10 +97,6 @@ class Complaints(models.Model):
         managed = False
         db_table = 'complaints'
 
-
-
-
-
 class ReservationType(models.Model):
     res_type_id = models.AutoField(primary_key=True)
     res_type_name = models.CharField(max_length=20)
@@ -186,23 +105,6 @@ class ReservationType(models.Model):
         managed = False
         db_table = 'reservation_type'
 
-
-
-
-
-class EquipmentGear(models.Model):
-    gear_id = models.AutoField(primary_key=True)
-    gear_name = models.CharField(max_length=20)
-    gear_cost = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'equipment_gear'
-
-
-
-
-
 class CustomerRating(models.Model):
     rating_id = models.AutoField(primary_key=True)
     rating_value = models.IntegerField()
@@ -210,11 +112,6 @@ class CustomerRating(models.Model):
     class Meta:
         managed = False
         db_table = 'customer_rating'
-
-
-
-
-
 
 class Checkuplog(models.Model):
     clog_id = models.AutoField(primary_key=True)
@@ -227,10 +124,6 @@ class Checkuplog(models.Model):
         managed = False
         db_table = 'checkuplog'
 
-
-
-
-
 class Stationfootage(models.Model):
     footage_id = models.AutoField(primary_key=True)
     footage_date = models.CharField(max_length=20)
@@ -240,7 +133,6 @@ class Stationfootage(models.Model):
     class Meta:
         managed = False
         db_table = 'stationfootage'
-
 
 class Maintenancelog(models.Model):
     mlog_id = models.AutoField(primary_key=True)
@@ -254,10 +146,6 @@ class Maintenancelog(models.Model):
         managed = False
         db_table = 'maintenancelog'
 
-
-
-
-
 class Stationroutes(models.Model):
     route_id = models.AutoField(primary_key=True)
     start_station = models.ForeignKey(Station, models.DO_NOTHING, related_name='start_station_id', blank=True, null=True)
@@ -267,20 +155,15 @@ class Stationroutes(models.Model):
         managed = False
         db_table = 'stationroutes'
 
-
-
-
 class Reservation(models.Model):
     reservation_id = models.AutoField(primary_key=True)
     res_type = models.ForeignKey('ReservationType', models.DO_NOTHING, db_column='res_type')
-    res_cost = models.IntegerField()
-    gear_type = models.ForeignKey(EquipmentGear, models.DO_NOTHING, db_column='gear_type')
+    res_cost = models.DecimalField(max_digits=11, decimal_places=2)
     res_date = models.DateTimeField()
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
-    totalduration = models.TimeField()
     c_rating = models.ForeignKey(CustomerRating, models.DO_NOTHING, db_column='c_rating', blank=True, null=True)
-    c = models.ForeignKey(Customer, models.DO_NOTHING)
+    c = models.ForeignKey(User, models.DO_NOTHING)
     bike_reservation = models.ManyToManyField(Bike, through='BikeOnReservation')
     route_reservation = models.ManyToManyField(Stationroutes, through='StationOnReservation')
 
@@ -313,4 +196,5 @@ class StationOnReservation(models.Model):
         managed = False
         db_table = 'station_on_reservation'
         unique_together = (('sor_route', 'sor_reservation'),)
-        
+#A table to keep track of station systems
+# QR code for reservations

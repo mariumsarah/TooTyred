@@ -316,14 +316,14 @@
             <div>
               Start Station <br><div class="start" id="startloc" ></div>
               End Station  <br><div class="end" id="endloc"></div><br>
-              <p class="information" id="info"></p>
-              <p class="priority" >Select based on priority</p>
+              <p class="information" id="startinfo"></p>
+              <p class="information" id="endinfo"></p>
               <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
                 <li class="nav-item">
                   <a onclick="resetHomeSelect()" class="nav-link active" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home1" aria-selected="true">Time</a>
                 </li>
                 <li class="nav-item">
-                  <a onclick="resetBikeSelect()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bike</a>
+                  <a onclick="resetBikeSelect()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" style="display:none;">Bike</a>
                 </li>
               </ul>
             </div><br>
@@ -339,6 +339,9 @@
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade" id="home1" role="tabpanel" aria-labelledby="home-tab">
                 <ul class="list-group" >
+                  <li class="list-group-item time" style="color: #3dcacd;font-size: 20px;font-weight:bold;">
+                    <u>Select your reservation time</u>
+                  </li>
                    <li class="list-group-item time">
                      <button onclick="resetSelect()" type="button" class="links">
                        <span >Reset</span>
@@ -367,7 +370,7 @@
                    <li class="list-group-item">
                      <form action="/home/reserve/" method="POST" name="time-form" id="timeform">
                           <button id="confirm" onclick="bikeSelect()" type="submit" style="background-color:#4CAF50;border-color:#4CAF50; color: black" class="btn btn-primary btn-md">
-                            <span>Confirm & Continue</span>
+                            <span>Continue to bike selection</span>
                           </button>
                        </form>
                    </li>
@@ -376,14 +379,15 @@
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div>
                     <ul class="list-group">
-                        <li class="list-group-item" style="height:50px;">
-                          <div style="text-align:center;" >
+                      <li class="list-group-item time" style="color: #3dcacd;font-size: 20px;font-weight:bold;">
+                        <u>Select the bikes</u>
+                      </li>
+                        <li class="list-group-item time" style="height:50px;">
                             <form action="/home/reserve/" method="POST" name="bike-form" id="bikeform">
-                              <button id="confirm2" onclick="timeSelect()" type="submit"  style="background-color:#4CAF50;border-color:#4CAF50; color: black" class="btn btn-primary btn-md">
-                                <span>Confirm & Continue</span>
+                              <button id="confirm2" onclick="timeSelect()" type="submit"  style="background-color:#4CAF50;border-color:#4CAF50; color: black;" class="btn btn-primary btn-md">
+                                <span>Confirm</span>
                               </button>
                             </form>
-                      <div style="width:10%;height:100%;">
                         </li>
                       <li class="list-group-item">
 
@@ -392,9 +396,6 @@
                           <span >Reset</span>
                         </button>
                           </div>
-                          <div style="width:100%;height:100%;font-size:20px;color:#3dcacd;">
-                            Quantity left: <span id="left"></span>
-                            </div>
                       </li>
                       {% for bike in bike_type %}
                         <li class="list-group-item bike">
@@ -654,9 +655,12 @@ map.setOptions(opt);
          modal.find('.tit').text('Make a reservation')
          $('#startloc').text(startlocationname);
          $('#endloc').text(endlocationname);
+         document.getElementById("home-tab").click();
+
+
      });
-     $("#left").text("{{ maxbikes }}");
     document.getElementById("confirm2").style.display="none";
+    document.getElementById("home-tab").style.display="none";
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     var startTime;
     var endTime;
@@ -671,6 +675,7 @@ map.setOptions(opt);
     var repeat = false;
     var done=0;
     function reset() {
+      document.getElementById("home-tab").style.display="none";
         startlocationname = "";
         endlocationname="";
         x = 0;
@@ -684,7 +689,8 @@ map.setOptions(opt);
         startDate="";
         endDate="";
 
-        $('#info').text("");
+        $('#startinfo').text("");
+        $('#endinfo').text("");
         resetSelect();
         done=0;
         {% for bike in bike_type %}
@@ -721,8 +727,8 @@ map.setOptions(opt);
       $("#bikebased").text($("#cyclecost").text());
       $("#finaltotal").text($("#totalcost").text());
       {% for bike in bike_type %}
-      if(Number($("#quantity{{ bike.bike_type_id }}").text())!=0)
-            $("#biked").append(($("#quantity{{ bike.bike_type_id }}").text())+" of {{ bike.bike_type }}  "+"<br>");
+      if(Number($("#quantity{{ bike.bike_type_id }}").text())!=0){
+            $("#biked").append(($("#quantity{{ bike.bike_type_id }}").text())+" of {{ bike.bike_type }}  "+"<br>");}
         {% endfor %}
       $("#ending").text(convertMinutes(endTime)+" on "+endDate);
       $("#starting").text(convertMinutes(startTime)+" on "+startDate);
@@ -733,12 +739,13 @@ map.setOptions(opt);
       document.getElementById("inputstartstation").value=($('#startloc').text());
       document.getElementById("inputendstation").value=($('#endloc').text());
                           {% for bike in bike_type %}
-      document.getElementById("inputbike{{ bike.bike_type_id }}").value=($("#quantity{{ bike.bike_type_id }}").text());
+      document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[{{ bike.bike_type_id }}]);
                             {% endfor %}
-      document.getElementById("inputstarttime").value=(convertMinutes(endTime));
-      document.getElementById("inputendtime").value=(convertMinutes(startTime));
+      document.getElementById("inputstarttime").value=(convertMinutes(startTime));
+      document.getElementById("inputendtime").value=(convertMinutes(endTime));
       document.getElementById("inputstartdate").value=(startDate);
       document.getElementById("inputenddate").value=(endDate);
+      document.getElementById("inputtotal").value=($('#totalcost').text());
       document.myform.submit();
     }
     function removeBike(selector) {
@@ -757,7 +764,6 @@ map.setOptions(opt);
                 $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
                 $('#cyclecost').text(Number($('#cyclecost').text())-(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
                 }
-                $("#left").text(Number($("#left").text())+1);
                 $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
 
             }
@@ -770,10 +776,10 @@ map.setOptions(opt);
             }
     }
     function addBike(selector) {
-      document.getElementById("confirm2").style.display="block";
       var num = selector[selector.length -1];
-      if($('#available'+num).text()>0 && $("#left").text()>0)
+      if(Number($('#available'+num).text())>0)
        {
+         document.getElementById("confirm2").style.display="block";
          var cost = {{ costperhour }}/4;
          $('#available'+num).text(($('#available'+num).text())-1);
          $('#quantity'+num).text(Number($('#quantity'+num).text())+1);
@@ -786,7 +792,6 @@ map.setOptions(opt);
          $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
          $('#cyclecost').text(Number($('#cyclecost').text())+(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
         }
-        $("#left").text(Number($("#left").text())-1);
        $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
           }
     }
@@ -828,7 +833,7 @@ map.setOptions(opt);
       {
         resetSelectBike();
         timesselected = false;
-        alert("back to time select page");
+        document.getElementById("home-tab").style.display="none";
       }
       else {
         populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
@@ -838,12 +843,10 @@ map.setOptions(opt);
          document.getElementById("confirm").style.display="none";
          if(bikesselected==false || (bikesselected== true && repeat==false))
          {
-           alert("reset home select");
               resetSelectBike();
              $("#cyclecost").text("0");
          }
          else {
-           alert("bikes selected now going to time");
            repeat=false;
             $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
             $("#cost").text("0");
@@ -856,13 +859,6 @@ map.setOptions(opt);
         {
           $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
             $("#cost").text("0");
-            if(bikesselected==false)
-            {
-                alert("reset bike select");
-            }
-            else {
-              alert("back to bike select page");
-            }
         }
         else
         {
@@ -875,6 +871,8 @@ map.setOptions(opt);
                 removeBike('bike{{ bike.bike_type_id }}');
               }
           {% endfor %}
+          $('#home-tab').text("Go back");
+          $('#home-tab').css('display','block');
           $('#cyclecost').text("0");
         }
     }
@@ -905,15 +903,12 @@ map.setOptions(opt);
         {% endfor %}
       if((total)>0)
       {
-        $('#info').text('Number of bikes selected:'+(
-        {% for bike in bike_type %}
-              bike[{{ bike.bike_type_id }}]+
-          {% endfor %}0));
             bikesselected=true;
       }
       if(bikesselected==true && timesselected==true)
       {
         confirmed();
+        return;
       //  alert("Done1");
       }
       repeat=true;
@@ -925,7 +920,8 @@ map.setOptions(opt);
       endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
       startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
       endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
-      $('#info').text('Start day: '+ startDate+' '+convertMinutes(startTime)+'  End day: '+endDate+' '+convertMinutes(endTime));
+      $('#startinfo').text('Start: '+ startDate+' '+convertMinutes(startTime));
+      $('#endinfo').text('End: '+ endDate+' '+convertMinutes(endTime));
       timesselected=true;
       if(bikesselected==true && timesselected==true)
       {
@@ -1149,7 +1145,7 @@ function time_post() {
   $.ajax({
         url : "/home/reserve/", // the endpoint
         type : "POST", // http method
-        data : { formtype : 'time', starttime: startTime , endtime: endTime, startdate: startDate, enddate: endDate}, // data sent with the post request
+        data : { formtype : 'time', starttime: convertMinutes(startTime) , endtime: convertMinutes(endTime), startdate: startDate, enddate: endDate,startstation: $('#startloc').text(),endstation:$('#endloc').text()}, // data sent with the post request
 
         // handle a successful response
         success : function(json) {

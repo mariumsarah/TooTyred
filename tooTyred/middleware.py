@@ -49,8 +49,6 @@ class LoginRequiredMiddleware:
         url_is_exempt_man=any(url.match(path) for url in LOGIN_EXEMPT_MANAGER_URL)
         if path == reverse('home:logout').lstrip('/'):
             logout(request)
-        print(LOGIN_EXEMPT_USER_URL)
-        print(url_is_exempt_user)
         if request.user.is_authenticated and url_is_exempt:
             if request.user.is_staff and not request.user.is_superuser:
                 return redirect(settings.LOGIN_REDIRECT_EMP_URL)

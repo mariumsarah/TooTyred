@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Users,Station, TypeOfBike
+from .models import Station, TypeOfBike,Stationroutes, StationOnReservation, Reservation, BikeOnReservation, ReservationType,Bike, StatusOfBike
 from .forms import ExampleForm, RegistrationForm, EditProfileForm
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -8,18 +8,10 @@ from django.contrib.auth import update_session_auth_hash
 from datetime import datetime, timedelta
 from django.http import HttpResponse,JsonResponse
 import json
-
+from datetime import datetime
+import time
 def home(request):
-    if request.method == 'POST':
-        form = ExampleForm(request.POST)
-        if form.is_valid():
-            field1 = form.cleaned_data['field']
-            book=Users(id=field1)
-            book.save()
-            return render(request, 'user/home.html', {'form': form,'user':Users.objects.all(),'is_false': True,'field1':field1})
-    else:
-        form = ExampleForm()
-        return render(request, 'user/home.html', {'form': form,'user':Users.objects.all(),'is_false': False})
+    return render(request, 'user/home.html')
 
 def register(request):
     if request.method == 'POST':
@@ -39,47 +31,99 @@ def register(request):
 def reserve(request):
     if request.method == 'POST':
             response_data = {}
-
-            if request.POST.get('formtype','') == 'bike':
-                return HttpResponse(
-                    json.dumps(response_data),
-                    content_type="application/json"
-                    )
-            #----------------------EDGAR ----------------------------------
-            elif request.POST.get('formtype','') == 'time':
-                #-----------The following are the variables containing the dates and times
-                #request.POST.get('starttime','')# in text 4:15 AM
-                #request.POST.get('endtime','')# in text 3:50 AM
-                #request.POST.get('startdate','')# in text 24 Jan 2019
-                #request.POST.get('enddate','')#in text 25 Jan 2019
-
-
-                #--------- the following are all the bike_types and how many are available forEach
-                # the digit after result is the bike_type_id
-                # also look at the success part of timepost() funciton in the reserve.html file
-                # if you want to see how this is rendered on the page
-                #--------- make sure this is in a for each bike_type loop
-                # this is so the bike types are dynamic and more can be added later
-                response_data['result1'] = 2
-                response_data['result2'] = 0
-                response_data['result3'] = 0
-                response_data['result4'] = 0
+            #EDGAR --------------------------------------------------------------------------------------
+            if request.POST.get('formtype','') == 'time':
+                startdatetime = datetime.strptime(request.POST.get('startdate','')+' '+request.POST.get('starttime',''),'%d %b %Y %I:%M %p')
+                enddatetime = datetime.strptime(request.POST.get('enddate','')+' '+request.POST.get('endtime',''),'%d %b %Y %I:%M %p')
+                startstation = request.POST.get('startstation','')
+                endstation = request.POST.get('endstation','')
+                bikes={}
+                #--------- the above are all the information you need
+                # look at the else loop on how i made the reservations for reference
+                #------In the bikes dict you need to put all the availabe for each of the bike types so for example
+                #  biketype[0] will be available bikes of biktype 1
+                #  biketype[1] will be available bikes of biktype 2
+                for i in (range(len(TypeOfBike.objects.all()))):
+                    response_data['result'+str(i+1)] = bikes[i]
                 return HttpResponse(
                     json.dumps(response_data),
                     content_type="application/json"
                     )
             else:
-                return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost,'maxbikes':maxbikes})
+                startstation = Station.objects.get(name=(request.POST.get("inputstartstation","")))
+                endstation = Station.objects.get(name=(request.POST.get("inputendstation","")))
+                route = Stationroutes.objects.get(start_station_id=startstation,end_station_id=endstation)
+                startdatetime = datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p')
+                enddatetime = datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p')
+                totalcost = int(request.POST.get("inputtotal",""))
+                currentDateTime=datetime.now()
+                reservationType = ReservationType.objects.get(res_type_name='future')
+                reservationTypePast = ReservationType.objects.get(res_type_name='past')
+                reservationTypeOngoing = ReservationType.objects.get(res_type_name='ongoing')
+                statusofbike = StatusOfBike.objects.get(bike_status_name='stationed')
+                bikes = {}
+                for i in range(len(TypeOfBike.objects.all())):
+                    bikes[i] = int(request.POST.get("inputbike"+str(i+1)))
+                #For each bike type
+                biked = {}
+                x=0
+                # for each of the bike types
+                for i in range(len(TypeOfBike.objects.all())):
+                        # for each of the bikes selected of the bike types
+                        for f in range(bikes[i]):
+                            #for all bikes that exist and have that bike type
+                            for bike in Bike.objects.filter(bike_type=i+1):
+                                # if there are reservations for that bike
+                                if BikeOnReservation.objects.filter(bor_bike=bike).exists():
+                                    #store all the bikesReservation in bikesReservations
+                                    bikesReservations = Reservation.objects.filter(bike_reservation=bike)
+
+                                    # if it has future reservations
+                                    if bikesReservations.filter(res_type=reservationType).exists():
+                                        #store all the future reservations in futurereservations
+                                        futurereservations = bikesReservations.filter(res_type=reservationType)
+
+                                        allwithendstation = futurereservations.filter(route_reservation__in=Stationroutes.objects.filter(end_station=startstation))
+
+                                        allwithstartstation = futurereservations.filter(route_reservation__in=Stationroutes.objects.filter(start_station=endstation))
+                                        max_year = futurereservations.latest('endtime').endtime
+                                        # if reservation is start and end station the same and there exists no reservation during the start and end reservation time allow it
+                                        if startstation.station_id == endstation.station_id and allwithendstation.exists() and allwithstartstation.exists() and not allwithendstation.filter(endtime__gt=startdatetime-timedelta(minutes=15)).exists() and not allwithstartstation.filter(starttime__lt=enddatetime+timedelta(minutes=15)).exists() and not bike in biked.values:
+                                            biked[x] = bike
+                                            x=x+1
+                                            break
+                                        elif futurereservations.filter(endtime=max_year,route_reservation__in=Stationroutes.objects.filter(end_station=startstation)).exists() and max_year<=startdatetime-timedelta(minutes=15) and not bike in biked.values :
+                                            biked[x] = bike
+                                            x=x+1
+                                            break
+                                    # if no future reservations but ongoing one
+                                    elif bikesReservations.get(res_type=reservationTypeOngoing).exists():
+                                        #check if the ongoing is going to end station
+                                        if bikesReservations.get(res_type=reservationTypeOngoing).route_reservation.endstation.station_id==startstation.station_id and bikesReservations.get(res_type=reservationTypeOngoing).endtime <= startdatetime-timedelta(minutes=15) and not bike in biked.values:
+                                            biked[x] = bike
+                                            x=x+1
+                                            break
+                                    # if no ongoing or future only past
+                                    elif bikesReservations.filter(res_type=reservationTypePast).exists():
+                                        if(bike.bike_status==statusofbike and bike.bike_stationedat.station_id==startstation.station_id and not bike in biked.values()):
+                                            biked[x] = bike
+                                            x=x+1
+                                            break
+                                elif (bike.bike_status==statusofbike and bike.bike_stationedat.station_id==startstation.station_id and not bike in biked.values()):
+                                    biked[x] = bike
+                                    x=x+1
+                                    break
+                user = User.objects.get(id=request.user.id)
+                reservation = Reservation.objects.create(res_type=reservationType,res_cost=totalcost,res_date=currentDateTime,starttime=startdatetime,endtime=enddatetime,c=user)
+                stationreservation = StationOnReservation.objects.create(sor_reservation=reservation,sor_route=route)
+                for biken in range(len(biked)):
+                    BikeOnReservation.objects.create(bor_bike=biked[biken],bor_reservation_id=reservation.reservation_id)
+                reservation.save()
+                return redirect('/home/reservations/')
     else:
-        startdates = []
-        i=0
-        for i in range(15):
-            startdates.append((datetime.now()+timedelta(days=i)).date())
-            i=i+1
         cost=20;
         reservationdays = 14;
-        maxbikes=3;
-        return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'startdates':startdates,'reservationdays':reservationdays,'costperhour':cost,'maxbikes':maxbikes})
+        return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 def reservations(request):
         return render(request,"user/reservations.html")
