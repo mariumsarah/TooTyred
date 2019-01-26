@@ -123,8 +123,10 @@ def reserve(request):
                 reservation.save()
                 return redirect('/home/reservations/')
     else:
-        cost=20;
-        reservationdays = 14;
+        cost=20
+        reservationdays = 14
+        if not Reservation.objects.filter(c=request.user.id).exists():
+            messages.success(request,'Double click markers to select start and end station! Click once to learn more about the station!')
         return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 def reservations(request):

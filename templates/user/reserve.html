@@ -12,11 +12,15 @@
      padding-top: 70px;
      color:black;
    }
+   .alert{
+     position: absolute; top: 70px; left: 10px; z-index: 99;right:10px;
+   }
    #map {
      position: absolute;
      top: 0;
      bottom: 0;
      width: 100%;
+     z-index:1;
    }
    .footer{
      height:80px;
@@ -41,32 +45,59 @@
    * {
    box-sizing: border-box
    }
-
    .gm-style-iw {
-     background: #3d3a3d;
-     color:white;
-     box-shadow: -14px 0px 0px #3d3a3a, -14px 9px 0px #3d3a3a, -14px -8px 0px #3d3a3a, 15px -8px 0px #3d3a3a, 15px 9px 0px #3d3a3a;
+   	width: 350px !important;
+   	top: 15px !important;
+   	left: 0px !important;
+   	background-color: #3d3a3a;
+    color:white;
+   	box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+   	border: 1px solid rgba(72, 181, 233, 0.6);
+   	border-radius: 2px 2px 10px 10px;
    }
-
-   .gm-style-iw {
-     overflow: visible !important;
-
-     div {
-       overflow: visible !important;
-     }
+   #iw-container {
+   	margin-bottom: 10px;
    }
-
-
-   /*style the arrow*/
-          .gm-style div div div div div div div div {
-               background-color: #3d3a3a !important;
-               padding: 0;
-               margin: 0;
-               top: 0;
-               color: #fff;
-               font-size: 12px;
-           }
-
+   #iw-container .iw-title {
+   	font-family: 'Open Sans Condensed', sans-serif;
+   	font-size: 22px;
+   	font-weight: 400;
+   	padding: 10px;
+   	background-color: #3dcacd;
+   	color: white;
+   	margin: 0;
+   	border-radius: 2px 2px 0 0;
+   }
+   #iw-container .iw-content {
+   	font-size: 13px;
+   	line-height: 18px;
+   	font-weight: 400;
+   	margin-right: 1px;
+   	padding: 15px 5px 20px 15px;
+   	max-height: 140px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+   }
+   .iw-content img {
+   	float: right;
+   	margin: 0 5px 5px 10px;
+   }
+   .iw-subTitle {
+   	font-size: 16px;
+   	font-weight: 700;
+   	padding: 5px 0;
+   }
+   .iw-bottom-gradient {
+   	position: absolute;
+   	width: 326px;
+   	height: 25px;
+   	bottom: 10px;
+   	right: 18px;
+   	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   }
 
    .i {
      float: right;
@@ -112,6 +143,7 @@
      position: fixed;
      right: 20px;
      bottom: 20px;
+     z-index:5;
    }
    .mapinfo {
      width: 100px;
@@ -271,7 +303,7 @@
    .bike{
    color: #3dcacd;
    text-align:left;
-   font-size:12px;
+   font-size:15px;
    }
    .black   { background-color: #3dcacd; }
    #myTab a, a:active, a:visited{border:1px solid #3dcacd;box-shadow: 2px 2px 1px grey;}
@@ -288,6 +320,13 @@
      </style>
     {% endblock %}
     {% block body %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert"><button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>{{ message }}</div>
+    {% endfor %}
+{% endif %}
     <div id='map'></div>
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
     <div class="location">
@@ -340,7 +379,7 @@
               <div class="tab-pane fade" id="home1" role="tabpanel" aria-labelledby="home-tab">
                 <ul class="list-group" >
                   <li class="list-group-item time" style="color: #3dcacd;font-size: 20px;font-weight:bold;">
-                    <u>Select your reservation time</u>
+                    <u>Select your reservation time</u><br> €5/15 minutes
                   </li>
                    <li class="list-group-item time">
                      <button onclick="resetSelect()" type="button" class="links">
@@ -482,6 +521,9 @@
       </div>
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
+      setTimeout(function(){
+   $("#alert").fadeOut();
+}, 20000);
             $(".closed").click(function(){
                 $(".footer").slideUp();
                 });
@@ -603,10 +645,65 @@ geojson.forEach(function(marker1) {
   if(marker1.is_active==1)
   {
   var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker1.images);
-  var contentString = '<div id="content">'+'<h5>' + marker1.name+"<br>"+ marker1.address +"</h5><p>" + marker1.info + "</p><li>Number of docks: "+marker1.capacity+"</li><img class='i' src='"+url_mask+"' />"+'</div>';
+  var contentString ='<div id="iw-container">' +
+                    '<div class="iw-title">'+marker1.name+'</div>' +
+                    '<div class="iw-content">' +
+                      '<div class="iw-subTitle">'+marker1.address+'</div>' +
+                      '<img src='+url_mask+' alt='+marker1.name+' height="115" width="83">' +
+                      '<p>'+marker1.info+'</p>' +
+                      '<div class="iw-subTitle">Racks Capacity: '+ marker1.capacity+'</div>' +
+                    '</div>' +
+                    '<div class="iw-bottom-gradient"></div>' +
+                  '</div>';
   var infowindow = new google.maps.InfoWindow({
-          content: contentString
+          content: contentString,
+          maxWidth: 350
         });
+        google.maps.event.addListener(infowindow, 'domready', function() {
+
+   // Reference to the DIV that wraps the bottom of infowindow
+   var iwOuter = $('.gm-style-iw');
+
+   /* Since this div is in a position prior to .gm-div style-iw.
+    * We use jQuery and create a iwBackground variable,
+    * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
+   */
+   var iwBackground = iwOuter.prev();
+
+   // Removes background shadow DIV
+   iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+   // Removes white background DIV
+   iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+
+   // Moves the infowindow 115px to the right.
+
+
+   // Moves the shadow of the arrow 76px to the left margin.
+   iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+
+   // Moves the arrow 76px to the left margin.
+   iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+
+   // Changes the desired tail shadow color.
+   iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1','background-color': '#3d3a3a'});
+
+   // Reference to the div that groups the close button elements.
+   var iwCloseBtn = iwOuter.next();
+
+   // Apply the desired effect to the close button
+   iwCloseBtn.css({ right: '50px', top: '10px'});
+
+   // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
+   if($('.iw-content').height() < 140){
+     $('.iw-bottom-gradient').css({display: 'none'});
+   }
+
+   // The API automatically applies 0.7 opacity to the button after the mouseout event. This function reverses this event to the desired value.
+   iwCloseBtn.mouseout(function(){
+     $(this).css({opacity: '1'});
+   });
+ });
   var Marker = new google.maps.Marker({
       map: map,
       icon: "{% static 'icons/marker.png' %}",
@@ -647,6 +744,7 @@ geojson.forEach(function(marker1) {
 });
 var opt = { minZoom: 11.5, maxZoom: 18 };
 map.setOptions(opt);
+
 
 }
 

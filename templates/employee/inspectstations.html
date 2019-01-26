@@ -1,9 +1,57 @@
 {% extends 'base.html' %}
 {% block head %}
-  <title>Inspect Stations</title>
+  <title>Track Stations</title>
+  <style>
+    .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+     background-color: #3dcacd;
+     color:#3d3a3a;
+     font-size: 25px;
+  }
+  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+   text-indent:10%;
+   font-size:17px;
+   font-weight:none; !important
+   text-shadow:none; !important
+}
+    </style>
 {% endblock %}
 {% block body %}
-  <div class="container">
-    <p>Welcome to the Operators interface</p>
-  </div>
+<div class="container">
+  <h1>Track Stations</h1>
+  <h4></h4>
+  <table class="table table-striped table-dark">
+    <tbody>
+      <tr>
+        <th scope="row">Track Bikes</th>
+      </tr>
+      <tr>
+        <th scope="row">On this page, you can view all the bikes on the map with their current locations and you are presented with the bike table from the database with their status. You have the option to Order bike redistribution and replace defective bikes and change the status of bikes</th>
+      </tr>
+      <tr>
+        <th scope="row">Track Reservations</th>
+      </tr>
+      <tr>
+        <th scope="row">About Track bikes</th>
+      </tr>
+      <tr>
+        <th scope="row">Track Stations</th>
+      </tr>
+      <tr>
+        <th scope="row">About Track bikes</th>
+      </tr>
+      <tr>
+        <th scope="row">Customer Service</th>
+      </tr>
+      <tr>
+        <th scope="row">About Track bikes</th>
+      </tr>
+      <tr>
+        <th scope="row">Check ups</th>
+      </tr>
+      <tr>
+        <th scope="row">About Track bikes</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
 {% endblock %}
