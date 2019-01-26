@@ -10,6 +10,7 @@ from django.http import HttpResponse,JsonResponse
 import json
 from datetime import datetime
 import time
+from django.core.mail import EmailMessage
 def home(request):
     return render(request, 'user/home.html')
 
@@ -121,6 +122,12 @@ def reserve(request):
                 for biken in range(len(biked)):
                     BikeOnReservation.objects.create(bor_bike=biked[biken],bor_reservation_id=reservation.reservation_id)
                 reservation.save()
+                messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nHere are the details of the reservation you just made on TooTyred.com! \n Your reservation starts on '+startdatetime.strftime('%d %b %Y %I:%M %p')+' at the station '+startstation.name+', '+startstation.address+'\n Your reservation ends on '+enddatetime.strftime('%d %b %Y %I:%M %p')+' at the station '+endstation.name+', '+endstation.address+'\n Your reservation ID is '+str(reservation.reservation_id)+ '\n Your reservation QR code is '+reservation.res_code+'\n The bikes you selected are \n'
+                for i in range(len(biked)):
+                    messagew+=str(i+1)+' '+biked[i].bike_type.bike_type+' \n'
+                messagew+='\n Your total cost that you paid for this reservation is €'+str(totalcost)+'\n Thank you for reserving a bike on our website! Hope you have a great ride!'
+                email = EmailMessage('Your TooTyred Reservation', messagew, to=[request.user.email])
+                email.send()
                 return redirect('/home/reservations/')
     else:
         cost=20

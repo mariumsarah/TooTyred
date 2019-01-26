@@ -174,5 +174,10 @@ LOGIN_EXEMPT_MANAGER_URL = (
     r'^manager/checkups/$',
     #employee and users come here
 )
-EMAIL_HOST='localhost'
-EMAIL_PORT=1025
+#password tootyred12345
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tootyred.com@gmail.com'
+EMAIL_HOST_PASSWORD = 'samwqdqbutvkyisp'
+EMAIL_PORT = 587
