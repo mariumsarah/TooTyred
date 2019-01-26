@@ -5,6 +5,5 @@ urlpatterns = [
     url(r'^log/$',views.manager,name='log'),
     url(r'^usagereports/$',views.manUsagereports,name="usagereports"),
     url(r'^statistics/$',views.manStatistics,name="statistics"),
-    url(r'^database/$',views.manDatabase,name="database"),
     url(r'^dailyreports/$',views.manDailyreport,name="dailyreport"),
     ]

@@ -17,12 +17,6 @@ def log(request):
 def bikes(request):
     return render(request, 'employee/inspectbikes.html')
 
-def empReservations(request):
-    return render(request, 'employee/inspectreservations.html')
-
-def empStations(request):
-    return render(request, 'employee/inspectstations.html')
-
 def empCustomerService(request):
     return render(request, 'employee/customerservice.html')
 

@@ -6,10 +6,9 @@ def manager(request):
 
 def manUsagereports(request):
     return render(request, 'manager/usagereports.html')
+    
 def manStatistics(request):
     return render(request, 'manager/statistics.html')
-def manDatabase(request):
-    return render(request, 'manager/database.html')
 
 def manDailyreport(request):
     return render(request, 'manager/dailyreport.html')
