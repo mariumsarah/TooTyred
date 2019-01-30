@@ -142,11 +142,10 @@ def reserve(request):
         return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 def reservations(request):
-        reservationTypePast = ReservationType.objects.get(res_type_name='past')
-        reservationType = ReservationType.objects.get(res_type_name='future')
-        pastreservations = Reservation.objects.filter(c=request.user.id,res_type=reservationTypePast)
-        futurereservations = Reservation.objects.filter(c=request.user.id,res_type=reservationType)
-        return render(request,"user/reservations.html",{ 'pastreservations':pastreservations,'futurereservations': futurereservations})
+        futurereservations = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=3",(request.user.id,))
+        pastreservations = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=1",(request.user.id,))
+        bikesonreservations =  Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
+        return render(request,"user/reservations.html",{ 'pastreservations':pastreservations,'futurereservations': futurereservations,'bikesonreservations':bikesonreservations})
 
 
 def logout(request):

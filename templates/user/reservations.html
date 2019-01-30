@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
   <title>View Reservations</title>
   <link href="/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -141,6 +142,7 @@ $(document).ready(function(){
   <style>
   table{
     border-radius:6px;
+    table-layout: fixed
   }
   .clicked_btn{
     background: rgba(0, 179, 179, 0.8);
@@ -278,60 +280,66 @@ $(".target").on("click", function() {
      <div id="left" class="table_style">
 
   <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Start</th>
-          <th scope="col">End</th>
-          <th scope="col">Start Station</th>
-          <th scope="col">End Station</th>
-          <th></th>
-
-        </tr>
-      </thead>
-      <tbody>
-          {% for record in pastreservations %}
-             <tr data-toggle="modal" data-target="#myModal" >
-               <td>{{ record.reservation_id}}</td>
-               <td>{{ record.starttime }}</td>
-               <td>{{ record.endtime }}</td>
-                <td>{{ record.endtime }}</td>
-                <td>{{ record.endtime }}</td>
-                 <td> <button type="button" id ="myBtnFeedback"  class="btn btn-info">Send Feedback</button></td>
+    <tbody>
+         {% for record in pastreservations %}
+         <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
+         <tr>
+<td  style="width:100%;"> <button type="button" id ="myBtnFeedback"  class="btn btn-info">Send Feedback</button></td>
+<td  style="width:100%;"> <button type="button" id ="myBtnFeedback"  class="btn btn-danger">PAY YOUR FINE BEFORE ITS TOO LATE!</button></td>
           </tr>
-          {% endfor %}
-      </tbody>
+         <tr>
+                  <td style="font-size:15px;border:3px solid green;border-radius:2px;">{{ record.startname }}<br>{{ record.starttime }}</td>
+                  <td style="font-size:15px;border:3px solid red;">{{ record.endname }}<br>{{ record.endtime }}</td>
+        </tr>
+        <tr> <td>
+          {% for bike in bikesonreservations %}
+          {% if bike.bor_reservation_id == record.reservation_id %}
+        <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+  drop-shadow(-1px -1px 0 white);
+  filter: drop-shadow(1px 1px 0 white)
+  drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}<br>
+          {% endif %}
+            {% endfor %}
+        </td>
+           <td>RESERVED ON: {{ record.res_date }}<br>PAID: {{ record.res_cost }}</td>
+         </tr>
+            {% endfor %}
+    </tbody>
 </table>
 
 </div>
 
  <div id="right"  class='table_style ' >
       <table class="table table-hover">
-  <thead>
-    <tr >
-         <th scope="col">Start</th>
-         <th scope="col">End</th>
-          <th scope="col">Bikes</th>
-          <th scope="col">Bikes</th>
 
-               <th scope="col">Reservation Code</th>
-    </tr>
-  </thead>
   <tbody>
        {% for record in futurereservations %}
+       <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
        <tr>
-                <td>{{ record.starttime }}</td>
-                <td>{{ record.endtime }}</td>
-                <td>{{ record.endtime }}</td>
-                <td>{{ record.endtime }}</td>
-                <td> {{ record.res_code }}</td>
-                    </tr>
+                <td style="font-size:15px;border:3px solid green;border-radius:2px;">{{ record.startname }}{{ record.starttime }}</td>
+                <td><button type="button" id='myBtnEdit' class="btn btn btn-warning" style="width:100%;">Edit</button></td>
+      </tr>
+      <tr >
+               <td style="font-size:15px;border:3px solid red;">{{ record.endname }} {{ record.endtime }}</td>
+               <td>  <button type="button" id="myBtnCancel" class="btn btn-danger" style="width:100%;">Cancel</button></td>
+      </tr>
+      <tr> <td>
+        {% for bike in bikesonreservations %}
+        {% if bike.bor_reservation_id == record.reservation_id %}
+      <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+drop-shadow(-1px -1px 0 white);
+filter: drop-shadow(1px 1px 0 white)
+drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+        {% endif %}
+          {% endfor %}
+      </td>
+         <td></td>
+
+       </tr>
         <tr>
-                 <td></td>
-                 <td></td>
-                  <td></td>
-                 <td><button type="button" id='myBtnEdit' class="btn btn btn-warning">Edit Reservation</button></td>
-                 <td ><button type="button" id="myBtnCancel" class="btn btn-danger">Cancel Reservation</button></td>
+           <td>RESERVED ON: {{ record.res_date }}</td>
+           <td>PAID: {{ record.res_cost }}</td>
+
          </tr>
           {% endfor %}
   </tbody>
