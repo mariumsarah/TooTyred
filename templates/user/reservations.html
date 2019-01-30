@@ -1,16 +1,480 @@
 {% extends 'base.html' %}
 {% block head %}
   <title>View Reservations</title>
+  <link href="/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  top.visible_div_id = 'right';
+  function toggle_visibility(id) {
+     var old_e = document.getElementById(top.visible_div_id);
+     var new_e = document.getElementById(id);
+     if(old_e) {
+        console.log('old', old_e, 'none');
+        old_e.style.display = 'none';
+     }
+    console.log('new', new_e, 'block');
+     new_e.style.display = 'block';
+     top.visible_div_id = id;
+  }
+  </script>
+  <script>
+function leftFun(){
+  document.getElementById("left_toggle_btn").classList.add('clicked_btn');
+
+  document.getElementById("left_toggle_btn").classList.remove('not_clicked_btn');
+   document.getElementById("right_toggle_btn").classList.remove('clicked_btn');
+
+  document.getElementById("right_toggle_btn").classList.add('not_clicked_btn');
+   }
+function rightFun(){
+  document.getElementById("right_toggle_btn").classList.add('clicked_btn');
+
+  document.getElementById("right_toggle_btn").classList.remove('not_clicked_btn');
+   document.getElementById("left_toggle_btn").classList.remove('clicked_btn');
+
+  document.getElementById("left_toggle_btn").classList.add('not_clicked_btn');
+
+}
+
+function editDetails(elem){
+{
+
+        //var ID = $(this).parent().parent().attr('id');
+        //var ID = elem.parentNode.id.slice(5);
+        //var e = document.getElementById(ID);
+      //  e.classList.add( "canceledElem");
+
+       /////  $(e).find("button").prop("disabled", true);
+
+
+
+
+}
+
+
+}
+</script>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+</script>
+
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#myBtnEdit").click(function(){
+    $("#myEditModal").modal();
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#myBtnCancel").click(function(){
+   var ID = $(this).parent().parent().attr('id');
+
+
+     $("#myCancelationModal .modal-body ").attr( "id", "modal"+ID);
+
+     $("#myCancelationModal").modal();
+
+  });
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#myBtnFeedback").click(function(){
+   var ID = $(this).parent().parent().attr('id');
+
+
+     $("#myFeedbackModal .modal-body ").attr( "id", "modal"+ID);
+
+     $("#myFeedbackModal").modal();
+
+  });
+});
+</script>
+
+<script type="text/javascript">
+
+
+  function cancelReservation(elem){
+
+        //var ID = $(this).parent().parent().attr('id');
+        var ID = elem.parentNode.id.slice(5);
+        var e = document.getElementById(ID);
+        e.classList.add( "canceledElem");
+
+         $(e).find("button").prop("disabled", true);
+}
+
+  function sendFeedback(elem){
+
+        //var ID = $(this).parent().parent().attr('id');
+        var ID = elem.parentNode.parentNode.id.slice(5);
+        var e = document.getElementById(ID);
+        var btn = $(e).find("button");
+         $(btn).prop("disabled", true);
+         $(btn).html("Feedback sent");
+       }
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+  $("#myBtnSubmitChanges").click(function(){
+    $("#myInformationModal").modal();
+  });
+});
+</script>
+
+
+  <style>
+  table{
+    border-radius:6px;
+  }
+  .clicked_btn{
+    background: rgba(0, 179, 179, 0.8);
+    color: white;
+
+  }
+  .not_clicked_btn{
+    background: rgba(0, 179, 179, 0.3);
+     transition: 0.3s;
+      color: white;
+
+  }
+
+  .toggle_btn{
+     border-bottom: solid white 2px;
+     width:100%;
+     border-top-left-radius: 15px;
+     border-top-right-radius: 15px;
+
+  }
+  .not_clicked_btn:hover{
+    background:white;
+    opacity: 1;
+    color:black;
+  }
+  .toggle_btn:active{
+      background:rgba(57, 161, 252, 0.2);
+       color:black;
+
+  }
+
+
+
+  .centered_item{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color: black;
+
+    }
+
+  .table_style{
+    border-right-color: grey;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-left-color: grey;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-bottom-color: grey;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-color: white;
+    border-top-style:solid;
+     border-top-width: 2px;
+    width:100%;
+    border-top-left-radius: 15px;
+     border-top-right-radius: 15px;
+     background-color:#3d3a3a;
+  }
+.canceledElem{
+ background-color: red;
+ opacity: 1;
+}
+
+
+
+.modal-content{
+  background-color:#3d3a3a;
+}
+td{
+  background: rgba(204, 204, 204, 0.9);
+}
+  thead{
+     background:darkgrey;
+  }
+.btn{
+ margin: 2px;
+}
+.btn:hover{
+transition:0.3s;
+
+}
+ </style>
+
 {% endblock %}
 {% block body %}
+<body onload="toggle_visibility('left');">
   <div class="container">
-    <h1>Display reservations</h1>
+    <h2>Hey there! </h2>
+    <h4>Below you can find all the information about you future and past reservations. </h4>
+   <!--
     <p>option to remove reservations</p>
     <p>view details of reservations</p>
     <p>edit reservations</p>
     <p>provide feedback</p>
       <p>path tracker</p>
         <p>path suggestion</p>
-        <p>feedback history</p>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<div class="target">Double click me</div>
+  <script>
+    var touchtime = 0;
+$(".target").on("click", function() {
+    if (touchtime == 0) {
+        // set first click
+        touchtime = new Date().getTime();
+    } else {
+        // compare first click to this click and see if they occurred within double click threshold
+        if (((new Date().getTime()) - touchtime) < 800) {
+            // double click occurred
+            alert("double clicked");
+            touchtime = 0;
+        } else {
+            // not a double click so set as a new first click
+            touchtime = new Date().getTime();
+        }
+    }
+});
+    </script>
+
+<div>-->
+<!-- toggle buttons -->
+<div class='centered_item'>
+<div onclick="toggle_visibility('left');leftFun();" class="toggle_btn clicked_btn" id= 'left_toggle_btn'>
+<center>  <h3>Past Reservations</h3></center>
+
+</div>
+
+<div onclick="toggle_visibility('right'); rightFun();" class='toggle_btn  not_clicked_btn ' id='right_toggle_btn' >
+ <center><h3> Future Reservations</h3></center>
+</div>
+</div>
+<!-- The table starts -->
+<div class='centered_item table-responsive'>
+     <div id="left" class="table_style">
+
+  <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Start</th>
+          <th scope="col">End</th>
+          <th scope="col">Start Station</th>
+          <th scope="col">End Station</th>
+          <th></th>
+
+        </tr>
+      </thead>
+      <tbody>
+          {% for record in pastreservations %}
+             <tr data-toggle="modal" data-target="#myModal" >
+               <td>{{ record.reservation_id}}</td>
+               <td>{{ record.starttime }}</td>
+               <td>{{ record.endtime }}</td>
+                <td>{{ record.endtime }}</td>
+                <td>{{ record.endtime }}</td>
+                 <td> <button type="button" id ="myBtnFeedback"  class="btn btn-info">Send Feedback</button></td>
+          </tr>
+          {% endfor %}
+      </tbody>
+</table>
+
+</div>
+
+ <div id="right"  class='table_style ' >
+      <table class="table table-hover">
+  <thead>
+    <tr >
+         <th scope="col">Start</th>
+         <th scope="col">End</th>
+          <th scope="col">Bikes</th>
+          <th scope="col">Bikes</th>
+
+               <th scope="col">Reservation Code</th>
+    </tr>
+  </thead>
+  <tbody>
+       {% for record in futurereservations %}
+       <tr>
+                <td>{{ record.starttime }}</td>
+                <td>{{ record.endtime }}</td>
+                <td>{{ record.endtime }}</td>
+                <td>{{ record.endtime }}</td>
+                <td> {{ record.res_code }}</td>
+                    </tr>
+        <tr>
+                 <td></td>
+                 <td></td>
+                  <td></td>
+                 <td><button type="button" id='myBtnEdit' class="btn btn btn-warning">Edit Reservation</button></td>
+                 <td ><button type="button" id="myBtnCancel" class="btn btn-danger">Cancel Reservation</button></td>
+         </tr>
+          {% endfor %}
+  </tbody>
+</table>
+
+ </div>
   </div>
+</div>
+
+
+  <!-- The Modal -->
+  <div class="modal" id="myFeedbackModal">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+
+        <div class="modal-header" style="border-bottom: 0px; margin-bottom: 0px; padding-bottom: 0px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+      <div class="centered_item" style=" margin-bottom: 2%;" >
+        <div class="modal-body "  style=" height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
+        <h2 style="color: rgba(0, 179, 179, 1); font-weight: bold;"> Feedback Form</h2>
+        <h3 style="color:white; "> Thank you for taking your time to comment on our service! Your feedback is very important to us!</h3>
+        <h4 style="color: black;"> Gentle reminder that you are about to send feedback about the so and so trip at so and so day </h4>
+        <div class="input-group " style="width:100%; margin-top:5%;">
+              <textarea class="form-control" aria-label="With textarea" style=" margin-bottom: 1%;" ></textarea>
+              <button type="submit"  id="myBtnSubmitFeedback" data-dismiss="modal" class="btn btn-success" onclick="sendFeedback(this);" style="width: 100%;">Submit</button>
+        </div>
+         <div>
+
+         </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Information model -->
+
+  <div class="modal" id="myInformationModal">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+
+        <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+      <div class="centered_item" style=" margin-bottom: 2%; margin-top: 0px;" >
+        <div class="modal-body "  style=" height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
+        <h3 style="color:white; "> Changes have been made!</h3>
+        <h3 style="color:white;"> Thank you for using our service! </h3>
+        <button type="button" data-dismiss="modal" class="btn btn-success" style="width: 100%;">Okay!</button>
+
+         <div>
+
+         </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- The Cancelation Modal -->
+   <div class="modal" id="myCancelationModal">
+    <div class="modal-dialog">
+      <div class="modal-content" >
+
+        <div class="modal-header"  style="border-bottom: 0px; padding-bottom: 0px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body" >
+
+
+          <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to cancel your reservation? </h4>
+
+            <button type="button" id="cancelReservation" data-dismiss="modal" style="width: 100%;" class="btn btn-success centered_item" onclick="cancelReservation(this);" >Yes</button>
+            <button type="button" data-dismiss="modal" style="width: 100%;" class="btn btn-danger centered_item">No</button>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+   <!-- The Edit Modal -->
+   <div class="modal" id="myEditModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+           <h2 style="color: rgba(0, 179, 179, 1); margin-left: 2%; font-weight: bold;"> Edit reservation</h2>
+          <form>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="startDate">Start Date</label>
+                  <input type="Date" class="form-control" id="startDateIn" placeholder="Initial start date">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="startTime">Start Time</label>
+                  <input type="Time" class="form-control" id="startTimeIn" placeholder="00:00">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="endDate">End Date</label>
+                  <input type="Date" class="form-control" id="endDateIn" placeholder="Initial end date">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="endTime">Start Time</label>
+                  <input type="Time" class="form-control" id="endTimeIn" placeholder="00:00">
+                </div>
+              </div>
+                <div class="form-group col-md-6" style="width:100%;">
+                  <h4> Current reservation contains:</h4>
+                  <p> 2 bikes 3 seats 4 horses</p>
+                  <h4>In order to change this plese select from below</h4>
+                  <p> Bicycle thing from the selection</p>
+
+                </div>
+
+
+            <div class="form-group col-md-6" style="border-top: solid 1 px white; width: 100%;">
+
+              <h4>You will be charged: XX$</h4>
+            </div>
+             <button type="submit" class="btn btn-success"  id="myBtnSubmitChanges" data-dismiss="modal" onclick="editDetails()" style="width: 100%;">Proceed</button>
+
+            </form>
+
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
 {% endblock %}

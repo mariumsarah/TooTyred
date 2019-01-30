@@ -46,7 +46,7 @@
    box-sizing: border-box
    }
    .gm-style-iw {
-   	width: 350px !important;
+   	width: 200px !important;
    	top: 15px !important;
    	left: 0px !important;
    	background-color: #3d3a3a;
@@ -107,6 +107,18 @@
      width: 150px;
    }
 
+      .drp {
+      background-color: #3dcacd;
+      display: block;
+      width: 92%;
+      height:100%;
+      float:left;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:bold;
+   position: relative;
+     display: inline-block;
+      }
    .beton {
    background-color: #3dcacd;
    display: block;
@@ -317,6 +329,34 @@
      }
      .button-3 {border-radius: 8px; color:  #3d3a3a; background-color: #3dcacd; margin-left:2px;}
 
+     #right-panel {
+       position: relative;
+       font-family: 'Roboto','sans-serif';
+       line-height: 16px;
+       padding-right: 10px;
+       padding-left: 10px;
+       height: 300px;
+       float: right;
+       width: 300px;
+       overflow: scroll;
+
+     }
+
+     #right-panel select, #right-panel input {
+
+       font-size: 10px;
+     }
+
+     #right-panel select {
+
+       width: 70%;
+     }
+
+     #right-panel i {
+
+       font-size: 8px;
+     }
+
      </style>
     {% endblock %}
     {% block body %}
@@ -328,14 +368,22 @@
     {% endfor %}
 {% endif %}
     <div id='map'></div>
+    <!-- <div id="right-panel" ></div> -->
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
     <div class="location">
-      <img width="20px" height="20px" src="{% static 'icons/location.png' %}">
-    </div>
-    <div class="footer">
-      <div class="footer-4">
+      <!--onclick="myloc()"-->
+      <img width="20px" height="20px" src="{% static 'icons/location.png' %}"  >
+    </div><div class="footer">
+
+      <div class="footer-4"  >
         <button class="beton">Direction to station</button>
-        <button type="button" style="float:left;opacity:9; color:#3dcacd;" class="close closed">
+<!--
+<select id="optn" class="drp" >
+   <option value="DRIVING">Driving</option>
+  <option value="BICYCLING">Bicycling</option>
+</select> -->
+
+        <button type="button" style="float:right;opacity:9; color:#3dcacd;" class="close closed">
         <span aria-hidden="true">&times;</span></button>
       </div>
     </div>
@@ -499,6 +547,8 @@
             <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
           <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
           <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
+          <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
+          <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT EDIT YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
               </ul>
                 <form  method="post" name="myform">
                   {% csrf_token %}
@@ -540,9 +590,11 @@
     var map;
     var markerlist=[];
     var i=0;
+    // var pos ;
+    //
+    // var des;
 // Initialize and add the map
 function initMap() {
-
 // The map, centered at Edinburgh
 map = new google.maps.Map(document.getElementById('map'), {
           center: {lat:55.94136542,lng:-3.18470478},
@@ -638,6 +690,7 @@ var geojson = [
     }
 {% endfor %}
 ];
+infoWindow = new google.maps.InfoWindow;
 var prev_infowindow=false;
 var prev_window;
 // The marker, positioned at Uluru
@@ -704,10 +757,11 @@ geojson.forEach(function(marker1) {
      $(this).css({opacity: '1'});
    });
  });
+  var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
   var Marker = new google.maps.Marker({
       map: map,
       icon: "{% static 'icons/marker.png' %}",
-     position: {lat:Number(marker1.lat),lng:Number(marker1.lon)}
+     position: latln
     });
       Marker.addListener('click', function() {
         if( prev_infowindow ) {
@@ -718,6 +772,16 @@ geojson.forEach(function(marker1) {
         prev_infowindow=true;
         prev_window = infowindow;
         infowindow.open(map, Marker);
+        //
+        // document.getElementById('right-panel').style.background="white";
+        // directionsDisplay.setPanel(document.getElementById('right-panel'));
+        //
+        //
+        // var lat = Marker.getPosition().lat();
+        // var lng = Marker.getPosition().lng();
+        //
+        //    des = new google.maps.LatLng(lat,lng);
+        //         window.des = des;
     });
     //var touchtime = 0;
     Marker.addListener('dblclick', () =>
@@ -744,7 +808,21 @@ geojson.forEach(function(marker1) {
 });
 var opt = { minZoom: 11.5, maxZoom: 18 };
 map.setOptions(opt);
-
+//--------------------------------------
+//
+// var directionsService = new google.maps.DirectionsService;
+// var directionsDisplay = new google.maps.DirectionsRenderer;
+// directionsDisplay.setMap(map);
+//
+// var bounds = new google.maps.LatLngBounds();
+//
+// var onChangeHandler = function() {
+//           calculateAndDisplayRoute(directionsService, directionsDisplay);
+//
+//         };
+//      //   document.getElementById('start').addEventListener('change', onChangeHandler);
+//  window.addEventListener('click', onChangeHandler);
+//         document.getElementById('optn').addEventListener('change', onChangeHandler);
 
 }
 
@@ -1290,7 +1368,68 @@ $.ajax({
             }
 });
 };
-
+//--------------------------------------
+// var  pos;
+// function myloc(){
+// if (navigator.geolocation) {
+//           navigator.geolocation.watchPosition(function(position) {
+//
+//             pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//
+//
+// window.pos = pos;
+//   var loc = new google.maps.Marker({
+//         position: pos,
+//         icon: "{% static 'icons/yourlocation.png' %}",
+//         animation: google.maps.Animation.DROP,
+//         map: map
+//     });
+//
+//           //  infoWindow.setPosition();
+//             infoWindow.setContent('You are here');
+//
+//             infoWindow.open(map);
+//             map.setCenter(pos);
+//           }, function() {
+//             handleLocationError(true, infoWindow, map.getCenter());
+//           });
+//         } else {
+//           // Browser doesn't support Geolocation
+//           handleLocationError(false, infoWindow, map.getCenter());
+//         }
+//
+// }
+//
+//       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+//         infoWindow.setPosition(pos);
+//         infoWindow.setContent(browserHasGeolocation ?
+//                               'Error: The Geolocation service failed.' :
+//                               'Error: Your browser doesn\'t support geolocation.');
+//         infoWindow.open(map);
+//       }
+//
+// function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+//      // var start = document.getElementById('start').value;
+//   // var  pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+//        //var end = document.getElementById('end').value;
+//        var optn = document.getElementById('optn').value;
+//         directionsService.route({
+//           origin: pos,
+//           destination: des,
+//           travelMode: optn,
+//           drivingOptions: {
+//     departureTime: new Date(Date.now()),  // for the time N milliseconds from now.
+//     trafficModel: 'optimistic'
+//   }
+//         }, function(response, status) {
+//           if (status === 'OK') {
+//             directionsDisplay.setDirections(response);
+//             bikeLayer.setMap(map);
+//           } else {
+//             window.alert('Directions request failed due to ' + status);
+//           }
+//         });
+//       }
   </script>
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">

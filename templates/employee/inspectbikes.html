@@ -20,30 +20,90 @@
     body { height: 100%; margin: 0; padding: 0 }
     #map_canvas{
       position: absolute;
-      top: 70px;
+      top: 14%;
       bottom: 0;
       width: 50%;
-      height: 75%;
-      float:left;
-      left:2%;
+      height: 100%;
+      float:right;
+      right:2%;
       border: 1px solid white;
     }
     .contain{
       border-radius:3px;
       border:1px solid #3dcacd;
-      float:right; background-color: #3d3a3a;
+      float:left; background-color: #3d3a3a;
       position:absolute;
-      left:54%;
+      right:54%;
       top:14%;
-      right:2%;
-      height: 75%;
+      left:2%;
+      height: 100%;
       padding:5px;
     }
+    #myBtn{background-color:#3dcacd;
+    font-size: 16px;}
     </style>
-    <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
+
+{% endblock %}
+{% block body %}
+<div class="container" >
+
+  <div class="contain">
+      <h3>Track Bikes</h3>
+      <table class="table table-striped table-dark">
+        <tbody>
+          <tr>
+            <th scope="row">Select Bike</th>
+          </tr>
+          <tr>
+            <th scope="row"><table style="width:100%">
+  <tr>
+    <th>Bike ID</th>
+    <th>Type</th>
+    <th>Select/Unselect</th>
+
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Mountain bike</td>
+    <td><button type="button" class="btn btn-primary" onclick="myFunction()">Select</button></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>treki</td>
+    <td><button type="button" class="btn btn-primary" onclick="myFunction()">Select</button></td>
+  </tr>
+
+</table></th>
+          </tr>
+          <tr>
+            <th scope="row"><button id="myBtn" onclick="myFun()">Replace Bike</button></th>
+          </tr>
+          <tr>
+            <th scope="row"><p id="demo"></p></th>
+          </tr>
+          <tr>
+            <th scope="row">View Reservation</th>
+          </tr>
+
+        </tbody>
+      </table>
+</div>
+
+</div>
+<div id="map_canvas"></div>
+   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
 
     <script type="text/javascript">
+document.getElementById("myBtn").disabled = true;
+function myFunction() {
+  document.getElementById("myBtn").disabled = false;
+}
+function myFun() {
+  document.getElementById("demo").innerHTML = "Replaced";
+  document.getElementById("myBtn").disabled = true;
+}
+
         function initMap() {
             var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);
             var endLatLng = new google.maps.LatLng(55.939940000000000,-3.1918600000000000);
@@ -163,46 +223,4 @@
 
         google.maps.event.addDomListener(window, 'load', initMap);
     </script>
-{% endblock %}
-{% block body %}
-<div class="container" >
-  <div id="map_canvas"></div>
-  <div class="contain">
-      <h3>Track Bikes</h3>
-      <table class="table table-striped table-dark">
-        <tbody>
-          <tr>
-            <th scope="row">Select Bike</th>
-          </tr>
-          <tr>
-            <th scope="row">Display all bikes here</th>
-          </tr>
-          <tr>
-            <th scope="row">Replace bike</th>
-          </tr>
-          <tr>
-            <th scope="row">Replace Bike</th>
-          </tr>
-          <tr>
-            <th scope="row">Order bike redistrubtion</th>
-          </tr>
-          <tr>
-            <th scope="row">About Track bikes</th>
-          </tr>
-          <tr>
-            <th scope="row">Customer Service</th>
-          </tr>
-          <tr>
-            <th scope="row">About Track bikes</th>
-          </tr>
-          <tr>
-            <th scope="row">Check ups</th>
-          </tr>
-          <tr>
-            <th scope="row">About Track bikes</th>
-          </tr>
-        </tbody>
-      </table>
-</div>
-</div>
 {% endblock %}

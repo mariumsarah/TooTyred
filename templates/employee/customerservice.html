@@ -1,57 +1,59 @@
 {% extends 'base.html' %}
 {% block head %}
   <title>Customer Service</title>
-  <style>
-    .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-     background-color: #3dcacd;
-     color:#3d3a3a;
-     font-size: 25px;
-  }
-  .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
-   text-indent:10%;
-   font-size:17px;
-   font-weight:none; !important
-   text-shadow:none; !important
+<style>
+.btn {
+  background-color: #3dcacd;
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+   width: 200px;
 }
-    </style>
+
+.btn{border-radius: 25%;}
+</style>
 {% endblock %}
 {% block body %}
-<div class="container">
-  <h1>Customer Service</h1>
-  <h4></h4>
-  <table class="table table-striped table-dark">
-    <tbody>
-      <tr>
-        <th scope="row">Track Bikes</th>
-      </tr>
-      <tr>
-        <th scope="row">On this page, you can view all the bikes on the map with their current locations and you are presented with the bike table from the database with their status. You have the option to Order bike redistribution and replace defective bikes and change the status of bikes</th>
-      </tr>
-      <tr>
-        <th scope="row">Track Reservations</th>
-      </tr>
-      <tr>
-        <th scope="row">About Track bikes</th>
-      </tr>
-      <tr>
-        <th scope="row">Track Stations</th>
-      </tr>
-      <tr>
-        <th scope="row">About Track bikes</th>
-      </tr>
-      <tr>
-        <th scope="row">Customer Service</th>
-      </tr>
-      <tr>
-        <th scope="row">About Track bikes</th>
-      </tr>
-      <tr>
-        <th scope="row">Check ups</th>
-      </tr>
-      <tr>
-        <th scope="row">About Track bikes</th>
-      </tr>
-    </tbody>
-  </table>
-</div>
+
+  <center><u><h1>Customer Service</h1></u></center>
+
+
+  <center>
+<h2>List of Users with:</h2>
+
+
+
+<button type="button" class="btn btn-primary"  onclick="myFunction()">Black listed</button>
+
+<button type="button" class="btn btn-primary" onclick="myFunction()">Fine</button>
+
+
+<button type="button" class="btn btn-primary" onclick="myFunction()">Complaints</button>
+
+<button type="button" class="btn btn-primary" onclick="myFunction()">Refund Requeest</button>
+
+
+<table id="demo"></table>
+</center>
+
+
+
+<script>
+function myFunction() {
+
+  var x = document.getElementById("demo");
+  x.innerHTML = " <tr>"+" "+" <th>ID_</th>"+" "+"<th>email_</th>"+" "+ " <th>See details_</th>"+" "+"</tr>" +" "+ "<tr> <td>Alfreds</td> <td>Maria </td> <td> <button >Try it</button></td> </tr>";
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
 {% endblock %}

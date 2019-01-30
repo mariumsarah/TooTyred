@@ -33,7 +33,7 @@ CREATE TABLE `auth_group` (
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `auth_group_permissions` (
   KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
   CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `auth_user_groups` (
   KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
   CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `auth_user_user_permissions` (
   KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
   CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +211,7 @@ CREATE TABLE `bike` (
   CONSTRAINT `fk_bike_station_id` FOREIGN KEY (`bike_stationedat`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_bike_status` FOREIGN KEY (`bike_status`) REFERENCES `status_of_bike` (`bike_status_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_bike_type` FOREIGN KEY (`bike_type`) REFERENCES `type_of_bike` (`bike_type_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +238,7 @@ CREATE TABLE `bike_on_reservation` (
   KEY `fk_bor_reservation_id` (`bor_reservation_id`),
   CONSTRAINT `fk_bor_bike_id` FOREIGN KEY (`bor_bike_id`) REFERENCES `bike` (`bike_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_bor_reservation_id` FOREIGN KEY (`bor_reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,7 +262,7 @@ CREATE TABLE `checkuplog` (
   PRIMARY KEY (`clog_id`),
   KEY `fk_checkuplog_station_id` (`checkuplog_station_id`),
   CONSTRAINT `fk_checkuplog_station_id` FOREIGN KEY (`checkuplog_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +287,7 @@ CREATE TABLE `complaints` (
   `complaint_type` varchar(20) NOT NULL,
   `complaint_desc` text NOT NULL,
   PRIMARY KEY (`complaint_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,7 +312,7 @@ CREATE TABLE `creditcardinfo` (
   `card_info` int(16) NOT NULL,
   `card_exp_date` date NOT NULL,
   PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,7 +332,7 @@ CREATE TABLE `customer_rating` (
   `rating_id` int(11) NOT NULL AUTO_INCREMENT,
   `rating_value` int(1) NOT NULL,
   PRIMARY KEY (`rating_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +366,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -392,7 +392,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -418,7 +418,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,7 +444,7 @@ CREATE TABLE `django_session` (
   `expire_date` datetime NOT NULL,
   PRIMARY KEY (`session_key`),
   KEY `django_session_expire_date_a5c62663` (`expire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -464,7 +464,7 @@ CREATE TABLE `example` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,7 +493,7 @@ CREATE TABLE `home_userprofile` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `home_userprofile_user_id_d1f7b466_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +523,7 @@ CREATE TABLE `maintenancelog` (
   PRIMARY KEY (`mlog_id`),
   KEY `fk_maintenance_bike_id` (`maintenance_bike_id`),
   CONSTRAINT `fk_maintenance_bike_id` FOREIGN KEY (`maintenance_bike_id`) REFERENCES `bike` (`bike_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -543,7 +543,7 @@ DROP TABLE IF EXISTS `reservation`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `reservation` (
   `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
-  `res_code` text NOT NULL,
+  `res_code` varchar(6) NOT NULL,
   `res_type` int(11) NOT NULL,
   `res_cost` decimal(11,2) NOT NULL,
   `res_date` datetime NOT NULL,
@@ -558,7 +558,7 @@ CREATE TABLE `reservation` (
   CONSTRAINT `fk_c_id` FOREIGN KEY (`c_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_c_rating` FOREIGN KEY (`c_rating`) REFERENCES `customer_rating` (`rating_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_res_type` FOREIGN KEY (`res_type`) REFERENCES `reservation_type` (`res_type_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,7 +575,7 @@ CREATE TABLE `reservation_type` (
   `res_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `res_type_name` varchar(20) NOT NULL,
   PRIMARY KEY (`res_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -609,7 +609,7 @@ CREATE TABLE `station` (
   `fine_cost` decimal(11,2) DEFAULT NULL,
   `fine_desc` text,
   PRIMARY KEY (`station_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -618,7 +618,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',16,8,'It is located in South Edinburgh in the Morningside/Oxgangs area. ' ,'Braidburn Valley Park',-3.2135800000000000,55.919100000000000,1,'BraidburnValleyPark.jpg',NULL,NULL),(2,'Edinburgh EH3 5PA, UK',16,8,'The pretty park near Washington Lake,Spread over 34 acres, it also has a delightful formal garden in classic style','Inverleith Park',-3.2143800000000000,55.966530000000000,1,'inverleithpark.jpg',NULL,NULL),(3,'Princes St, Edinburgh EH2 2HG, UK',16,8,'Princes Street Gardens are two adjacent public parks in the centre of Edinburgh','Princes Street Gardens',-3.1983900000000000,55.951752000000000,1,'princesstreetgardens.jpg',NULL,NULL),(4,'Melville Dr, Edinburgh EH9 1ND, UK',16,8,'The Meadows is a large public park in Edinburgh, Scotland, to the south of the city centre.','The Meadows',-3.1918600000000000,55.939940000000000,1,'themeadows.JPG',NULL,NULL),(5,'Lochend Rd S, Edinburgh EH7 6BP, UK',16,8,'The park meant for all kids in town','Lochend Park',-3.1584700000000000,55.961310000000000,1,'lochendpark.jpg',NULL,NULL),(6,'Links Gardens, Edinburgh EH6 7QR, UK',16,8,'The link that connects to the metroSpread over 34 acres, it also has a delightful formal garden in classic style','Leith Links',-3.1621200000000000,55.971740000000000,1,'leithlinks.png',NULL,NULL),(7,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',16,8,'The old Neils garden founded in the late 90s','Dr Neils Garden',-3.1463600000000000,55.941720000000000,1,'DrNeilGarden.jpg',NULL,NULL),(8,'Stanedykehead, Alnwickhill EH16 6TN, UK',16,8,'The largest park to visit is righ here.Spread over 34 acres, it also has a delightful formal garden in classic style','Seven Acre Park',-3.1683400000000000,55.905840000000000,1,'SevenAcrePark.jpg',NULL,NULL),(9,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',16,8,'Spread over 34 acres, it also has a delightful formal garden in classic style ','Saughton Park And Gardens',-3.2485290000000000,55.934132000000000,1,'SaughtonParkAndGardens.jpg',NULL,NULL),(10,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',16,8,'We are a 9 hole golf course situated within 1.5 miles f the centre of Edinburgh, ','Ravelston Golf Club',-3.2577200000000000,55.954350000000000,1,'ravelstongolfclub.jpg',NULL,NULL);
+INSERT INTO `station` VALUES (1,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',16,8,'It is located in South Edinburgh in the Morningside/Oxgangs area.It is located in South Edinburgh in the Morningside/Oxgangs area. ' ,'Braidburn Valley Park',-3.2135800000000000,55.919100000000000,1,'BraidburnValleyPark.jpg',NULL,NULL),(2,'Edinburgh EH3 5PA, UK',16,8,'The pretty park near Washington Lake,Spread over 34 acres, it also has a delightful formal garden in classic style','Inverleith Park',-3.2143800000000000,55.966530000000000,1,'inverleithpark.jpg',NULL,NULL),(3,'Princes St, Edinburgh EH2 2HG, UK',16,8,'Princes Street Gardens are two adjacent public parks in the centre of Edinburgh','Princes Street Gardens',-3.1983900000000000,55.951752000000000,1,'princesstreetgardens.jpg',NULL,NULL),(4,'Melville Dr, Edinburgh EH9 1ND, UK',16,8,'The Meadows is a large public park in Edinburgh, Scotland, to the south of the city centre.','The Meadows',-3.1918600000000000,55.939940000000000,1,'themeadows.JPG',NULL,NULL),(5,'Lochend Rd S, Edinburgh EH7 6BP, UK',16,8,'The park meant for all kids in townIt is located in South Edinburgh in the Morningside/Oxgangs area.','Lochend Park',-3.1584700000000000,55.961310000000000,1,'lochendpark.jpg',NULL,NULL),(6,'Links Gardens, Edinburgh EH6 7QR, UK',16,8,'The link that connects to the metroSpread over 34 acres, it also has a delightful formal garden in classic style','Leith Links',-3.1621200000000000,55.971740000000000,1,'leithlinks.png',NULL,NULL),(7,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK',16,8,'The old Neils garden founded in the late 90s','Dr Neils Garden',-3.1463600000000000,55.941720000000000,1,'DrNeilGarden.jpg',NULL,NULL),(8,'Stanedykehead, Alnwickhill EH16 6TN, UK',16,8,'The largest park to visit is righ here.Spread over 34 acres, it also has a delightful formal garden in classic style','Seven Acre Park',-3.1683400000000000,55.905840000000000,1,'SevenAcrePark.jpg',NULL,NULL),(9,'1 Greenbank Cres, Edinburgh EH10 5TE, UK',16,8,'Spread over 34 acres, it also has a delightful formal garden in classic style ','Saughton Park And Gardens',-3.2485290000000000,55.934132000000000,1,'SaughtonParkAndGardens.jpg',NULL,NULL),(10,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK',16,8,'We are a 9 hole golf course situated within 1.5 miles f the centre of Edinburgh, ','Ravelston Golf Club',-3.2577200000000000,55.954350000000000,1,'ravelstongolfclub.jpg',NULL,NULL);
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -636,7 +636,7 @@ CREATE TABLE `station_on_reservation` (
   KEY `fk_sor_reservation_id` (`sor_reservation_id`),
   CONSTRAINT `fk_sor_reservation_id` FOREIGN KEY (`sor_reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_sor_route_id` FOREIGN KEY (`sor_route_id`) REFERENCES `stationroutes` (`route_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -659,7 +659,7 @@ CREATE TABLE `stationfootage` (
   PRIMARY KEY (`footage_id`),
   KEY `fk_footage_station_id` (`footage_station_id`),
   CONSTRAINT `fk_footage_station_id` FOREIGN KEY (`footage_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -687,7 +687,7 @@ CREATE TABLE `stationroutes` (
   KEY `fk_end_station_id` (`end_station_id`),
   CONSTRAINT `fk_end_station_id` FOREIGN KEY (`end_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_start_station_id` FOREIGN KEY (`start_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -711,7 +711,7 @@ CREATE TABLE `status_of_bike` (
   `bike_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `bike_status_name` varchar(20) NOT NULL,
   PRIMARY KEY (`bike_status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -739,7 +739,7 @@ CREATE TABLE `type_of_bike` (
   `bike_cost` decimal(11,2) NOT NULL,
   `bike_image` varchar(30) NOT NULL,
   PRIMARY KEY (`bike_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -762,7 +762,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

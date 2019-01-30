@@ -11,6 +11,8 @@ import json
 from datetime import datetime
 import time
 from django.core.mail import EmailMessage
+from django.utils.crypto import get_random_string
+
 def home(request):
     return render(request, 'user/home.html')
 
@@ -117,7 +119,10 @@ def reserve(request):
                                     break
                 user = User.objects.get(id=request.user.id)
                 reservation = Reservation.objects.create(res_type=reservationType,res_cost=totalcost,res_date=currentDateTime,starttime=startdatetime,endtime=enddatetime,c=user)
-                reservation.res_code='https://api.qrserver.com/v1/create-qr-code/?data='+str(reservation.reservation_id)+'&size=100x100'
+                random = get_random_string(length=6, allowed_chars='1234567890')
+                while(Reservation.objects.filter(res_code=random).exists()):
+                    random = get_random_string(length=6, allowed_chars='1234567890')
+                reservation.res_code=random
                 stationreservation = StationOnReservation.objects.create(sor_reservation=reservation,sor_route=route)
                 for biken in range(len(biked)):
                     BikeOnReservation.objects.create(bor_bike=biked[biken],bor_reservation_id=reservation.reservation_id)
@@ -137,7 +142,11 @@ def reserve(request):
         return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 def reservations(request):
-        return render(request,"user/reservations.html")
+        reservationTypePast = ReservationType.objects.get(res_type_name='past')
+        reservationType = ReservationType.objects.get(res_type_name='future')
+        pastreservations = Reservation.objects.filter(c=request.user.id,res_type=reservationTypePast)
+        futurereservations = Reservation.objects.filter(c=request.user.id,res_type=reservationType)
+        return render(request,"user/reservations.html",{ 'pastreservations':pastreservations,'futurereservations': futurereservations})
 
 
 def logout(request):

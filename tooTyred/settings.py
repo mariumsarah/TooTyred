@@ -25,7 +25,7 @@ SECRET_KEY = '&wu^h*s^#5(*1i3ab=cbo&*6+f+qph3s5(peuc-7&g79h*cqc('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tootyred.com','127.0.0.1']
+ALLOWED_HOSTS = ['tootyred.com','127.0.0.1','mariumsarah.pythonanywhere.com']
 
 # Application definition
 
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'tooTyred.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,12 +84,23 @@ DATABASES = {
         'NAME': 'tootyred',
         'USER':'root',
         'PASSWORD':'tootyred',
-        'HOST':'localhost',
+        'HOST':'localhost',#
         'PORT':''
     }
 }
 
+##PYTHON pythonanywhere
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'mariumsarah$tootyred',
+#        'USER':'mariumsarah',
+#        'PASSWORD':'tootyred',
+#        'HOST':'mariumsarah.mysql.pythonanywhere-services.com',
+#        'PORT':''
+#    }
+#}
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
