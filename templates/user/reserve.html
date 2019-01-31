@@ -4,8 +4,6 @@
 <meta charset='utf-8' />
    <title>Reserve</title>
    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
-   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
    <style>
      body {
      margin: 0;
@@ -397,7 +395,7 @@
       <div class="modal-dialog dia" role="document">
         <div class="modal-content">
           <div class="modal-header header column-4">
-            <button type="button" style="float:left;opacity:9; color:#3dcacd;" onclick="reset()" class="close" data-dismiss="modal">
+            <button type="button" style="float:left;opacity:9; color:#3dcacd;" onclick="reset()" id="clickme" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span></button><br>
             <h5 class="modal-title tit" id="exampleModalLabel">Make a reservation</h5>
             <div>
@@ -548,7 +546,7 @@
           <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
           <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
           <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
-          <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT EDIT YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
+          <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANCEL YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
               </ul>
                 <form  method="post" name="myform">
                   {% csrf_token %}
@@ -873,7 +871,7 @@ map.setOptions(opt);
              bike[{{ bike.bike_type_id }}] = 0;
           {% endfor %}
         {% for bike in bike_type %}
-          for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
+          for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
           {
           removeBike('bike{{ bike.bike_type_id }}');
           }
@@ -987,7 +985,7 @@ map.setOptions(opt);
            bike[{{ bike.bike_type_id }}] = 0;
         {% endfor %}
         {% for bike in bike_type %}
-          for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
+          for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
           {
             removeBike('bike{{ bike.bike_type_id }}');
           }
@@ -1042,7 +1040,7 @@ map.setOptions(opt);
             bike[{{ bike.bike_type_id }}] = 0;
           {% endfor %}
           {% for bike in bike_type %}
-            for(var i=0;i<4;i++)//CHANGE TO AVAILABLE BIKES
+            for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
             {
                 removeBike('bike{{ bike.bike_type_id }}');
               }
