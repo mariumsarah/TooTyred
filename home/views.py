@@ -5,13 +5,13 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 from django.http import HttpResponse,JsonResponse
 import json
-from datetime import datetime
 import time
 from django.core.mail import EmailMessage
 from django.utils.crypto import get_random_string
+import pytz
 
 def home(request):
     return render(request, 'user/home.html')
@@ -222,12 +222,11 @@ def reservations(request):
         bikesonreservations =  Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
         cost=20
         reservationdays = 14
-        nows=datetime.today() + timedelta(days=1)
+        nows =  utc.localize(datetime.now()) + timedelta(days=1)
         return render(request,"user/reservations.html",{'now': nows,'pastreservations':pastreservations,'station':Station.objects.all(),'futurereservations': futurereservations,'bikesonreservations':bikesonreservations,'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 def getBikes(startdatetime,enddatetime,startstationid,endstationid):
     response_data={}
-
     for i in (range(len(TypeOfBike.objects.all()))):
         response_data['result'+str(i+1)] = 0 # bikes[i]
 
@@ -270,14 +269,12 @@ def getBikes(startdatetime,enddatetime,startstationid,endstationid):
     no_fut_ong_bikes = Bike.objects.raw(' SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND \
         bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = %s', [startstationid])
 
-    if(not(fut_ong_bikes and no_fut_ong_bikes)):
+    if not fut_ong_bikes and not no_fut_ong_bikes:
         return response_data
     else:
         #if there are values inside the fut_ong_bikes query
         if fut_ong_bikes:
             for bikeobj in fut_ong_bikes:
-
-                print(bikeobj.bike_id)
                 #get the bike_id value for bikeobj
                 b_id = bikeobj.bike_id
                 #get the bike_type value for bikeobj
@@ -318,7 +315,7 @@ def getBikes(startdatetime,enddatetime,startstationid,endstationid):
                     after_endtime_reserv_station = Stationroutes.objects.raw('SELECT route_id FROM stationroutes, station_on_reservation, reservation WHERE sor_route_id = route_id AND sor_reservation_id = reservation_id  AND reservation_id = %s', [after_endtime_reserv_id])
 
 
-                    if after_endtime_reserv_station[0].start_station_id == endstationid:
+                    if after_endtime_reserv_station[0].start_station_id == endstationid and bikeobj1.bike_stationedat==startstationid:
                         print('bike allowed: %s', [b_id])
                         response_data['result'+str(b_type)] += 1
 
