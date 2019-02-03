@@ -67,10 +67,17 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+  var reser;
   $(document).ready(function(){
   $("#myBtnEdit").click(function(){
     $("#myEditModal").modal();
-  });
+      reser=this.name;
+      $('#currentpickuptime').text($('#stt'+reser).text());
+      $('#currentdropofftime').text($('#ent'+reser).text());
+      $('#currentcost').text($('#cos'+reser).text());
+      $('#currentstartstation').text($('#st'+reser).text());
+      $('#currentendstation').text($('#en'+reser).text());
+        });
 });
 </script>
 
@@ -475,7 +482,8 @@ transition:0.3s;
        <tr>
                 <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
               <!--  <td><button type="button" id='myBtnEdit' class="btn btn btn-warning" style="width:100%;">Edit</button></td>-->
-              <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button></td>
+              <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button>
+            <!--  <button type="button" id='myBtnEdit' name='{{ record.reservation_id }}' class="btn btn btn-warning" style="width:100%;">Edit Time</button></td>-->
       </tr>
       <tr >
                <td style="font-size:15px;border:3px solid red;"><span id='en{{ record.reservation_id }}'>{{ record.endname }}</span>  <span id='ent{{ record.reservation_id }}'>{{ record.endtime }}</span></td>
@@ -1202,35 +1210,34 @@ $.ajax({
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-           <h2 style="color: rgba(0, 179, 179, 1); margin-left: 2%; font-weight: bold;"> Edit reservation</h2>
+           <h2 style="color: rgba(0, 179, 179, 1); margin-left: 2%; font-weight: bold;">Edit reservation timing</h2>
           <form>
-
+            <div class="form-group col-md-6" style="width:100%;">
+              <h4>Current Pick up time</h4>
+              <p id='currentpickuptime'></p>
+              <h4>Current Drop Off time</h4>
+              <p id='currentdropofftime'></p>
+              <!--<h4>Time €<span id="currentcost">0</span></h4>
+              <h4>Bike €<span  id="cyclecost">0</span></h4>-->
+              <h4>Total €<span id="currentcost">0</span></h4>
+            </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="startDate">Start Date</label>
-                  <input type="Date" class="form-control" id="startDateIn" placeholder="Initial start date">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="startTime">Start Time</label>
-                  <input type="Time" class="form-control" id="startTimeIn" placeholder="00:00">
+                    <label for="startTime">Change Pick up time from <span id='currentstartstation'></span></label>
+                  <select class="styled-select black rounded" id="select_start_time">
+                    <option disabled selected value>Change Pick Up Time</option>
+                  </select>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="endDate">End Date</label>
-                  <input type="Date" class="form-control" id="endDateIn" placeholder="Initial end date">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="endTime">Start Time</label>
-                  <input type="Time" class="form-control" id="endTimeIn" placeholder="00:00">
+                  <label for="endTime">Change Drop off time to <span id='currentendstation'></span></label>
+                  <select class="styled-select black rounded" id="select_start_time">
+                    <option disabled selected value>Change Drop Off Time</option>
+                  </select>
                 </div>
               </div>
                 <div class="form-group col-md-6" style="width:100%;">
-                  <h4> Current reservation contains:</h4>
-                  <p> 2 bikes 3 seats 4 horses</p>
-                  <h4>In order to change this plese select from below</h4>
-                  <p> Bicycle thing from the selection</p>
-
                 </div>
 
 

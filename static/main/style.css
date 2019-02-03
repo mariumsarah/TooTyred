@@ -28,12 +28,12 @@ a, a:active, a:visited { color:#3dcacd; }
   box-shadow:-10px 8px 15px #808080, 10px 8px 15px #808080;
 }
 #home {color: #000000; background-color: #C0C0C0;}
-#howitworks{color: #fff; background-color: #f4a688;}
-#cycles {color: #fff; background-color: #00bcd4;}
-#stationmap{color: #000000; background-color: #FFFFFF;}
-#pricing {color: #fff; background-color: #673ab7;}
+#howitworks{color: #fff; background-color: #009688;}
+#cycles {color: #fff; background-color: #C0C0C0;}
+#stationmap{color: #000000; background-color: #009688;}
+#pricing {color: #fff; background-color: #C0C0C0;}
 #aboutus {color: #fff; background-color: #009688;}
-#contact {color: #fff; background-color:#1E88E5;}
+#contact {color: #fff; background-color:#C0C0C0;}
 
 /*
 

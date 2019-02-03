@@ -34,12 +34,14 @@ def stations(request):
                     status=StatusOfBike.objects.get(bike_status_name='active')
                     station=None
                     bikes=Bike.objects.raw("select * from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id and br.bor_reservation_id=%s",(reservation.reservation_id,))
+                    s="The following bikes \n"
                     for x in bikes:
                         x.bike_status=status
                         x.bike_stationedat=station
                         x.save()
+                        s+=x.bike_type.bike_type+' \n'
                     reservation.save()
-                    messages.success(request,'Your bikes are now  UNLOCKED! Have a great ride!')
+                    messages.success(request,s+'is now  UNLOCKED! Have a great ride!')
                 # if the time is 15 min before end of reservation and 15 min after end of reservations
                 # and if the reservation was unlocked
                 # and the end station is end statin
@@ -48,16 +50,18 @@ def stations(request):
                     status=StatusOfBike.objects.get(bike_status_name='stationed')
                     station=Station.objects.get(station_id=current_url)
                     bikes=Bike.objects.raw("select * from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id and br.bor_reservation_id=%s",(reservation.reservation_id,))
+                    s=""
                     for x in bikes:
                         x.bike_status=status
                         x.bike_stationedat=station
                         x.save()
+                        s+=x.bike_type.bike_type+' \n'
                     reservation.save()
-                    messages.success(request,'Your bikes are now LOCKED! Thank you for reserving with us!')
+                    messages.success(request,s+' is now LOCKED! Thank you for reserving with us! Do give us feedback about your reservation experience!')
                 else:
-                    messages.error(request,'Sorry, you entered the wrong code. Please try again!')
+                    messages.error(request,'Sorry, you entered the wrong passcode. Please try again!')
             else:
-                messages.error(request,'Sorry, yousdfds entered the wrong code. Please try again!')
+                messages.error(request,'Sorry, this passcode does not exist. Please try again!')
             return render(request, 'employee/station.html',{'url':current_url,'station':Station.objects.get(station_id=current_url)})
     else:
         current_url = int(request.get_full_path().strip('/')[-1:])+1
