@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpResponse
 import json
 from django.urls import resolve
-from home.models import Station,Reservation,BikeOnReservation,Bike,StatusOfBike,ReservationType,Stationroutes,StationOnReservation
+from home.models import Station,Reservation,BikeOnReservation,Bike,StatusOfBike,ReservationType,Stationroutes,StationOnReservation, UserProfile
 from django.contrib import messages
 from datetime import datetime, timedelta,timezone
 # Create your views here.
@@ -71,13 +71,7 @@ def log(request):
     return render(request, 'employee/home.html')
 
 def bikes(request):
-    return render(request, 'employee/inspectbikes.html')
+    return render(request, 'employee/inspectbikes.html',{'status_of_bike':StatusOfBike.objects.all()})
 
 def empCustomerService(request):
-    return render(request, 'employee/customerservice.html')
-
-def empCheckups(request):
-    return render(request, 'employee/checkups.html')
-
-def empCheckups(request):
-    return render(request, 'employee/checkups.html')
+    return render(request, 'employee/customerservice.html',{'home_userprofile':UserProfile.objects.all()})

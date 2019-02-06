@@ -67,9 +67,10 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+  //------------------------------------------------------------------------
   var reser;
   $(document).ready(function(){
-  $("#myBtnEdit").click(function(){
+  $(".myBtnEdit").click(function(){
     $("#myEditModal").modal();
       reser=this.name;
       $('#currentpickuptime').text($('#stt'+reser).text());
@@ -77,8 +78,24 @@ $(document).ready(function(){
       $('#currentcost').text($('#cos'+reser).text());
       $('#currentstartstation').text($('#st'+reser).text());
       $('#currentendstation').text($('#en'+reser).text());
+      var select = $('#currentstarttime');
+      select.empty().append($('<option disabled selected value>'+'Change pick up time'+'</option>'));
+      select.append($('<option></option>')
+          .attr('value', 6)
+          .text(':'+' ' ));
+      select.append($('<option></option>')
+              .attr('value', 5)
+              .text('dfgdf:'+' ' ));
+      //Disable end time
+      document.getElementById('currentendtime').selectedIndex=0;
+      document.getElementById('currentendtime').style.color= "grey" ;
+      document.getElementById('currentendtime').disabled = true;
+
+      //Disable confirm
+      document.getElementById('myBtnSubmitChanges').style.display="none";
         });
 });
+//--------------------------------------------------------------
 </script>
 
 
@@ -481,10 +498,13 @@ transition:0.3s;
        <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
        <tr>
                 <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
-              <!--  <td><button type="button" id='myBtnEdit' class="btn btn btn-warning" style="width:100%;">Edit</button></td>-->
-              <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button>
-            <!--  <button type="button" id='myBtnEdit' name='{{ record.reservation_id }}' class="btn btn btn-warning" style="width:100%;">Edit Time</button></td>-->
-      </tr>
+            <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button>
+<!--------------
+              <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
+                <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
+              </form>
+      <!---------------->
+        </tr>
       <tr >
                <td style="font-size:15px;border:3px solid red;"><span id='en{{ record.reservation_id }}'>{{ record.endname }}</span>  <span id='ent{{ record.reservation_id }}'>{{ record.endtime }}</span></td>
                <td> {% if now.date < record.starttime.date %} <button type="button" id="myBtnCancel" class="btn btn-danger" style="width:100%;">Cancel</button>{% endif %}</td>
@@ -722,8 +742,8 @@ filter: drop-shadow(1px 1px 0 white)
   var x = 0;
   var startlocationid;
   var endlocationid;
-  var startlocationname='Ravelston Golf Club';
-  var endlocationname='Saughton Park And Gardens';
+  var startlocationname='';
+  var endlocationname='';
   var i=0;
   document.getElementById("confirm2").style.display="none";
   document.getElementById("home-tab").style.display="none";
@@ -1152,7 +1172,32 @@ $.ajax({
           }
 });
 };
+//-------------------------------------
+$('.timeedit').on('submit', function(event){
+event.preventDefault();
+edit_post();
+});
+// AJAX for posting
+function edit_post() {
+$.ajax({
+  url : "/home/reservations/", // the endpoint
+  type : "POST", // http method
+  data : { formtype: 'timeedit', reservationnumber:reser}, // data sent with the post fo
+  // handle a successful response
+  success : function(json) {
+    //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+    //IF THERE ARE NO TIMES AVAILABLE THEN :
+    //alert('Sorry, there are no other times you can change, other reservations occupied')
+    //document.getElementById('pleaseclose').click();
+        alert(json[1]); // remove t // remove the value from the input
+  },
 
+  // handle a non-successful response
+  error : function(xhr,errmsg,err) {
+          }
+});
+};
+//------------------------------------------
   </script>
  <!-- Information model -->
 
@@ -1207,7 +1252,7 @@ $.ajax({
       <div class="modal-content">
 
         <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" class="close" id='pleaseclose' data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
            <h2 style="color: rgba(0, 179, 179, 1); margin-left: 2%; font-weight: bold;">Edit reservation timing</h2>
@@ -1224,7 +1269,7 @@ $.ajax({
               <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="startTime">Change Pick up time from <span id='currentstartstation'></span></label>
-                  <select class="styled-select black rounded" id="select_start_time">
+                  <select class="styled-select black rounded" id="currentstarttime">
                     <option disabled selected value>Change Pick Up Time</option>
                   </select>
                 </div>
@@ -1232,7 +1277,7 @@ $.ajax({
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="endTime">Change Drop off time to <span id='currentendstation'></span></label>
-                  <select class="styled-select black rounded" id="select_start_time">
+                  <select class="styled-select black rounded" id="currentendtime">
                     <option disabled selected value>Change Drop Off Time</option>
                   </select>
                 </div>
@@ -1257,8 +1302,26 @@ $.ajax({
       </div>
     </div>
   </div>
-
-
-
+  <!---------------------------------------->
+<script>
+  $('#currentstarttime').change(function() {
+    var select = $('#currentendtime');
+    select.empty().append($('<option disabled selected value>'+'Edit Drop off time'+'</option>'));
+    select.append($('<option></option>')
+        .attr('value', 6)
+        .text(':'+' ' ));
+    select.append($('<option></option>')
+            .attr('value', 5)
+            .text('dfgdf:'+' ' ));
+    document.getElementById('currentendtime').selectedIndex=0;
+    document.getElementById('currentendtime').style.color= "black" ;
+    document.getElementById('currentendtime').disabled = false;
+    document.getElementById('myBtnSubmitChanges').style.display="none";
+  });
+  $('#currentendtime').change(function() {
+  document.getElementById('myBtnSubmitChanges').style.display="block";
+  });
+</script>
+<!------------------------------------------>
 </body>
 {% endblock %}

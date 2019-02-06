@@ -111,8 +111,23 @@ def reserve(request):
 
 def reservations(request):
     if request.method == 'POST':
-            #EDGAR --------------------------------------------------------------------------------------
-            if request.POST.get('formtype','') == 'time':
+            # --------------------------------------------------------------------------------------
+            if request.POST.get('formtype','') == 'timeedit':
+                reservationnumber = request.POST.get('reservationnumber','')
+                response_data={}
+                response_data[0]=request.POST.get('reservationnumber','')
+                #get all the times available for start time and end time
+                # if there is a reservation for Bikes A,B,C from 5PM to 6PM on Jan 1
+                #get all times the reservations can be moved backwards or forward
+                #so if the bikes A,B,C are at the station from 3PM to 8PM on Jan 1
+                # return the times 3PM Jan1,3:15PM Jan1,3:30PM Jan1,3:45PM Jan 1.....6PM Jan1
+
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                    )
+            #-------------------------------------------
+            elif request.POST.get('formtype','') == 'time':
                 startdatetime = datetime.strptime(request.POST.get('startdate','')+' '+request.POST.get('starttime',''),'%d %b %Y %I:%M %p')
                 enddatetime = datetime.strptime(request.POST.get('enddate','')+' '+request.POST.get('endtime',''),'%d %b %Y %I:%M %p')
                 startstationid = Station.objects.get(name = request.POST.get('startstation','')).station_id

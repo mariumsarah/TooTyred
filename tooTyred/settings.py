@@ -83,21 +83,22 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tootyred',
         'USER':'root',
-        'PASSWORD':'tootyred',
-        'HOST':'localhost',#
+        'PASSWORD':'tootyred',#superusertootyred
+        'HOST':'localhost',#toootyred.mysql.pythonanywhere-services.com
         'PORT':''
     }
 }
 
 ##PYTHON pythonanywhere
 
+
 #DATABASES = {
-#    'default': {
+##    'default': {
 #        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'mariumsarah$tootyred',
-#        'USER':'mariumsarah',
-#        'PASSWORD':'tootyred',
-#        'HOST':'mariumsarah.mysql.pythonanywhere-services.com',
+#        'NAME': 'toootyred$tootyred',
+#        'USER':'toootyred',
+#        'PASSWORD':'superusertootyred',#superusertootyred
+#        'HOST':'toootyred.mysql.pythonanywhere-services.com',#toootyred.mysql.pythonanywhere-services.com
 #        'PORT':''
 #    }
 #}

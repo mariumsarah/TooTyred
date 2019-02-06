@@ -7,6 +7,5 @@ urlpatterns = [
     url(r'^log/$',views.log,name="log"),
     url(r'^bikes/$',views.bikes,name="bikes"),
     url(r'^customerservice/$',views.empCustomerService,name="customerservice"),
-    url(r'^checkups/$',views.empCheckups,name="checkups"),
     url(r'^station[0-9]/$',views.stations,name="stations"),
     ]

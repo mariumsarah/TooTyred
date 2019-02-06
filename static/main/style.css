@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body{
   background-color: #696969;
   padding-top: 70px;
@@ -35,7 +36,7 @@ a, a:active, a:visited { color:#3dcacd; }
 #aboutus {color: #fff; background-color: #009688;}
 #contact {color: #fff; background-color:#C0C0C0;}
 
-/*
+/*#sdfsdf
 
   #map-canvas
 {

@@ -40,8 +40,6 @@ class Station(models.Model):
     lat = models.DecimalField(max_digits=30, decimal_places=15)
     is_active = models.IntegerField()
     image = models.CharField(max_length=30)
-    fine_cost = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
-    fine_desc = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -167,6 +165,8 @@ class Reservation(models.Model):
     bike_reservation = models.ManyToManyField(Bike, through='BikeOnReservation')
     route_reservation = models.ManyToManyField(Stationroutes, through='StationOnReservation')
     res_code = models.TextField()
+    fine_cost = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
+    fine_desc = models.TextField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'reservation'
