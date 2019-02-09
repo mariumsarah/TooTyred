@@ -45,7 +45,7 @@ def stations(request):
                 # if the time is 15 min before end of reservation and 15 min after end of reservations
                 # and if the reservation was unlocked
                 # and the end station is end statin
-                elif now<(reservation.endtime+timedelta(minutes=15)) and now>(reservation.endtime-timedelta(minutes=15)) and Reservation.objects.filter(res_code=request.POST.get("reservationcode",""),res_type=reservationTypeCurrent).exists() and stations[0].end_station_id==current_url:
+                elif now<(reservation.endtime+timedelta(minutes=15)) and now>(reservation.starttime-timedelta(minutes=15)) and Reservation.objects.filter(res_code=request.POST.get("reservationcode",""),res_type=reservationTypeCurrent).exists() and stations[0].end_station_id==current_url:
                     reservation.res_type=reservationTypePast
                     status=StatusOfBike.objects.get(bike_status_name='stationed')
                     station=Station.objects.get(station_id=current_url)

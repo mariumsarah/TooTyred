@@ -560,8 +560,7 @@
                     {% for bike in bike_type %}
                   <input type="hidden" name="inputbike{{ bike.bike_type_id }}" id="inputbike{{ bike.bike_type_id }}" value="">
                   {% endfor %}
-              <button type="button" class="btn btn-secondary" style="color: #3d3a3a;" onclick="reload_page()" data-dismiss="modal">Go back to Reserve Page</button>
-              <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
+                  <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
               </form>
             </div>
           </div>
@@ -675,11 +674,9 @@ var geojson = [
     {
         station_id: "{{ stat.station_id }}",
         address: "{{ stat.address }}",
-        capacity: "{{ stat.rack_capacity }}",
         lat: "{{ stat.lat }}",
         lon: "{{ stat.lon }}",
         name: "{{ stat.name }}",
-        numbikesavailable: "{{ stat.num_racks_available }}",
         images: "{{ stat.image }}",
         info: "{{ stat.info }}",
         is_active: "{{ stat.is_active }}",
@@ -701,14 +698,13 @@ geojson.forEach(function(marker1) {
                     '<div class="iw-content">' +
                       '<div class="iw-subTitle">'+marker1.address+'</div>' +
                       '<img src='+url_mask+' alt='+marker1.name+' height="115" width="83">' +
-                      '<p>'+marker1.info+'</p>' +
-                      '<div class="iw-subTitle">Racks Capacity: '+ marker1.capacity+'</div>' +
+                      '<p>'+marker1.info+'</p>'  +
                     '</div>' +
                     '<div class="iw-bottom-gradient"></div>' +
                   '</div>';
   var infowindow = new google.maps.InfoWindow({
           content: contentString,
-          maxWidth: 350
+          maxWidth: 250
         });
         google.maps.event.addListener(infowindow, 'domready', function() {
 

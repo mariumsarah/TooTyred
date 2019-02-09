@@ -32,8 +32,6 @@ post_save.connect(create_profile,sender=User)
 class Station(models.Model):
     station_id = models.AutoField(primary_key=True)
     address = models.CharField(max_length=100)
-    rack_capacity = models.IntegerField()
-    num_racks_available = models.IntegerField()
     info = models.TextField()
     name = models.CharField(max_length=50)
     lon = models.DecimalField(max_digits=30, decimal_places=16)
@@ -176,8 +174,8 @@ class Reservation(models.Model):
 
 
 class BikeOnReservation(models.Model):
-    bor_bike = models.ForeignKey(Bike, models.DO_NOTHING)
-    bor_reservation = models.ForeignKey('Reservation', models.DO_NOTHING)
+    bor_bike = models.ForeignKey('Bike', models.DO_NOTHING)
+    bor_reservation = models.ForeignKey(Reservation, models.DO_NOTHING)
 
     class Meta:
         managed = False

@@ -100,15 +100,13 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+  var can;
   $(document).ready(function(){
-  $("#myBtnCancel").click(function(){
+  $(".myBtnCancel").click(function(){
    var ID = $(this).parent().parent().attr('id');
-
-
      $("#myCancelationModal .modal-body ").attr( "id", "modal"+ID);
-
      $("#myCancelationModal").modal();
-
+     can=this.name;
   });
 });
 </script>
@@ -129,15 +127,15 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 
-
   function cancelReservation(elem){
-
         //var ID = $(this).parent().parent().attr('id');
-        var ID = elem.parentNode.id.slice(5);
-        var e = document.getElementById(ID);
-        e.classList.add( "canceledElem");
+      //  var ID = elem.parentNode.id.slice(5);
+        //var e = document.getElementById(ID);
+        //e.classList.add( "canceledElem");
+        // $(e).find("button").prop("disabled", true);
+         event.preventDefault();
 
-         $(e).find("button").prop("disabled", true);
+         cancel_reser();
 }
 
   function sendFeedback(elem){
@@ -507,7 +505,7 @@ transition:0.3s;
         </tr>
       <tr >
                <td style="font-size:15px;border:3px solid red;"><span id='en{{ record.reservation_id }}'>{{ record.endname }}</span>  <span id='ent{{ record.reservation_id }}'>{{ record.endtime }}</span></td>
-               <td> {% if now.date < record.starttime.date %} <button type="button" id="myBtnCancel" class="btn btn-danger" style="width:100%;">Cancel</button>{% endif %}</td>
+               <td> {% if now.date < record.starttime.date %} <button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:100%;">Cancel</button>{% endif %}</td>
       </tr>
       <tr> <td colspan='2'>
         {% for bike in bikesonreservations %}
@@ -1152,6 +1150,7 @@ $.ajax({
               }
   });
 };
+
 $('#bikeform').on('submit', function(event){
 event.preventDefault();
 bike_post();
@@ -1197,6 +1196,29 @@ $.ajax({
           }
 });
 };
+
+// AJAX for posting
+function cancel_reser() {
+$.ajax({
+  url : "/home/reservations/", // the endpoint
+  type : "POST", // http method
+  data : { formtype: 'cancel', reservationcode:can}, // data sent with the post fo
+  // handle a successful response
+  success : function(json) {
+    //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+    //IF THERE ARE NO TIMES AVAILABLE THEN :
+    //alert('Sorry, there are no other times you can change, other reservations occupied')
+    //document.getElementById('pleaseclose').click();
+        alert('Your refund of '+json[0]+' will be processed, check your mail for updates'); // remove t // remove the value from the input
+        reload_page();
+  },
+
+  // handle a non-successful response
+  error : function(xhr,errmsg,err) {
+          }
+});
+};
+
 //------------------------------------------
   </script>
  <!-- Information model -->

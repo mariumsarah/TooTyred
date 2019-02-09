@@ -126,6 +126,33 @@ def reservations(request):
                     json.dumps(response_data),
                     content_type="application/json"
                     )
+            elif request.POST.get('formtype','') == 'cancel':
+                reservationnumber = request.POST.get('reservationcode','')
+                reservation = Reservation.objects.get(reservation_id=reservationnumber)
+                cost = reservation.res_cost
+                messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nYour reservation of code '+reservation.res_code+' is cancelled successfully! \n'
+                messagew+='\n Your total cost that will be refunded is €'+str(reservation.res_cost)+'\n Hope you had a great experience on our website! And keep reserving!'
+                email = EmailMessage('Your TooTyred Reservation', messagew, to=[request.user.email])
+                email.send()
+                bikes = BikeOnReservation.objects.filter(bor_reservation_id=reservation.reservation_id)
+                bikes.delete()
+                    #print(bike.id)
+                StationOnReservation.objects.filter(sor_reservation_id=reservation.reservation_id).delete()
+                #remove the reservations
+                reservation.delete()
+                #remove all station on that reservation
+                response_data={}
+                response_data[0]=str(cost)
+                #get all the times available for start time and end time
+                # if there is a reservation for Bikes A,B,C from 5PM to 6PM on Jan 1
+                #get all times the reservations can be moved backwards or forward
+                #so if the bikes A,B,C are at the station from 3PM to 8PM on Jan 1
+                # return the times 3PM Jan1,3:15PM Jan1,3:30PM Jan1,3:45PM Jan 1.....6PM Jan1
+                # this is the part that takes time when reserving
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                    )
             #-------------------------------------------
             elif request.POST.get('formtype','') == 'time':
                 startdatetime = datetime.strptime(request.POST.get('startdate','')+' '+request.POST.get('starttime',''),'%d %b %Y %I:%M %p')
