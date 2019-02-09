@@ -59,7 +59,7 @@ def reserve(request):
                 for i in range(len(TypeOfBike.objects.all())):
                     bikes[i] = int(request.POST.get("inputbike"+str(i+1)))
                     print(bikes[i])
-                    inputbikelen += 1   #gets the total number of bikes that user wanted on the bike select page
+                    inputbikelen += bikes[i]   #gets the total number of bikes that user wanted on the bike select page
                 #For each bike type
                 biked = {}  #these are the bikes that are allowed to be reserved by the user
                 finalbikes = {} #these are the bikes that WILL be reserved to the user
@@ -78,7 +78,6 @@ def reserve(request):
                         print('123', bikes[biked[b].bike_type.bike_type_id-1])
                         if bikes[biked[b].bike_type.bike_type_id-1] > 0:
                             bikes[biked[b].bike_type.bike_type_id-1] -= 1
-                            print(bikes[biked[b].bike_type.bike_type_id])
                             finalbikes[x] = biked[b]
                             inputbikelen -= 1
                             x += 1
@@ -131,7 +130,7 @@ def reservations(request):
                 reservation = Reservation.objects.get(reservation_id=reservationnumber)
                 cost = reservation.res_cost
                 messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nYour reservation of code '+reservation.res_code+' is cancelled successfully! \n'
-                messagew+='\n Your total cost that will be refunded is €'+str(reservation.res_cost)+'\n Hope you had a great experience on our website! And keep reserving!'
+                messagew+='\n Your total cost that will be refunded is €'+str(reservation.res_cost)+'\n Send us an email specifying your account number and account name and further updates will be made. \nHope you had a great experience on our website! And keep reserving!'
                 email = EmailMessage('Your TooTyred Reservation', messagew, to=[request.user.email])
                 email.send()
                 bikes = BikeOnReservation.objects.filter(bor_reservation_id=reservation.reservation_id)
@@ -180,7 +179,7 @@ def reservations(request):
                 for i in range(len(TypeOfBike.objects.all())):
                     bikes[i] = int(request.POST.get("inputbike"+str(i+1)))
                     print(bikes[i])
-                    inputbikelen += 1   #gets the total number of bikes that user wanted on the bike select page
+                    inputbikelen += bikes[i]   #gets the total number of bikes that user wanted on the bike select page
                 #For each bike type
                 biked = {}  #these are the bikes that are allowed to be reserved by the user
                 finalbikes = {} #these are the bikes that WILL be reserved to the user
@@ -199,7 +198,6 @@ def reservations(request):
                         print('123', bikes[biked[b].bike_type.bike_type_id-1])
                         if bikes[biked[b].bike_type.bike_type_id-1] > 0:
                             bikes[biked[b].bike_type.bike_type_id-1] -= 1
-                            print(bikes[biked[b].bike_type.bike_type_id])
                             finalbikes[x] = biked[b]
                             inputbikelen -= 1
                             x += 1
