@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'bootstrap3',
-    'empApp',
+    'optrApp',
     'manApp'
 ]
 
@@ -142,7 +142,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT ='/home/toootyred/TooTyred'
 
 LOGIN_REDIRECT_URL='/login_success/'
-LOGIN_REDIRECT_EMP_URL='/employee/log/'
+LOGIN_REDIRECT_EMP_URL='/operator/log/'
 LOGIN_REDIRECT_MAN_URL='/manager/log/'
 LOGOUT_REDIRECT_URL='/home/'
 
@@ -156,6 +156,8 @@ LOGIN_EXEMPT_URL = (
     r'^home/reset-password/confirm/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$',
     r'^home/reset-password/complete/$',
     r'^home/termsandconditions/$',
+    r'^operator/$',
+    r'^manager/$',
     r'^employee/$',
 )
 
@@ -170,12 +172,10 @@ LOGIN_EXEMPT_EMPLOYEE_URL = (
 )
 
 LOGIN_EXEMPT_USER_URL = (
-    r'^employee/log/$',
-    r'^employee/bikes/$',
-    r'^employee/reservations/$',
-    r'^employee/stations/$',
-    r'^employee/customerservice/$',
-    r'^employee/checkups/$',
+    r'^operator/log/$',
+    r'^operator/bikes/$',
+    r'^operator/station[0-9]/$',
+    r'^operator/customerservice/$',
     #managers pages come here
 )
 
@@ -183,8 +183,7 @@ LOGIN_EXEMPT_MANAGER_URL = (
     r'^manager/log/$',
     r'^manager/usagereports/$',
     r'^manager/statistics/$',
-    r'^manager/database/$',
-    r'^manager/checkups/$',
+    r'^manager/dailyreports/$',
     #employee and users come here
 )
 #password tootyred12345

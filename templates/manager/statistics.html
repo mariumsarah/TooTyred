@@ -1,147 +1,88 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block head %}
   <title>Statistics</title>
-
-  <style>
-.content-page{
-margin-left: 0;
-width: 100%;
-align-content: center;
-
-}
-
-#container{
- align-content: center;
-left: 40%;
-
-
-}
-
-#row{
-  align-content: center;
-
-}
-
-#analyc{
-align-content: center;
-width: 40%;
-border:3px solid black;
-border-right: 1.4px solid black;
-padding-bottom: 15px
-}
-    </style>
+  <link rel="stylesheet" href= "{% static 'css/manager/statistics.css' %}" type="text/css">
 {% endblock %}
 {% block body %}
   <div id="container">
 
           <div  id="row">
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="analyc" >
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Bar Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="barChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="analyc" >
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Combo Bar Line Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="comboBarLineChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
           </div>
 
-
           <div class="row">
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Pie Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="pieChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Doughnut Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="doughnutChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Radar Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="radarChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
               <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc" >
-                <div class="card mb-3" style="background:#3dcacd">
+                <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-table"></i> Polar Area Chart
                   </div>
-
                   <div class="card-body">
                     <canvas id="polarAreaChart"></canvas>
                   </div>
-
                 </div><!-- end card-->
               </div>
-
           </div>
           <!-- end row -->
-
-
-
-
             </div>
       <!-- END container-fluid -->
-
     </div>
     <!-- END content -->
-
-
-
-
 </div>
 <!-- END main -->
 
 
 <!-- BEGIN Java Script for this page -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-
   <script>
   // barChart
   var ctx1 = document.getElementById("barChart").getContext('2d');

@@ -3,11 +3,10 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="icon" href="{% static 'icons/icon.png' %}">
-  <link rel="stylesheet" href= "{% static 'main/style.css' %}" type="text/css">
+  <link rel="stylesheet" href= "{% static 'css/style.css' %}" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block head %}
@@ -38,12 +37,12 @@
                 <li><a href="{% url 'home:logout' %}">Logout</a></li>
               </ul>
               {% elif user.is_staff %}<!--This is the employees page-->
-              <a class="navbar-brand" href="{% url 'empApp:log' %}"><img src="{% static 'icons/logo.png' %}" style="float:left;margin-top: -12px;" width="66" height="45">&nbsp;&nbsp;{{ user.username }}</a>
+              <a class="navbar-brand" href="{% url 'optrApp:log' %}"><img src="{% static 'icons/logo.png' %}" style="float:left;margin-top: -12px;" width="66" height="45">&nbsp;&nbsp;{{ user.username }}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
-                <li><a href="{% url 'empApp:bikes' %}">Track Bikes</a></li>
-                <li><a href="{% url 'empApp:customerservice' %}">Customer Service</a></li>
+                <li><a href="{% url 'optrApp:bikes' %}">Track Bikes</a></li>
+                <li><a href="{% url 'optrApp:customerservice' %}">Customer Service</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'home:logout' %}">Logout</a></li>
@@ -81,11 +80,13 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-      <script>$(document).ready(function () {
-  $(".navbar-nav a").click(function(event) {
-    $(".navbar-collapse").collapse('hide');
-  });
-});</script>
+      <script>
+          $(document).ready(function () {
+            $(".navbar-nav a").click(function(event) {
+              $(".navbar-collapse").collapse('hide');
+            });
+          });
+      </script>
   {% block body %}
   <h1>not  </h1>
   {% endblock %}

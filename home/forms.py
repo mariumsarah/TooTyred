@@ -7,9 +7,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.core.validators import validate_email
 
-class ExampleForm(forms.Form):
-    field = forms.CharField(label='Message', max_length=80)
-
 class EditProfileForm(UserChangeForm):
     class Meta:
         model = User

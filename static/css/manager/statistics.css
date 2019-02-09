@@ -1,0 +1,26 @@
+.content-page{
+margin-left: 0;
+width: 100%;
+align-content: center;
+
+}
+
+#container{
+ align-content: center;
+left: 40%;
+}
+.card{
+  background:#3dcacd
+}
+#row{
+  align-content: center;
+
+}
+
+#analyc{
+align-content: center;
+width: 40%;
+border:3px solid black;
+border-right: 1.4px solid black;
+padding-bottom: 15px
+}

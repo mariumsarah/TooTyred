@@ -550,6 +550,7 @@ CREATE TABLE `reservation` (
   `starttime` datetime NOT NULL,
   `endtime` datetime NOT NULL,
   `c_rating` int(11) DEFAULT NULL,
+  `feedback` text DEFAULT NULL,
   `c_id` int(11) NOT NULL,
   `fine_cost` decimal(11,2) DEFAULT NULL,
   `fine_desc` text,

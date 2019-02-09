@@ -7,64 +7,46 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script type="text/javascript">
-  top.visible_div_id = 'right';
-  function toggle_visibility(id) {
-     var old_e = document.getElementById(top.visible_div_id);
-     var new_e = document.getElementById(id);
-     if(old_e) {
+    top.visible_div_id = 'right';
+    function toggle_visibility(id) {
+      var old_e = document.getElementById(top.visible_div_id);
+      var new_e = document.getElementById(id);
+      if(old_e) {
         console.log('old', old_e, 'none');
         old_e.style.display = 'none';
+      }
+      console.log('new', new_e, 'block');
+      new_e.style.display = 'block';
+      top.visible_div_id = id;
+    }
+
+    function leftFun(){
+      document.getElementById("left_toggle_btn").classList.add('clicked_btn');
+      document.getElementById("left_toggle_btn").classList.remove('not_clicked_btn');
+      document.getElementById("right_toggle_btn").classList.remove('clicked_btn');
+      document.getElementById("right_toggle_btn").classList.add('not_clicked_btn');
      }
-    console.log('new', new_e, 'block');
-     new_e.style.display = 'block';
-     top.visible_div_id = id;
-  }
-  </script>
-  <script>
-function leftFun(){
-  document.getElementById("left_toggle_btn").classList.add('clicked_btn');
 
-  document.getElementById("left_toggle_btn").classList.remove('not_clicked_btn');
-   document.getElementById("right_toggle_btn").classList.remove('clicked_btn');
+    function rightFun(){
+      document.getElementById("right_toggle_btn").classList.add('clicked_btn');
+      document.getElementById("right_toggle_btn").classList.remove('not_clicked_btn');
+      document.getElementById("left_toggle_btn").classList.remove('clicked_btn');
+      document.getElementById("left_toggle_btn").classList.add('not_clicked_btn');
+    }
 
-  document.getElementById("right_toggle_btn").classList.add('not_clicked_btn');
-   }
-function rightFun(){
-  document.getElementById("right_toggle_btn").classList.add('clicked_btn');
+    function editDetails(elem){
+            //var ID = $(this).parent().parent().attr('id');
+            //var ID = elem.parentNode.id.slice(5);
+            //var e = document.getElementById(ID);
+          //  e.classList.add( "canceledElem");
 
-  document.getElementById("right_toggle_btn").classList.remove('not_clicked_btn');
-   document.getElementById("left_toggle_btn").classList.remove('clicked_btn');
+           /////  $(e).find("button").prop("disabled", true);
+    }
 
-  document.getElementById("left_toggle_btn").classList.add('not_clicked_btn');
-
-}
-
-function editDetails(elem){
-{
-
-        //var ID = $(this).parent().parent().attr('id');
-        //var ID = elem.parentNode.id.slice(5);
-        //var e = document.getElementById(ID);
-      //  e.classList.add( "canceledElem");
-
-       /////  $(e).find("button").prop("disabled", true);
-
-
-
-
-}
-
-
-}
+    $(document).ready(function(){
+      $('[data-toggle="popover"]').popover();
+    });
 </script>
-
-<script>
-$(document).ready(function(){
-    $('[data-toggle="popover"]').popover();
-});
-</script>
-
-
 
 <script type="text/javascript">
   //------------------------------------------------------------------------
@@ -100,23 +82,24 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-  var can;
+  var cancelreser;
   $(document).ready(function(){
   $(".myBtnCancel").click(function(){
    var ID = $(this).parent().parent().attr('id');
      $("#myCancelationModal .modal-body ").attr( "id", "modal"+ID);
      $("#myCancelationModal").modal();
-     can=this.name;
+     cancelreser=this.name;
   });
 });
 </script>
 
 <script type="text/javascript">
+  var feedbackreservation;
   $(document).ready(function(){
-  $("#myBtnFeedback").click(function(){
+  $(".myBtnFeedback").click(function(){
    var ID = $(this).parent().parent().attr('id');
-
-
+    feedbackreservation=this.name;
+$("#whichtrip").text(feedbackreservation);
      $("#myFeedbackModal .modal-body ").attr( "id", "modal"+ID);
 
      $("#myFeedbackModal").modal();
@@ -129,29 +112,30 @@ $(document).ready(function(){
 
   function cancelReservation(elem){
         //var ID = $(this).parent().parent().attr('id');
-      //  var ID = elem.parentNode.id.slice(5);
+        //  var ID = elem.parentNode.id.slice(5);
         //var e = document.getElementById(ID);
         //e.classList.add( "canceledElem");
         // $(e).find("button").prop("disabled", true);
          event.preventDefault();
-
          cancel_reser();
-}
-
+       }
+  var feedbacktext;
+  var ratingnumber;
   function sendFeedback(elem){
-
         //var ID = $(this).parent().parent().attr('id');
-        var ID = elem.parentNode.parentNode.id.slice(5);
-        var e = document.getElementById(ID);
-        var btn = $(e).find("button");
-         $(btn).prop("disabled", true);
-         $(btn).html("Feedback sent");
+        //  var ID = elem.parentNode.parentNode.id.slice(5);
+        //var e = document.getElementById(ID);
+        //var btn = $(e).find("button");
+        //$(btn).prop("disabled", true);
+        //$(btn).html("Feedback sent");
+        feedbacktext=document.getElementById("customerfeedback").value;
+        ratingnumber=document.getElementById("customerrating").value;
+        event.preventDefault();
+        feedback_reser();
        }
 
-</script>
-<script type="text/javascript">
   $(document).ready(function(){
-  $("#myBtnSubmitChanges").click(function(){
+    $("#myBtnSubmitChanges").click(function(){
     $("#myInformationModal").modal();
   });
 });
@@ -219,14 +203,6 @@ $(document).ready(function(){
   box-sizing: border-box
   }
 
-
-  .i {
-    float: right;
-    border: 1px solid #ddd;
-    border-radius: 7px;
-    padding: 2px;
-    width: 150px;
-  }
   .closed{
   width:5%;
   height:100%;
@@ -246,7 +222,7 @@ $(document).ready(function(){
     border-top:2px solid;
     margin-bottom:4px;
   }
-  .modal-content{
+  .contented{
     display:flex;
   }
   .column-4, .column-8 {
@@ -463,8 +439,8 @@ transition:0.3s;
          {% for record in pastreservations %}
          <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
          <tr>
-<td  style="width:100%;"> <button type="button" id ="myBtnFeedback"  class="btn btn-info">Send Feedback</button></td>
-<td  style="width:100%;"> <button type="button" id ="myBtnFeedback"  class="btn btn-danger">PAY YOUR FINE!</button></td>
+<td  style="width:100%;"> <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button></td>
+<td  style="width:100%;">{% if record.fine_cost != None %}<button type="button" style="width:100%;" class="btn btn-danger myBtnFeedback">PAY YOUR FINE!</button>{% endif %} </td>
           </tr>
          <tr>
                   <td style="font-size:15px;border:3px solid green;border-radius:2px;">{{ record.startname }}<br>{{ record.starttime }}</td>
@@ -534,7 +510,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
 <!--EDIT RESERVATION -->
 <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog dia" role="document">
-    <div class="modal-content">
+    <div class="modal-content contented">
       <div class="modal-header header column-4">
         <button type="button" style="float:left;opacity:9; color:#3dcacd;" id="clickme" onclick="reset()" class="close" data-dismiss="modal">
         <span aria-hidden="true">&times;</span></button><br>
@@ -671,30 +647,30 @@ filter: drop-shadow(1px 1px 0 white)
   <!-- Modal -->
   <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content cont">
+      <div class="modal-content cont contented">
         <div class="modal-header">
           <h5 class="modal-title titles" id="exampleModalLabel1">Would you like to confirm the following reservation?</h5>
         </div>
         <div class="modal-body context">
           <ul class="list-group">
             <li class="list-group-item">
-              <li class="list-group-item" style="color:#3dcacd;">End Station <span style="font-weight:bold" id="ends"></span></li>
-              <li class="list-group-item" style="color:#3dcacd;">Start Station <span style="font-weight:bold" id="starts"></span></li>
-          <li class="list-group-item" style="color:#3dcacd;">Your reservation will start at <span style="font-weight:bold" id="starting"></span></li>
-          <li class="list-group-item"  style="color:#3dcacd;">Your reservation will end at <span style="font-weight:bold" id="ending"></span></li>
-        <li class="list-group-item"  id="biked" style="color:#3dcacd;">Bikes reserved:<br></li>
-        <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
-      <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
-      <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
-      <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
-      <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANNOT YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
+            <li class="list-group-item" style="color:#3dcacd;">End Station <span style="font-weight:bold" id="ends"></span></li>
+            <li class="list-group-item" style="color:#3dcacd;">Start Station <span style="font-weight:bold" id="starts"></span></li>
+            <li class="list-group-item" style="color:#3dcacd;">Your reservation will start at <span style="font-weight:bold" id="starting"></span></li>
+            <li class="list-group-item"  style="color:#3dcacd;">Your reservation will end at <span style="font-weight:bold" id="ending"></span></li>
+            <li class="list-group-item"  id="biked" style="color:#3dcacd;">Bikes reserved:<br></li>
+            <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
+            <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
+            <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
+            <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
+            <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANNOT YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
           </ul>
-            <form  method="post" name="myform">
+          <form  method="post" name="myform">
               {% csrf_token %}
-           <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
-            <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
+              <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
+              <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
               <input type="hidden" name="reservation" id="reservationt" value=""/>
-             <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
+              <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
               <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
               <input type="hidden" name="inputenddate" id="inputenddate" value=""/>
               <input type="hidden" name="inputstartdate" id="inputstartdate" value=""/>
@@ -702,8 +678,7 @@ filter: drop-shadow(1px 1px 0 white)
                 {% for bike in bike_type %}
               <input type="hidden" name="inputbike{{ bike.bike_type_id }}" id="inputbike{{ bike.bike_type_id }}" value="">
               {% endfor %}
-          <button type="button" class="btn btn-secondary" style="color: #3d3a3a;" onclick="reload_page()" data-dismiss="modal">Go back to Reservations Log</button>
-          <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
+              <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
           </form>
         </div>
       </div>
@@ -713,24 +688,24 @@ filter: drop-shadow(1px 1px 0 white)
   <div class="modal" id="myFeedbackModal">
     <div class="modal-dialog">
       <div class="modal-content" >
-
         <div class="modal-header" style="border-bottom: 0px; margin-bottom: 0px; padding-bottom: 0px;">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-      <div class="centered_item" style=" margin-bottom: 2%;" >
-        <div class="modal-body "  style=" height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
-        <h2 style="color: rgba(0, 179, 179, 1); font-weight: bold;"> Feedback Form</h2>
-        <h3 style="color:white; "> Thank you for taking your time to comment on our service! Your feedback is very important to us!</h3>
-        <h4 style="color: black;"> Gentle reminder that you are about to send feedback about the so and so trip at so and so day </h4>
-        <div class="input-group " style="width:100%; margin-top:5%;">
-              <textarea class="form-control" aria-label="With textarea" style=" margin-bottom: 1%;" ></textarea>
-              <button type="submit"  id="myBtnSubmitFeedback" data-dismiss="modal" class="btn btn-success" onclick="sendFeedback(this);" style="width: 100%;">Submit</button>
-        </div>
-         <div>
-
-         </div>
-        </div>
-
+        <div class="centered_item" style=" margin-bottom: 2%;" >
+          <div class="modal-body "  style="height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
+            <h2 style="color: rgba(0, 179, 179, 1); font-weight: bold;"> Feedback Form</h2>
+            <h3 style="color:white; "> Thank you for taking your time to comment on our service! Your feedback is very important to us!</h3>
+            <h4 style="color: black;"> Gentle reminder that you are about to send feedback about the trip with reservation code <span id='whichtrip'></span>.</h4>
+            <div class="input-group " style="width:100%; margin-top:5%;">
+                <form>
+                  <input max="5" min="1" type="number" class="form-control" id="customerrating" placeholder="Rating of your reservation" required/><br><br><br>
+                  <textarea class="form-control" id="customerfeedback" aria-label="With textarea" placeholder="Feedback or report a bike" style=" margin-bottom: 1%;" required></textarea>
+                  <button type="submit"  id="myBtnSubmitFeedback" data-dismiss="modal" class="btn btn-success" onclick="sendFeedback(this);" style="width: 100%;">Submit</button>
+                </form>
+            </div>
+            <div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1202,7 +1177,7 @@ function cancel_reser() {
 $.ajax({
   url : "/home/reservations/", // the endpoint
   type : "POST", // http method
-  data : { formtype: 'cancel', reservationcode:can}, // data sent with the post fo
+  data : { formtype: 'cancel', reservationcode:cancelreser}, // data sent with the post fo
   // handle a successful response
   success : function(json) {
     //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
@@ -1218,76 +1193,81 @@ $.ajax({
           }
 });
 };
+function feedback_reser() {
+$.ajax({
+  url : "/home/reservations/", // the endpoint
+  type : "POST", // http method
+  data : { formtype: 'feedback', reservationcode:feedbackreservation,feedback:feedbacktext,rating:ratingnumber}, // data sent with the post fo
+  // handle a successful response
+  success : function(json) {
+    alert('Feedback Sent')
+    //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+    //IF THERE ARE NO TIMES AVAILABLE THEN :
+    //alert('Sorry, there are no other times you can change, other reservations occupied')
+    //document.getElementById('pleaseclose').click();
 
+  },
+
+  // handle a non-successful response
+  error : function(xhr,errmsg,err) {
+          }
+});
+};
 //------------------------------------------
   </script>
  <!-- Information model -->
-
   <div class="modal" id="myInformationModal">
     <div class="modal-dialog">
-      <div class="modal-content" >
-
+      <div class="modal-content contented" >
         <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-      <div class="centered_item" style=" margin-bottom: 2%; margin-top: 0px;" >
-        <div class="modal-body "  style=" height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
-        <h3 style="color:white; "> Changes have been made!</h3>
-        <h3 style="color:white;"> Thank you for using our service! </h3>
-        <button type="button" data-dismiss="modal" class="btn btn-success" style="width: 100%;">Okay!</button>
-
-         <div>
-
-         </div>
-        </div>
-
+        <div class="centered_item" style=" margin-bottom: 2%; margin-top: 0px;" >
+          <div class="modal-body "  style=" height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
+            <h3 style="color:white; "> Changes have been made!</h3>
+            <h3 style="color:white;"> Thank you for using our service! </h3>
+            <button type="button" data-dismiss="modal" class="btn btn-success" style="width: 100%;">Okay!</button>
+            <div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
  <!-- The Cancelation Modal -->
    <div class="modal" id="myCancelationModal">
     <div class="modal-dialog">
-      <div class="modal-content" >
-
+      <div class="modal-content contented" >
         <div class="modal-header"  style="border-bottom: 0px; padding-bottom: 0px;">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body" >
-
-
-          <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to cancel your reservation? </h4>
-
+            <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to cancel your reservation? </h4>
             <button type="button" id="cancelReservation" data-dismiss="modal" style="width: 100%;" class="btn btn-success centered_item" onclick="cancelReservation(this);" >Yes</button>
             <button type="button" data-dismiss="modal" style="width: 100%;" class="btn btn-danger centered_item">No</button>
         </div>
-
-
-
       </div>
     </div>
-  </div>
+   </div>
    <!-- The Edit Modal -->
    <div class="modal" id="myEditModal">
     <div class="modal-dialog">
-      <div class="modal-content">
-
+      <div class="modal-content contented">
         <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
           <button type="button" class="close" id='pleaseclose' data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
            <h2 style="color: rgba(0, 179, 179, 1); margin-left: 2%; font-weight: bold;">Edit reservation timing</h2>
-          <form>
-            <div class="form-group col-md-6" style="width:100%;">
-              <h4>Current Pick up time</h4>
-              <p id='currentpickuptime'></p>
-              <h4>Current Drop Off time</h4>
-              <p id='currentdropofftime'></p>
-              <!--<h4>Time €<span id="currentcost">0</span></h4>
-              <h4>Bike €<span  id="cyclecost">0</span></h4>-->
-              <h4>Total €<span id="currentcost">0</span></h4>
-            </div>
+           <form>
+              <div class="form-group col-md-6" style="width:100%;">
+                <h4>Current Pick up time</h4>
+                <p id='currentpickuptime'></p>
+                <h4>Current Drop Off time</h4>
+                <p id='currentdropofftime'></p>
+                <!--<h4>Time €<span id="currentcost">0</span></h4>
+                <h4>Bike €<span  id="cyclecost">0</span></h4>-->
+                <h4>Total €<span id="currentcost">0</span></h4>
+              </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="startTime">Change Pick up time from <span id='currentstartstation'></span></label>
@@ -1304,23 +1284,14 @@ $.ajax({
                   </select>
                 </div>
               </div>
-                <div class="form-group col-md-6" style="width:100%;">
-                </div>
-
-
-            <div class="form-group col-md-6" style="border-top: solid 1 px white; width: 100%;">
-
-              <h4>You will be charged: XX$</h4>
-            </div>
-             <button type="submit" class="btn btn-success"  id="myBtnSubmitChanges" data-dismiss="modal" onclick="editDetails()" style="width: 100%;">Proceed</button>
-
+              <div class="form-group col-md-6" style="width:100%;">
+              </div>
+              <div class="form-group col-md-6" style="border-top: solid 1 px white; width: 100%;">
+                <h4>You will be charged: XX$</h4>
+              </div>
+              <button type="submit" class="btn btn-success"  id="myBtnSubmitChanges" data-dismiss="modal" onclick="editDetails()" style="width: 100%;">Proceed</button>
             </form>
-
-
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -1341,7 +1312,7 @@ $.ajax({
     document.getElementById('myBtnSubmitChanges').style.display="none";
   });
   $('#currentendtime').change(function() {
-  document.getElementById('myBtnSubmitChanges').style.display="block";
+    document.getElementById('myBtnSubmitChanges').style.display="block";
   });
 </script>
 <!------------------------------------------>

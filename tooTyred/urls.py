@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from tooTyred import views
+from django.contrib.auth.views import LoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^home/',include('home.urls',namespace="home")),
+    url(r'^employee/',LoginView.as_view(template_name='operator/login.html'),name="emplogin"),
     url(r'^$', views.welcome_redirect,name='welcome_redirect'),
-    url(r'^employee/',include('empApp.urls',namespace="employee")),
-    url(r'^manager/',include('manApp.urls',namespace="maanager")),
+    url(r'^operator/',include('optrApp.urls',namespace="operator")),
+    url(r'^manager/',include('manApp.urls',namespace="manager")),
     url(r'^login_success/',views.login_success,name='login_redirect'),
 ]

@@ -7,27 +7,27 @@ from django.core.validators import RegexValidator
 # Create your models here.
 
 #store more infor about usr than provided
-class UserProfile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
-    #-------------------------------WE NEED CREDIT CARD NUMBER-----------------------------
-    #creditcardnumber=models.CharField(placeholder='0000 0000 0000 0000', min_length=12, max_length=19)
-    creditcardexpirationdate=models.DateField(null=True,blank=True)
-    CREDITCARD_TYPE = (
-        ('V' ,'Visa'),
-        ('M' ,'Mastercard'),
-        ('A','American Express'),
-    )
-    creditcardtype=models.CharField(max_length=1,choices=CREDITCARD_TYPE,null=True,blank=True)
-    def __str__(self):
-        return self.user.username
+#class UserProfile(models.Model):
+#    user=models.OneToOneField(User,on_delete=models.CASCADE)
+#    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+#    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
+#    #-------------------------------WE NEED CREDIT CARD NUMBER-----------------------------
+#    #creditcardnumber=models.CharField(placeholder='0000 0000 0000 0000', min_length=12, max_length=19)
+#    creditcardexpirationdate=models.DateField(null=True,blank=True)
+#    CREDITCARD_TYPE = (
+#        ('V' ,'Visa'),
+#        ('M' ,'Mastercard'),
+#        ('A','American Express'),
+#    )
+#    creditcardtype=models.CharField(max_length=1,choices=CREDITCARD_TYPE,null=True,blank=True)
+#    def __str__(self):
+#        return self.user.username
 #This part of the code when once a user is created the extended user profile for that user is also created
-def create_profile(sender,**kwargs):
-    if kwargs['created']:
-        user_profile=UserProfile.objects.create(user=kwargs['instance'])
+#def create_profile(sender,**kwargs):
+#    if kwargs['created']:
+#        user_profile=UserProfile.objects.create(user=kwargs['instance'])
 
-post_save.connect(create_profile,sender=User)
+#post_save.connect(create_profile,sender=User)
 
 class Station(models.Model):
     station_id = models.AutoField(primary_key=True)
@@ -159,6 +159,7 @@ class Reservation(models.Model):
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
     c_rating = models.ForeignKey(CustomerRating, models.DO_NOTHING, db_column='c_rating', blank=True, null=True)
+    feedback= models.TextField(blank=True, null=True)
     c = models.ForeignKey(User, models.DO_NOTHING)
     bike_reservation = models.ManyToManyField(Bike, through='BikeOnReservation')
     route_reservation = models.ManyToManyField(Stationroutes, through='StationOnReservation')

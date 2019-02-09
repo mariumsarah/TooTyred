@@ -1,0 +1,63 @@
+#map {
+
+   width: 100%;
+   height: 500px;
+
+ }
+.refresh{
+  background: #3d3a3a;
+  font-size: 16px;
+border-radius: 4px;
+width: 250px;
+padding-left: 10px;
+ }
+#t1{
+border:3px solid black;
+width: 80%;
+B
+}
+.content-page{
+margin-left: 0;
+width: 100%;
+left: 10%;
+}
+#container{
+top: 20%;
+border: 100px;
+}
+#analy1{
+width: 40%;
+left: 10%;
+}
+#analy2{
+width: 40%;
+left: 10%;
+}
+#t2{
+width: 80%;
+background: white;
+color: black;
+font-style: normal;
+font-size: 16px;
+font-family: "Times New Roman", Times, serif;
+overflow: scroll; example3
+}
+.close{
+ width:5%;
+ height:100%;
+ float:right;
+ color: black;
+ }
+#modal-dialog{
+width: 95%;
+}
+#gap{
+height: 50px;
+}
+body{
+background-color: #696969;
+padding-top: 70px;
+font-family: 'Poppins', sans-serif;
+color:black;
+text-shadow: 1px 0 black, 1px 0 black, 1px 0 black, 1px 0 black;
+}

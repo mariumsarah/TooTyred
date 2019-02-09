@@ -9,17 +9,21 @@
      margin: 0;
      padding-top: 70px;
      color:black;
-   }
-   .alert{
-     position: absolute; top: 70px; left: 10px; z-index: 99;right:10px;
-   }
-   #map {
-     position: absolute;
-     top: 0;
-     bottom: 0;
-     width: 100%;
-     z-index:1;
-   }
+    }
+    .alert{
+      position: absolute;
+      top: 70px;
+      left: 10px;
+      z-index: 99;
+      right:10px;
+    }
+    #map {
+       position: absolute;
+       top: 0;
+       bottom: 0;
+       width: 100%;
+       z-index:1;
+    }
    .footer{
      height:80px;
      background-color:#3d3a3a;
@@ -43,6 +47,8 @@
    * {
    box-sizing: border-box
    }
+
+
    .gm-style-iw {
    	width: 200px !important;
    	top: 15px !important;
@@ -96,28 +102,7 @@
    	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
    	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
    }
-
-   .i {
-     float: right;
-     border: 1px solid #ddd;
-     border-radius: 7px;
-     padding: 2px;
-     width: 150px;
-   }
-
-      .drp {
-      background-color: #3dcacd;
-      display: block;
-      width: 92%;
-      height:100%;
-      float:left;
-      border-radius:12px;
-      font-size:15px;
-      font-weight:bold;
-   position: relative;
-     display: inline-block;
-      }
-   .beton {
+   .directionButton {
    background-color: #3dcacd;
    display: block;
    width: 100%;
@@ -130,11 +115,11 @@
    -webkit-transition-duration: 0.4s; /* Safari */
    transition-duration: 0.4s;
    }
-   .beton:hover {
+   .directionButton:hover {
      background-color:  #3d3a3a; /* Green */
      color: #3dcacd;
    }
-   .closed{
+   .closedirection{
    width:5%;
    height:100%;
    float:left;
@@ -155,6 +140,10 @@
      bottom: 20px;
      z-index:5;
    }
+   .location:hover {
+     box-shadow: 0 6px 14px 0 #666;
+     transform: scale(1.05);
+   }
    .mapinfo {
      width: 100px;
      height: 35px;
@@ -170,10 +159,6 @@
      left: 15px;
      bottom: 20px;
      z-index:3;
-   }
-   .location:hover {
-     box-shadow: 0 6px 14px 0 #666;
-     transform: scale(1.05);
    }
 
    .bod,.header,.dia,.modal-content
@@ -272,7 +257,7 @@
      background-color:white;
      position:relative;
    }
-   .dx{
+   .col3{
      font-size:15px;
      font-weight:bold;
      float:right;
@@ -287,7 +272,7 @@
      font-size:20px;
      font-weight:bold;
    }
-   .cq,.cm,.av,.qu{
+   .costq,.costm,.av,.qu{
     border: 1px solid #3dcacd;
     padding:2px;
     border-radius:4px;
@@ -298,7 +283,7 @@
    .context{
      font-size:15px;
    }
-   .ci{
+   .costi{
     font-size:10px;
     padding:4px;
    }
@@ -321,73 +306,51 @@
      border-radius:3px; }
    #myTab a:focus{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
      border-radius:3px; }
-     .links{ color:  #3d3a3a; background-color: #3dcacd;border:1px solid  #AFABAA;
+     .links{
+       color:  #3d3a3a;
+       background-color: #3dcacd
+       ;border:1px solid  #AFABAA;
        border-radius:3px;box-shadow: 2px 2px 1px grey;
-
      }
      .button-3 {border-radius: 8px; color:  #3d3a3a; background-color: #3dcacd; margin-left:2px;}
-
-     #right-panel {
-       position: relative;
-       font-family: 'Roboto','sans-serif';
-       line-height: 16px;
-       padding-right: 10px;
-       padding-left: 10px;
-       height: 300px;
-       float: right;
-       width: 300px;
-       overflow: scroll;
-
-     }
-
-     #right-panel select, #right-panel input {
-
-       font-size: 10px;
-     }
-
-     #right-panel select {
-
-       width: 70%;
-     }
-
-     #right-panel i {
-
-       font-size: 8px;
-     }
 
      </style>
     {% endblock %}
     {% block body %}
     {% if messages %}
-    {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert"><button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>{{ message }}</div>
-    {% endfor %}
-{% endif %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert">
+          <button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
     <div id='map'></div>
     <!-- <div id="right-panel" ></div> -->
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
     <div class="location">
       <!--onclick="myloc()"-->
       <img width="20px" height="20px" src="{% static 'icons/location.png' %}"  >
-    </div><div class="footer">
-
-      <div class="footer-4"  >
-        <button class="beton">Direction to station</button>
-<!--
-<select id="optn" class="drp" >
-   <option value="DRIVING">Driving</option>
-  <option value="BICYCLING">Bicycling</option>
-</select> -->
-
-        <button type="button" style="float:right;opacity:9; color:#3dcacd;" class="close closed">
-        <span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="footer">
+      <div class="footer-4">
+        <button class="directionButton">Direction to station</button>
+        <!--
+        <select id="optn" class="drp" >
+           <option value="DRIVING">Driving</option>
+          <option value="BICYCLING">Bicycling</option>
+        </select> -->
+        <button type="button" style="float:right;opacity:9; color:#3dcacd;" class="close closedirection">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
     </div>
     <div class="mapinfo">
       <img style="text-align=right;" src="{% static 'icons/line.png' %}">
-      Trails<br>
+      Trails
+      <br>
       <img style="text-align=right;" src="{% static 'icons/dotted.png' %}">
       Bike Lanes
     </div>
@@ -396,7 +359,9 @@
         <div class="modal-content">
           <div class="modal-header header column-4">
             <button type="button" style="float:left;opacity:9; color:#3dcacd;" onclick="reset()" id="clickme" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span></button><br>
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <br>
             <h5 class="modal-title tit" id="exampleModalLabel">Make a reservation</h5>
             <div>
               Start Station <br><div class="start" id="startloc" ></div>
@@ -411,16 +376,21 @@
                   <a onclick="resetBikeSelect()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" style="display:none;">Bike</a>
                 </li>
               </ul>
-            </div><br>
+            </div>
+            <br>
             <table style="width:100%;">
-            <tr>
-              <td style="border-bottom:1px solid;">Time</td><td style="border-bottom:1px solid;">€<span style="text-align:left;" id="cost">0</span></td></tr>
-            <tr><td style="border-bottom:1px solid;">Bike</td><td style="border-bottom:1px solid;">€<span style="text-align:left;" id="cyclecost">0</span></td></tr>
-            <tr><td>Total</td><td> €<span style="text-align:left;" id="totalcost">0</span></td></tr>
+              <tr>
+                <td style="border-bottom:1px solid;">Time</td><td style="border-bottom:1px solid;">€<span style="text-align:left;" id="cost">0</span></td>
+              </tr>
+              <tr>
+                <td style="border-bottom:1px solid;">Bike</td><td style="border-bottom:1px solid;">€<span style="text-align:left;" id="cyclecost">0</span></td>
+              </tr>
+              <tr>
+                <td>Total</td><td> €<span style="text-align:left;" id="totalcost">0</span></td>
+              </tr>
             </table>
           </div>
           <div class="modal-body bod column-8">
-
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade" id="home1" role="tabpanel" aria-labelledby="home-tab">
                 <ul class="list-group" >
@@ -459,41 +429,40 @@
                           </button>
                        </form>
                    </li>
-               </ul>
-            </div>
+                 </ul>
+              </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div>
-                    <ul class="list-group">
-                      <li class="list-group-item time" style="color: #3dcacd;font-size: 20px;font-weight:bold;">
-                        <u>Select the bikes</u>
-                      </li>
-                        <li class="list-group-item time" style="height:50px;">
-                            <form action="/home/reserve/" method="POST" name="bike-form" id="bikeform">
-                              <button id="confirm2" onclick="timeSelect()" type="submit"  style="background-color:#4CAF50;border-color:#4CAF50; color: black;" class="btn btn-primary btn-md">
-                                <span>Confirm</span>
-                              </button>
-                            </form>
-                        </li>
-                      <li class="list-group-item">
-
-                            <div style="width:10%;height:100%;">
-                        <button onclick="resetSelectBike()" type="button" class="links">
-                          <span >Reset</span>
+                  <ul class="list-group">
+                    <li class="list-group-item time" style="color: #3dcacd;font-size: 20px;font-weight:bold;">
+                      <u>Select the bikes</u>
+                    </li>
+                    <li class="list-group-item time" style="height:50px;">
+                      <form action="/home/reserve/" method="POST" name="bike-form" id="bikeform">
+                        <button id="confirm2" onclick="timeSelect()" type="submit"  style="background-color:#4CAF50;border-color:#4CAF50; color: black;" class="btn btn-primary btn-md">
+                          <span>Confirm</span>
                         </button>
-                          </div>
-                      </li>
-                      {% for bike in bike_type %}
-                        <li class="list-group-item bike">
-                          <div class="row">
+                      </form>
+                    </li>
+                    <li class="list-group-item">
+                        <div style="width:10%;height:100%;">
+                          <button onclick="resetSelectBike()" type="button" class="links">
+                            <span >Reset</span>
+                          </button>
+                        </div>
+                    </li>
+                    {% for bike in bike_type %}
+                    <li class="list-group-item bike">
+                        <div class="row">
                             <div class="column-1">
-                              <div class="dx">
-                                <span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
+                              <div class="col3">
+                                  <span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
                               </div>
                               <div class="col1">
-                                <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
-                  drop-shadow(-1px -1px 0 white);
-  filter: drop-shadow(1px 1px 0 white)
-          drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
+                                  <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+    drop-shadow(-1px -1px 0 white);
+    filter: drop-shadow(1px 1px 0 white)
+            drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
                               </div>
                               <div class="col2">
                                 <button class="button-3" onclick="addBike('bike{{ bike.bike_type_id }}')">+</button>
@@ -502,348 +471,309 @@
                             </div>
                             <div class="column-2">
                               <div class="num1">
-                              <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
-                              <div class="qu">Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
+                                <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
+                                <div class="qu">Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
                               </div>
                               <div class="num2">
-                              <div class="cq">Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span></div>
-                              <div class="cm">Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span></div>
-                              <div class="ci"><span>{{ bike.bike_model }}</span> is a
-                              {{ bike.bike_info }}
+                                <div class="costq">Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span></div>
+                                <div class="costm">Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span></div>
+                                <div class="costi"><span>{{ bike.bike_model }}</span> is a
+                                {{ bike.bike_info }}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                      </li>
-                      {% endfor %}
-                      </ul>
-                    </div>
-                  </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                  </ul>
                 </div>
               </div>
-              </div>
-        </div>
-      </div>
-      <!-- Button trigger modal -->
-      <button id="modalButton1" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
-      </button>
-
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content cont">
-            <div class="modal-header">
-              <h5 class="modal-title titles" id="exampleModalLabel1">Would you like to confirm the following reservation?</h5>
-            </div>
-            <div class="modal-body context">
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <li class="list-group-item" style="color:#3dcacd;">End Station <span style="font-weight:bold" id="ends"></span></li>
-                  <li class="list-group-item" style="color:#3dcacd;">Start Station <span style="font-weight:bold" id="starts"></span></li>
-              <li class="list-group-item" style="color:#3dcacd;">Your reservation will start at <span style="font-weight:bold" id="starting"></span></li>
-              <li class="list-group-item"  style="color:#3dcacd;">Your reservation will end at <span style="font-weight:bold" id="ending"></span></li>
-            <li class="list-group-item"  id="biked" style="color:#3dcacd;">Bikes reserved:<br></li>
-            <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
-          <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
-          <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
-          <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
-          <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANCEL YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
-              </ul>
-                <form  method="post" name="myform">
-                  {% csrf_token %}
-               <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
-                <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
-                 <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
-                  <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
-                  <input type="hidden" name="inputenddate" id="inputenddate" value=""/>
-                  <input type="hidden" name="inputstartdate" id="inputstartdate" value=""/>
-                  <input type="hidden" name="inputtotal" id="inputtotal" value=""/>
-                    {% for bike in bike_type %}
-                  <input type="hidden" name="inputbike{{ bike.bike_type_id }}" id="inputbike{{ bike.bike_type_id }}" value="">
-                  {% endfor %}
-                  <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
-              </form>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <!-- Button trigger modal -->
+    <button id="modalButton1" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content cont">
+          <div class="modal-header">
+            <h5 class="modal-title titles" id="exampleModalLabel1">Would you like to confirm the following reservation?</h5>
+          </div>
+          <div class="modal-body context">
+            <ul class="list-group">
+              <li class="list-group-item">
+              <li class="list-group-item" style="color:#3dcacd;">End Station <span style="font-weight:bold" id="ends"></span></li>
+              <li class="list-group-item" style="color:#3dcacd;">Start Station <span style="font-weight:bold" id="starts"></span></li>
+              <li class="list-group-item" style="color:#3dcacd;">Your reservation will start at <span style="font-weight:bold" id="starting"></span></li>
+              <li class="list-group-item"  style="color:#3dcacd;">Your reservation will end at <span style="font-weight:bold" id="ending"></span></li>
+              <li class="list-group-item"  id="biked" style="color:#3dcacd;">Bikes reserved:<br></li>
+              <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
+              <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
+              <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
+              <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
+              <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANCEL YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
+            </ul>
+            <form  method="post" name="myform">
+              {% csrf_token %}
+              <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
+              <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
+              <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
+              <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
+              <input type="hidden" name="inputenddate" id="inputenddate" value=""/>
+              <input type="hidden" name="inputstartdate" id="inputstartdate" value=""/>
+              <input type="hidden" name="inputtotal" id="inputtotal" value=""/>
+              {% for bike in bike_type %}
+              <input type="hidden" name="inputbike{{ bike.bike_type_id }}" id="inputbike{{ bike.bike_type_id }}" value="">
+              {% endfor %}
+              <button type="submit" onclick="send()" class="btn btn-primary">Proceed to Pay</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
-      setTimeout(function(){
-   $("#alert").fadeOut();
-}, 20000);
-            $(".closed").click(function(){
-                $(".footer").slideUp();
+      setTimeout(function(){$("#alert").fadeOut();}, 20000);
+      $(".closedirection").click(function(){
+          $(".footer").slideUp(); });
+      $(".location").click(function(){
+          $(".footer").slideDown(); });
+      document.getElementById('modalButton').style.display="none";
+      document.getElementById('modalButton1').style.display="none";
+      document.getElementById("confirm2").style.display="none";
+      document.getElementById("home-tab").style.display="none";
+      var x = 0;
+      var startlocationid;
+      var endlocationid;
+      var startlocationname;
+      var endlocationname;
+      var map;
+      var markerlist=[];
+      var i=0;
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var startTime;
+      var endTime;
+      var startDate;
+      var endDate;
+      var bike = {}
+        {% for bike in bike_type %}
+              bike[{{ bike.bike_type_id }}] = 0;
+        {% endfor %}
+      var bikesselected=false;
+      var timesselected=false;
+      var repeat = false;
+      var done=0;
+      // Initialize and add the map
+//--------------------------------------------------------------------
+      function initMap() {
+      // The map, centered at Edinburgh
+        map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat:55.94136542,lng:-3.18470478},
+                zoom: 12,
+                zoomControl: false,
+                streetViewControl:false,
+                styles:
+                [
+                  {
+                    "featureType": 'poi',
+                    "stylers": [{"visibility": 'off'}]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "all",
+                      "stylers": [
+                          {
+                              "hue": "#ff0000"
+                          },
+                          {
+                              "saturation": -100
+                          },
+                          {
+                              "lightness": -30
+                          }
+                      ]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "labels.text.fill",
+                      "stylers": [
+                          {
+                              "color": "#ffffff"
+                          }
+                      ]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "labels.text.stroke",
+                      "stylers": [
+                          {
+                              "color": "#353535"
+                          }
+                      ]
+                  },
+                ]
+              });
+              var bikeLayer = new google.maps.BicyclingLayer();
+              bikeLayer.setMap(map);
+              var allowedBounds = new google.maps.LatLngBounds(
+              		new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
+                  new google.maps.LatLng(56.042897365961046,-2.918450843462324));
+              // Define the rectangle and set its editable property to true.
+              google.maps.event.addListener(map, 'dragend', function() {
+                  if (allowedBounds.contains(map.getCenter())) return;
+                  // Out of bounds - Move the map back within the bounds
+                  var c = map.getCenter(),
+                      x = c.lng(),
+                      y = c.lat(),
+                      maxX = allowedBounds.getNorthEast().lng(),
+                      maxY = allowedBounds.getNorthEast().lat(),
+                      minX = allowedBounds.getSouthWest().lng(),
+                      minY = allowedBounds.getSouthWest().lat();
+                  if (x < minX) x = minX;
+                  if (x > maxX) x = maxX;
+                  if (y < minY) y = minY;
+                  if (y > maxY) y = maxY;
+                  map.setCenter(new google.maps.LatLng(y, x));
                 });
-              $(".location").click(function(){
-                $(".footer").slideDown();
-            });
-    document.getElementById('modalButton').style.display="none";
-    document.getElementById('modalButton1').style.display="none";
-    var x = 0;
-    var startlocationid;
-    var endlocationid;
-    var startlocationname;
-    var endlocationname;
-    var map;
-    var markerlist=[];
-    var i=0;
-    // var pos ;
-    //
-    // var des;
-// Initialize and add the map
-function initMap() {
-// The map, centered at Edinburgh
-map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat:55.94136542,lng:-3.18470478},
-          zoom: 12,
-          zoomControl: false,
-          streetViewControl:false,
-          styles:
-          [
+      // The marker, positioned at Uluru
+      var geojson = [
+      {% for stat in station %}
+          {% if not forloop.first %},{% endif %}
+          {
+              station_id: "{{ stat.station_id }}",
+              address: "{{ stat.address }}",
+              lat: "{{ stat.lat }}",
+              lon: "{{ stat.lon }}",
+              name: "{{ stat.name }}",
+              images: "{{ stat.image }}",
+              info: "{{ stat.info }}",
+              is_active: "{{ stat.is_active }}",
+              fine_cost: "{{ stat.fine_cost }}",
+              fine_desc: "{{ stat.fine_desc }}"
+          }
+      {% endfor %}
+      ];
+      infoWindow = new google.maps.InfoWindow;
+      var prev_infowindow=false;
+      var prev_window;
+      // The marker, positioned at Uluru
+      geojson.forEach(function(marker1) {
+        if(marker1.is_active==1)
         {
-          "featureType": 'poi',
-          "stylers": [{"visibility": 'off'}]
-        },
-            {
-                "featureType": "all",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "hue": "#ff0000"
-                    },
-                    {
-                        "saturation": -100
-                    },
-                    {
-                        "lightness": -30
-                    }
-                ]
-            },
-            {
-                "featureType": "all",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                    {
-                        "color": "#ffffff"
-                    }
-                ]
-            },
-            {
-                "featureType": "all",
-                "elementType": "labels.text.stroke",
-                "stylers": [
-                    {
-                        "color": "#353535"
-                    }
-                ]
-            },
-          ]
-        });
-        var bikeLayer = new google.maps.BicyclingLayer();
-        bikeLayer.setMap(map);
-
-        var allowedBounds = new google.maps.LatLngBounds(
-
-        		new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
-            	new google.maps.LatLng(56.042897365961046,-2.918450843462324));
-        // Define the rectangle and set its editable property to true.
-        google.maps.event.addListener(map, 'dragend', function() {
-            if (allowedBounds.contains(map.getCenter())) return;
-
-            // Out of bounds - Move the map back within the bounds
-
-            var c = map.getCenter(),
-                x = c.lng(),
-                y = c.lat(),
-                maxX = allowedBounds.getNorthEast().lng(),
-                maxY = allowedBounds.getNorthEast().lat(),
-                minX = allowedBounds.getSouthWest().lng(),
-                minY = allowedBounds.getSouthWest().lat();
-
-            if (x < minX) x = minX;
-            if (x > maxX) x = maxX;
-            if (y < minY) y = minY;
-            if (y > maxY) y = maxY;
-
-            map.setCenter(new google.maps.LatLng(y, x));
-          });
-// The marker, positioned at Uluru
-var geojson = [
-{% for stat in station %}
-    {% if not forloop.first %},{% endif %}
-    {
-        station_id: "{{ stat.station_id }}",
-        address: "{{ stat.address }}",
-        lat: "{{ stat.lat }}",
-        lon: "{{ stat.lon }}",
-        name: "{{ stat.name }}",
-        images: "{{ stat.image }}",
-        info: "{{ stat.info }}",
-        is_active: "{{ stat.is_active }}",
-        fine_cost: "{{ stat.fine_cost }}",
-        fine_desc: "{{ stat.fine_desc }}"
-    }
-{% endfor %}
-];
-infoWindow = new google.maps.InfoWindow;
-var prev_infowindow=false;
-var prev_window;
-// The marker, positioned at Uluru
-geojson.forEach(function(marker1) {
-  if(marker1.is_active==1)
-  {
-  var url_mask = "{% static 'stationpictures/12345' %}".replace(/12345/, marker1.images);
-  var contentString ='<div id="iw-container">' +
-                    '<div class="iw-title">'+marker1.name+'</div>' +
-                    '<div class="iw-content">' +
-                      '<div class="iw-subTitle">'+marker1.address+'</div>' +
-                      '<img src='+url_mask+' alt='+marker1.name+' height="115" width="83">' +
-                      '<p>'+marker1.info+'</p>'  +
-                    '</div>' +
-                    '<div class="iw-bottom-gradient"></div>' +
-                  '</div>';
-  var infowindow = new google.maps.InfoWindow({
-          content: contentString,
-          maxWidth: 250
-        });
+          var url_mask = "{% static 'stations/12345' %}".replace(/12345/, marker1.images);
+          var contentString ='<div id="iw-container">' +
+                            '<div class="iw-title">'+marker1.name+'</div>' +
+                            '<div class="iw-content">' +
+                              '<div class="iw-subTitle">'+marker1.address+'</div>' +
+                              '<img src='+url_mask+' alt='+marker1.name+' height="115" width="83">' +
+                              '<p>'+marker1.info+'</p>'  +
+                            '</div>' +
+                            '<div class="iw-bottom-gradient"></div>' +
+                          '</div>';
+          var infowindow = new google.maps.InfoWindow({
+                  content: contentString,
+                  maxWidth: 250
+                });
         google.maps.event.addListener(infowindow, 'domready', function() {
 
-   // Reference to the DIV that wraps the bottom of infowindow
-   var iwOuter = $('.gm-style-iw');
+             // Reference to the DIV that wraps the bottom of infowindow
+             var iwOuter = $('.gm-style-iw');
 
-   /* Since this div is in a position prior to .gm-div style-iw.
-    * We use jQuery and create a iwBackground variable,
-    * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
-   */
-   var iwBackground = iwOuter.prev();
+             /* Since this div is in a position prior to .gm-div style-iw.
+              * We use jQuery and create a iwBackground variable,
+              * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
+             */
+             var iwBackground = iwOuter.prev();
 
-   // Removes background shadow DIV
-   iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+             // Removes background shadow DIV
+             iwBackground.children(':nth-child(2)').css({'display' : 'none'});
 
-   // Removes white background DIV
-   iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+             // Removes white background DIV
+             iwBackground.children(':nth-child(4)').css({'display' : 'none'});
 
-   // Moves the infowindow 115px to the right.
+             // Moves the infowindow 115px to the right.
 
 
-   // Moves the shadow of the arrow 76px to the left margin.
-   iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+             // Moves the shadow of the arrow 76px to the left margin.
+             iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
 
-   // Moves the arrow 76px to the left margin.
-   iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+             // Moves the arrow 76px to the left margin.
+             iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
 
-   // Changes the desired tail shadow color.
-   iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1','background-color': '#3d3a3a'});
+             // Changes the desired tail shadow color.
+             iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1','background-color': '#3d3a3a'});
 
-   // Reference to the div that groups the close button elements.
-   var iwCloseBtn = iwOuter.next();
+             // Reference to the div that groups the close button elements.
+             var iwCloseBtn = iwOuter.next();
 
-   // Apply the desired effect to the close button
-   iwCloseBtn.css({ right: '50px', top: '10px'});
+             // Apply the desired effect to the close button
+             iwCloseBtn.css({ right: '50px', top: '10px'});
 
-   // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
-   if($('.iw-content').height() < 140){
-     $('.iw-bottom-gradient').css({display: 'none'});
-   }
+             // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
+             if($('.iw-content').height() < 140){
+               $('.iw-bottom-gradient').css({display: 'none'});
+             }
 
-   // The API automatically applies 0.7 opacity to the button after the mouseout event. This function reverses this event to the desired value.
-   iwCloseBtn.mouseout(function(){
-     $(this).css({opacity: '1'});
-   });
- });
-  var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
-  var Marker = new google.maps.Marker({
-      map: map,
-      icon: "{% static 'icons/marker.png' %}",
-     position: latln
-    });
-      Marker.addListener('click', function() {
-        if( prev_infowindow ) {
-           prev_window.close();
-
+             // The API automatically applies 0.7 opacity to the button after the mouseout event. This function reverses this event to the desired value.
+             iwCloseBtn.mouseout(function(){
+               $(this).css({opacity: '1'});
+             });
+        });
+        var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
+        var Marker = new google.maps.Marker({
+            map: map,
+            icon: "{% static 'icons/marker.png' %}",
+           position: latln
+        });
+            Marker.addListener('click', function() {
+              if( prev_infowindow ) {
+                 prev_window.close();
+              }
+              prev_infowindow=true;
+              prev_window = infowindow;
+              infowindow.open(map, Marker);
+          });
+          //var touchtime = 0;
+          Marker.addListener('dblclick', () =>
+             {
+                 if(x==1)
+                 {
+                   Marker.setIcon("{% static 'icons/red.png' %}");
+                   endlocationid=marker1.station_id;
+                   endlocationname=marker1.name;
+                   prev_window.close();
+                   document.getElementById("modalButton").click();
+                 }
+                 else{
+                   Marker.setIcon("{% static 'icons/green.png' %}");
+                   startlocationid=marker1.station_id;
+                   startlocationname=marker1.name;
+                 }
+                 x=x+1;
+             }
+          );
+          markerlist[i]=Marker;
+          i=i+1;
         }
+      });
+      var opt = { minZoom: 11.5, maxZoom: 18 };
+      map.setOptions(opt);
 
-        prev_infowindow=true;
-        prev_window = infowindow;
-        infowindow.open(map, Marker);
-        //
-        // document.getElementById('right-panel').style.background="white";
-        // directionsDisplay.setPanel(document.getElementById('right-panel'));
-        //
-        //
-        // var lat = Marker.getPosition().lat();
-        // var lng = Marker.getPosition().lng();
-        //
-        //    des = new google.maps.LatLng(lat,lng);
-        //         window.des = des;
-    });
-    //var touchtime = 0;
-    Marker.addListener('dblclick', () =>
-       {
-           if(x==1)
-           {
-             Marker.setIcon("{% static 'icons/red.png' %}");
-             endlocationid=marker1.station_id;
-             endlocationname=marker1.name;
-             prev_window.close();
-             document.getElementById("modalButton").click();
-           }
-           else{
-             Marker.setIcon("{% static 'icons/green.png' %}");
-             startlocationid=marker1.station_id;
-             startlocationname=marker1.name;
-           }
-           x=x+1;
-       }
-    );
-    markerlist[i]=Marker;
-    i=i+1;
-  }
-});
-var opt = { minZoom: 11.5, maxZoom: 18 };
-map.setOptions(opt);
-//--------------------------------------
-//
-// var directionsService = new google.maps.DirectionsService;
-// var directionsDisplay = new google.maps.DirectionsRenderer;
-// directionsDisplay.setMap(map);
-//
-// var bounds = new google.maps.LatLngBounds();
-//
-// var onChangeHandler = function() {
-//           calculateAndDisplayRoute(directionsService, directionsDisplay);
-//
-//         };
-//      //   document.getElementById('start').addEventListener('change', onChangeHandler);
-//  window.addEventListener('click', onChangeHandler);
-//         document.getElementById('optn').addEventListener('change', onChangeHandler);
-
-}
-
+      }
+//--------------------------------------------------------------------
      $('#exampleModal').on('show.bs.modal', function (event) {
          var modal = $(this)
          modal.find('.tit').text('Make a reservation')
          $('#startloc').text(startlocationname);
          $('#endloc').text(endlocationname);
          document.getElementById("home-tab").click();
-
-
      });
-    document.getElementById("confirm2").style.display="none";
-    document.getElementById("home-tab").style.display="none";
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var startTime;
-    var endTime;
-    var startDate;
-    var endDate;
-    var bike = {}
-      {% for bike in bike_type %}
-            bike[{{ bike.bike_type_id }}] = 0;
-      {% endfor %}
-    var bikesselected=false;
-    var timesselected=false;
-    var repeat = false;
-    var done=0;
+//--------------------------------------------------------------------
     function reset() {
       document.getElementById("home-tab").style.display="none";
         startlocationname = "";
@@ -858,7 +788,6 @@ map.setOptions(opt);
         endTime="";
         startDate="";
         endDate="";
-
         $('#startinfo').text("");
         $('#endinfo').text("");
         resetSelect();
@@ -878,16 +807,19 @@ map.setOptions(opt);
         bikesselected=false;
         timesselected=false;
     }
+//--------------------------------------------------------------------
     function disable(selector) {
       document.getElementById(selector).selectedIndex=0;
       document.getElementById(selector).style.color= "grey" ;
       document.getElementById(selector).disabled = true;
     }
+//--------------------------------------------------------------------
     function enable(selector) {
           document.getElementById(selector).selectedIndex=0;
           document.getElementById(selector).style.color= "black" ;
           document.getElementById(selector).disabled = false;
     }
+//--------------------------------------------------------------------
     function confirmed()
     {
       $('#exampleModal').fadeOut();
@@ -904,6 +836,7 @@ map.setOptions(opt);
       $("#starting").text(convertMinutes(startTime)+" on "+startDate);
       document.getElementById("modalButton1").click();
     }
+//--------------------------------------------------------------------
     function send()
     {
       document.getElementById("inputstartstation").value=($('#startloc').text());
@@ -918,6 +851,7 @@ map.setOptions(opt);
       document.getElementById("inputtotal").value=($('#totalcost').text());
       document.myform.submit();
     }
+//--------------------------------------------------------------------
     function removeBike(selector) {
            var num = selector[selector.length -1];
            if($('#quantity'+num).text()>0)
@@ -945,6 +879,7 @@ map.setOptions(opt);
                 document.getElementById("confirm2").style.display="none";
             }
     }
+//--------------------------------------------------------------------
     function addBike(selector) {
       var num = selector[selector.length -1];
       if(Number($('#available'+num).text())>0)
@@ -955,16 +890,17 @@ map.setOptions(opt);
          $('#quantity'+num).text(Number($('#quantity'+num).text())+1);
          if((Number($('#cost').text()))==0)
          {
-         $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*(Number($('#costperfifteen'+num).text()))));
-         $('#cyclecost').text(Number($('#cyclecost').text())+(Number($('#costperfifteen'+num).text())));
+             $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*(Number($('#costperfifteen'+num).text()))));
+             $('#cyclecost').text(Number($('#cyclecost').text())+(Number($('#costperfifteen'+num).text())));
           }
           else {
-         $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
-         $('#cyclecost').text(Number($('#cyclecost').text())+(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
-        }
-       $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
+             $('#quantitycost'+num).text(((Number($('#quantity'+num).text()))*((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
+             $('#cyclecost').text(Number($('#cyclecost').text())+(((Number($('#costperfifteen'+num).text()))*((Number($('#cost').text()))/cost))));
+          }
+        $('#totalcost').text(Number($('#cyclecost').text())+Number($('#cost').text()));
           }
     }
+//--------------------------------------------------------------------
     //https://stackoverflow.com/questions/32890938/next-7-days-in-drop-down-list
     function formatDate(date) {
               var d = new Date(date),
@@ -975,6 +911,8 @@ map.setOptions(opt);
                   day = '0' + day;
               return [day,monthNames[month-1],year].join(' ');
           }
+
+//--------------------------------------------------------------------
     function resetSelectBike()
     {
       {% for bike in bike_type %}
@@ -989,6 +927,7 @@ map.setOptions(opt);
         $("#totalcost").text($("#totalcost").text()-(Number($("#cyclecost").text())));
         $("#cyclecost").text("0");
     }
+//--------------------------------------------------------------------
     function resetSelect(){
       populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
       disable("select_end_date");
@@ -998,6 +937,7 @@ map.setOptions(opt);
        $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
          $("#cost").text("0");
     }
+//--------------------------------------------------------------------
     function resetHomeSelect(){
       if(timesselected==true)
       {
@@ -1023,7 +963,7 @@ map.setOptions(opt);
          }
       }
     }
-
+//--------------------------------------------------------------------
     function resetBikeSelect(){
         if(timesselected==false)
         {
@@ -1046,6 +986,7 @@ map.setOptions(opt);
           $('#cyclecost').text("0");
         }
     }
+//--------------------------------------------------------------------
     function convertMinutes(i)
     {
       var hours,minutes,ampm,text;
@@ -1062,6 +1003,7 @@ map.setOptions(opt);
         text=(hours + ':' + minutes + ' ' + ampm);
         return text;
     }
+//--------------------------------------------------------------------
     function timeSelect(){
 
       {% for bike in bike_type %}
@@ -1072,9 +1014,7 @@ map.setOptions(opt);
             total = total+bike[{{ bike.bike_type_id }}];
         {% endfor %}
       if((total)>0)
-      {
             bikesselected=true;
-      }
       if(bikesselected==true && timesselected==true)
       {
         confirmed();
@@ -1084,6 +1024,7 @@ map.setOptions(opt);
       repeat=true;
       document.getElementById("home-tab").click();
     }
+//--------------------------------------------------------------------
     function bikeSelect() {
       //select all times from all dates that are not full
       startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
@@ -1099,6 +1040,7 @@ map.setOptions(opt);
       //  alert('Done2');
       }
     }
+//--------------------------------------------------------------------
     function populateDate(selector,text,days,curr)
     {
       var x;
@@ -1115,19 +1057,19 @@ map.setOptions(opt);
         {x=1;}
         else{x=0;}
       }
-      else {
+      else
         x=0;
-      }
       var options = "";
       var first = curr.getDate();
       var firstday = (new Date(curr.setDate(first))).toString();
-        $(selector).empty().append('<option disabled selected value>' +text+ '</option>');
+      $(selector).empty().append('<option disabled selected value>' +text+ '</option>');
       for (var i = x; i < days; i++) {
           var next = new Date(curr.getTime());
           next.setDate(first + i);
           $(selector).append('<option>' + formatDate((next.toString())) + '</option>');
       }
     }
+//--------------------------------------------------------------------
     //https://stackoverflow.com/questions/8918168/javascript-dynamic-time-drop-down
     function populate(selector,text,x,y) {
       //select all times from all dates that are not full
@@ -1151,6 +1093,8 @@ map.setOptions(opt);
     }
     }
 
+
+//--------------------------------------------------------------------
     $('#select_start_date').change(function() {
     var parts = $(this).val().split(' ');
     dateselected=new Date(parts[2],monthNames.indexOf(parts[1]),parts[0]);
@@ -1163,6 +1107,7 @@ map.setOptions(opt);
     document.getElementById("confirm").style.display="none";
     });
 
+//--------------------------------------------------------------------
     $('#select_end_date').change(function() {
      disable("select_end_time");
      enable("select_start_time");
@@ -1196,10 +1141,11 @@ map.setOptions(opt);
         populate('#select_start_time','Select Start time',0,1425);
      }
      $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
-       $("#cost").text("0");
+     $("#cost").text("0");
      document.getElementById("confirm").style.display="none";
     });
 
+//--------------------------------------------------------------------
     $('#select_start_time').change(function() {
     enable("select_end_time");
     var start=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value.split(' ');
@@ -1218,42 +1164,44 @@ map.setOptions(opt);
     document.getElementById("confirm").style.display="none";
     });
 
+//--------------------------------------------------------------------
     $('#select_end_time').change(function() {
-    document.getElementById("confirm").style.display="block";
-    var cost=0;
-    var costperfifteen={{ costperhour }}/4;
-    startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
-    endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
-    startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
-    endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
-    if(startDate==endDate)
-    {
-        for(var i = Number(startTime); i < Number(endTime); i += 15){
-          cost=costperfifteen+cost;
-    }
-    }
-    else {
-      for(var i = Number(startTime); i < 1440; i += 15){
-          cost=costperfifteen+cost;
-        }
-    for(var i = 0; i < Number(endTime); i += 15){
-        cost=costperfifteen+cost;
-      }
-    }
-    $('#cost').text(Number(cost));
-    $('#totalcost').text(Number(cost)+Number($('#cyclecost').text()));
+          document.getElementById("confirm").style.display="block";
+          var cost=0;
+          var costperfifteen={{ costperhour }}/4;
+          startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
+          endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
+          startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
+          endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
+          if(startDate==endDate)
+          {
+              for(var i = Number(startTime); i < Number(endTime); i += 15){
+                cost=costperfifteen+cost;
+          }
+          }
+          else {
+            for(var i = Number(startTime); i < 1440; i += 15){
+                cost=costperfifteen+cost;
+              }
+          for(var i = 0; i < Number(endTime); i += 15){
+              cost=costperfifteen+cost;
+            }
+          }
+          $('#cost').text(Number(cost));
+          $('#totalcost').text(Number(cost)+Number($('#cyclecost').text()));
     });
+
+//--------------------------------------------------------------------
     $(document).ready(function(){
    setInterval(function(){ reload_page(); },60*60000);
     });
-
+//--------------------------------------------------------------------
     function reload_page()
     {
       window.location.reload(true);
     }
+//--------------------------------------------------------------------
     $(function() {
-
-
     // This function gets cookie with a given name
     function getCookie(name) {
         var cookieValue = null;
@@ -1271,7 +1219,6 @@ map.setOptions(opt);
         return cookieValue;
     }
     var csrftoken = getCookie('csrftoken');
-
     /*
     The functions below will create a header with csrftoken
     */
@@ -1306,126 +1253,66 @@ map.setOptions(opt);
     });
 
 });
+//--------------------------------------------------------------------
     $('#timeform').on('submit', function(event){
     event.preventDefault();
     time_post();
 });
+//--------------------------------------------------------------------
 // AJAX for posting
 function time_post() {
-  $.ajax({
-        url : "/home/reserve/", // the endpoint
-        type : "POST", // http method
-        data : { formtype : 'time', starttime: convertMinutes(startTime) , endtime: convertMinutes(endTime), startdate: startDate, enddate: endDate,startstation: $('#startloc').text(),endstation:$('#endloc').text()}, // data sent with the post request
+    $.ajax({
+            url : "/home/reserve/", // the endpoint
+            type : "POST", // http method
+            data : { formtype : 'time', starttime: convertMinutes(startTime) , endtime: convertMinutes(endTime), startdate: startDate, enddate: endDate,startstation: $('#startloc').text(),endstation:$('#endloc').text()}, // data sent with the post request
 
-        // handle a successful response
-        success : function(json) {
-          if (
-          //this part checks if all the available bikes added together ==0 if yes then returns 0
-          {% for bike in bike_type %}
-          json.result{{ bike.bike_type_id }} +
-        {% endfor %}0 == 0)
-        {
-          alert("Sorry, there are no bikes available for that timing, try again");
-          document.getElementById("home-tab").click();
-        }
-        //This else loop sets the available bikes for each of the bike types
-        else{
-          {% for bike in bike_type %}
-          $('#available{{ bike.bike_type_id }}').text(json.result{{ bike.bike_type_id }}); // remove the value from the input
-        {% endfor %}
-        document.getElementById("profile-tab").click();
-      }
+            // handle a successful response
+            success : function(json) {
+              if (
+                    //this part checks if all the available bikes added together ==0 if yes then returns 0
+                  {% for bike in bike_type %}
+                    json.result{{ bike.bike_type_id }} +
+                  {% endfor %}0 == 0)
+                  {
+                    alert("Sorry, there are no bikes available for that timing, try again");
+                    document.getElementById("home-tab").click();
+                  }
+            //This else loop sets the available bikes for each of the bike types
+              else{
+                {% for bike in bike_type %}
+                $('#available{{ bike.bike_type_id }}').text(json.result{{ bike.bike_type_id }}); // remove the value from the input
+              {% endfor %}
+            document.getElementById("profile-tab").click();
+          }
         },
-
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
                 }
     });
 };
+//--------------------------------------------------------------------
 $('#bikeform').on('submit', function(event){
-event.preventDefault();
+  event.preventDefault();
   bike_post();
 });
+//--------------------------------------------------------------------
 // AJAX for posting
 function bike_post() {
-$.ajax({
-    url : "/home/reserve/", // the endpoint
-    type : "POST", // http method
-    data : { formtype: 'bike', bikes: bike}, // data sent with the post fo
-    // handle a successful response
-    success : function(json) {
-        $('#post-text').val(json.result); // remove the value from the input
-    },
-
-    // handle a non-successful response
-    error : function(xhr,errmsg,err) {
-            }
-});
+    $.ajax({
+        url : "/home/reserve/", // the endpoint
+        type : "POST", // http method
+        data : { formtype: 'bike', bikes: bike}, // data sent with the post fo
+        // handle a successful response
+        success : function(json) {
+            $('#post-text').val(json.result); // remove the value from the input
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+                }
+        });
 };
-//--------------------------------------
-// var  pos;
-// function myloc(){
-// if (navigator.geolocation) {
-//           navigator.geolocation.watchPosition(function(position) {
-//
-//             pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-//
-//
-// window.pos = pos;
-//   var loc = new google.maps.Marker({
-//         position: pos,
-//         icon: "{% static 'icons/yourlocation.png' %}",
-//         animation: google.maps.Animation.DROP,
-//         map: map
-//     });
-//
-//           //  infoWindow.setPosition();
-//             infoWindow.setContent('You are here');
-//
-//             infoWindow.open(map);
-//             map.setCenter(pos);
-//           }, function() {
-//             handleLocationError(true, infoWindow, map.getCenter());
-//           });
-//         } else {
-//           // Browser doesn't support Geolocation
-//           handleLocationError(false, infoWindow, map.getCenter());
-//         }
-//
-// }
-//
-//       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-//         infoWindow.setPosition(pos);
-//         infoWindow.setContent(browserHasGeolocation ?
-//                               'Error: The Geolocation service failed.' :
-//                               'Error: Your browser doesn\'t support geolocation.');
-//         infoWindow.open(map);
-//       }
-//
-// function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-//      // var start = document.getElementById('start').value;
-//   // var  pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-//        //var end = document.getElementById('end').value;
-//        var optn = document.getElementById('optn').value;
-//         directionsService.route({
-//           origin: pos,
-//           destination: des,
-//           travelMode: optn,
-//           drivingOptions: {
-//     departureTime: new Date(Date.now()),  // for the time N milliseconds from now.
-//     trafficModel: 'optimistic'
-//   }
-//         }, function(response, status) {
-//           if (status === 'OK') {
-//             directionsDisplay.setDirections(response);
-//             bikeLayer.setMap(map);
-//           } else {
-//             window.alert('Directions request failed due to ' + status);
-//           }
-//         });
-//       }
+//--------------------------------------------------------------------
   </script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
   </script>
 {% endblock %}
