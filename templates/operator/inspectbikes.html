@@ -319,8 +319,8 @@
             //document.getElementById('pleaseclose').click();
             document.getElementById('bikeoptions').style.visibility='visible';
             $('.bikeid').text(json[0]);
+            $('#ReservationsTable').find('tbody').empty();
               if(json[1]!=null){
-                $('#ReservationsTable').find('tbody').empty();
                 for (var i = 1; i < Object.keys(json).length; i++) {
                   str='';
                   for (var x = 0; x < Object.keys(json[i]['bikes_on_reservation']).length; x++) {
