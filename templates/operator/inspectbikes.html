@@ -1,363 +1,352 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
   <title> Track Bikes</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
   <style>
-    body{color: white;}
-    .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-     background-color: #3dcacd;
-     color:#3d3a3a;
-     font-size: 15px;
-    }
-    .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
-       text-indent:10%;
-       font-size:10px;
-       font-weight:none; !important
-       text-shadow:none; !important
-     }
-    #iw-container {
-      margin-bottom: 10px;
-    }
-     #iw-container .iw-title {
-      font-family: 'Open Sans Condensed', sans-serif;
-      font-size: 22px;
-      font-weight: 400;
-      padding: 10px;
-      background-color: #3dcacd;
-      color: white;
-      margin: 0;
-      border-radius: 2px 2px 0 0;
-     }
-     #iw-container .iw-content {
-      font-size: 13px;
-      line-height: 18px;
-      font-weight: 400;
-      margin-right: 1px;
-      padding: 15px 5px 20px 15px;
-      max-height: 140px;
-      overflow-y: auto;
-      overflow-x: hidden;
-     }
-     .iw-content img {
-      float: right;
-      margin: 0 5px 5px 10px;
-     }
-     .iw-subTitle {
-      font-size: 16px;
-      font-weight: 700;
-      padding: 5px 0;
-     }
-        html { height: 100% }
-        body { height: 100%; margin: 0; padding: 0 }
-        #map_canvas{
-          position: absolute;
-          top: 14%;
-          bottom: 0;
-          width: 50%;
-          height: 150%;
-          float:right;
-          right:2%;
-          border: 1px solid white;
-        }
-
-        .contain{
-          border-radius:3px;
-          border:1px solid #3dcacd;
-          float:left; background-color: #3d3a3a;
-          position:absolute;
-          right:54%;
-          top:14%;
-          left:2%;
-          height: 150%;
-          padding:5px;
-        }
-        #myBtn{background-color:#3dcacd;
-        font-size: 16px;}
-
-    .custom-select {
-      position: relative;
-      font-family: Arial;
-    }
-
-    .custom-select select {
-      display: none; /*hide original SELECT element:*/
-    }
-
-    .select-selected {
-      background-color: DodgerBlue;
-    }
-
-    /*style the arrow inside the select element:*/
-    .select-selected:after {
-      position: absolute;
-      content: "";
-      top: 14px;
-      right: 10px;
-      width: 0;
-      height: 0;
-      border: 6px solid transparent;
-      border-color: #fff transparent transparent transparent;
-    }
-
-    /*point the arrow upwards when the select box is open (active):*/
-    .select-selected.select-arrow-active:after {
-      border-color: transparent transparent #fff transparent;
-      top: 7px;
-    }
-
-    /*style the items (options), including the selected item:*/
-    .select-items div,.select-selected {
-      color: #ffffff;
-      padding: 8px 16px;
-      border: 1px solid transparent;
-      border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    /*style items (options):*/
-    .select-items {
-      position: absolute;
-      background-color: DodgerBlue;
-      top: 100%;
-      left: 0;
-      right: 0;
-      z-index: 99;
-    }
-
-    /*hide the items when the select box is closed:*/
-    .select-hide {
-      display: none;
-    }
-
-    .select-items div:hover, .same-as-selected {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-    </style>
-
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0,color: white; }
+      #map_canvas{
+        position: absolute;
+        top: 10%;
+        bottom: 0;
+        width: 40%;
+        height: 79%;
+        right:2%;
+        border: 1px solid white;
+        z-index:1;
+      }
+      .bikeButton{
+        background: gray;
+        box-shadow: 0px 0px 0px transparent;
+        border: 0px solid transparent;
+        text-shadow: 0px 0px 0px transparent;border-radius:5px;
+      }
+       .table-design > tbody > tr > td{
+         text-align: left; /* Left-align text */
+         padding: 6px;
+         font-weight:none; !important
+         text-shadow:none; !important
+          font-size:15px;
+          color:black;
+       }
+      .table-design > tbody > tr > td:hover {
+        background-color: #3dcacd;
+        color:#3d3a3a;
+      }
+      .table-design2 > tbody > tr > td{
+        text-align: left; /* Left-align text */
+        padding: 6px;
+        font-weight:none; !important
+        text-shadow:none; !important
+         font-size:15px;
+         color:white;
+         border:none; !important
+      }
+      .hidden{
+        display:none;
+      }
+      .contain{
+        border-radius:3px;
+        border:1px solid #3dcacd;
+        float:left; background-color: #3d3a3a;
+        position:absolute;
+        right:89%;
+        top:10%;
+        left:2%;
+        height: 79%;
+        padding:5px;
+        overflow: scroll;
+        z-index:4;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      #search {
+        position:absolute;
+        background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+        background-position: 10px 12px; /* Position the search icon */
+        background-repeat: no-repeat;
+         /* Do not repeat the icon image */
+        width:27%;
+        font-size: 16px; /* Increase font-size */
+        padding: 12px 20px 12px 40px; /* Add some padding */
+        border: 1px solid #ddd; /* Add a grey border */
+        border-radius:5px;
+        color:black;
+        right:14%;
+        top:11%;
+        z-index:12;
+      }
+      #reservationSearch {
+        position:fixed;
+        background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+        background-position: 10px 12px; /* Position the search icon */
+        background-repeat: no-repeat;
+         /* Do not repeat the icon image */
+        width:27%;
+        font-size: 16px; /* Increase font-size */
+        padding: 12px 20px 12px 40px; /* Add some padding */
+        border: 1px solid #ddd; /* Add a grey border */
+        border-radius:5px;
+        color:black;
+      }
+      #reservations{
+        background-color:#3d3a3a;
+        border-radius:12px;
+        position: absolute;
+        top: 10%;
+        bottom: 0;
+        width: 45%;
+        height: 79%;
+        left:12%;
+        overflow: scroll;
+        z-index:1;
+      }
+      #bikeoptions{
+        position:absolute;
+        background-color:#3d3a3a;
+        top: 90%;
+        width: 96%;
+        height: 9%;
+        right:2%;
+        left:2%;
+        border-radius:20px;
+        padding:5px;
+        display:flex;
+      }
+      .btn{
+        margin:6px;font-size:18px;
+      }
+     </style>
 {% endblock %}
 {% block body %}
-<div class="container" >
-
-  <div class="contain">
-      <h3>Track Bikes</h3>
-      <table class="table table-striped table-dark">
-        <tbody>
-          <tr>
-            <th scope="row">Select Bike</th>
-          </tr>
-
-          <tr>
-            <th scope="row">
-<!--     <a href="#">type of bike</a>
-    <a href="#">based on station</a>
-    <a href="#">reported defective bikes</a>
-     <a href="#">active</a>
-      <a href="#">stationed</a>
-       <a href="#">out of service</a> -->
-
-  <!-- </div>  -->
- <!--  <div class="w3-dropdown-click">
-    <button onclick="myfifi()" class="w3-button w3-black">Choose:</button>
-    <div id="Demo" class="w3-dropdown-content w3-bar-block w3-card-4 w3-animate-zoom">
-     <button onclick="myipi()" class="w3-button w3-black">Type of bike</button>
-      <button onclick="myipi()" class="w3-button w3-black">Defective Bike</button>
-     <button onclick="myipi()" class="w3-button w3-black">Active</button>
-     <button onclick="myipi()" class="w3-button w3-black">Station</button>
-     <button onclick="myipi()" class="w3-button w3-black">Out of service</button>
-     <button onclick="myipi()" class="w3-button w3-black">Stationed</button>
+<div>
+      <div class="container">
+            <input type="text" id="search" onkeyup="searchFun()" placeholder="Search for bikes based on...">
+          <div id="map_canvas">
+          </div>
+          <div class="contain">
+            <table id="BikeTable" class="table table-design table-dark">
+              <!-- <theader>
+                  <tr class="header">
+                    <th style="width:17%;">Bike</th>
+                    <th style="width:70%;">Station</th>
+                    <th style="width:40%;">Status</th>
+                  </tr> if bike==outofservice then highlight to red
+                  if bike==active then highlinh to green
+              </theader> -->
+                  <tbody style="height: 10px !important;">
+                  {% for bike in allbikes %}
+                    <tr {% if bike.bike_status.bike_status_name == "Outofservice" %}
+                          style='background-color: #B22222;color:white;'
+                        {% elif bike.bike_status.bike_status_name == "active" %}
+                          style='background-color: green;color:white;'
+                        {% else %}
+                          style='background-color: #3d3a3a;color:#3dcacd;'
+                        {% endif %}>
+                        <td class='hidden'>{{ bike.bike_type.bike_type }}</td>
+                        <td><button class='bikeButton' name='{{ bike.bike_id }}'>{{ bike.bike_id }}
+                          <img style="width:60px;height:60px;-webkit-filter: drop-shadow(1px 1px 0 black)
+                                      drop-shadow(-1px -1px 0 darkgrey);
+                                      filter: drop-shadow(1px 1px 0 darkgrey)
+                                      drop-shadow(-1px -1px 0 darkgrey);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">
+                                      </button>
+                        </td>
+                        <td class='hidden'>{{ bike.bike_stationedat.name }}</td>
+                        <td class='hidden'>{{ bike.bike_status.bike_status_name }}</td>
+                    </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id='bikeoptions'>
+            <button style='color:black;' class="btn btn-success form-control">Transfer Bike <span class='bikeid'></span></button>
+            <button style='color:black;' class="btn btn-success form-control">Replace Bike <span class='bikeid'></span></button>
+            <button class="btn btn-danger form-control">Block Bike <span class='bikeid'></span></button>
+            <button class="btn btn-danger form-control">Unblock Bike <span class='bikeid'></span></button>
+        </div>
+        <div id='reservations'>
+          <table id="ReservationsTable" class="table table-design2 table-dark">
+            <input type="text" id="reservationSearch" onkeyup="reservationSearchFun()" placeholder="Search for reservations based on...">
+            <tbody style="height: 10px !important;">
+            </tbody>
+          </table>
+        </div>
     </div>
-  </div> -->
-<div class="custom-select" style="width:200px;">
-  <select>
-    <option value="0">Choose category:</option>
-    <option value="1">Type of bike</option>
-    <option value="2">Station</option>
-    <option value="3">Defective Bike</option>
-    <option value="4">Active</option>
-    <option value="5">Stationed</option>
-    <option value="6">Out of service</option>
+   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
 
-  </select>
-</div>
-  <table style="width:100%" >
-
-  <tr>
-    <th>Bike ID</th>
-    <th>Status of the bike</th>
-    <th>Select/Unselect</th>
-
-  </tr>
-  {% for bikes in status_of_bike %}
-  <tr>
-    <td>{{ bikes.bike_status_id}}</td>
-
-
-    <td>{{ bikes.bike_status_name}}</td>
-
-
-    <td><button type="button" class="btn btn-primary" onclick="myFunction()">Select</button></td>
-  </tr>
-
-{% endfor %}
-</table>
-
-</th>
-          </tr>
- <tr>
-            <th scope="row"><button id="myBtn" onclick="myFun()">Block bike from viewing</button></th>
-          </tr>
-
-          <tr>
-            <th scope="row"><p id="demo"></p></th>
-          </tr>
-
-
-          <tr>
-            <th scope="row"><button id="myBtn" onclick="myFun1()">Replace Bike</button></th>
-          </tr>
-
-          <tr>
-            <th scope="row"><p id="do"></p></th>
-          </tr>
-
-
-          <tr>
-            <th scope="row">View Reservation</th>
-
- </tr>
-
-  <table style="width:100%" id="reserving"><div class="custom-select" style="width:200px;"> <select><option value="0">Choose Type:</option> <option value="1">Past</option><option value="2">Ongoing</option><option value="3">Future</option></select></div><tbody> <th scope="row"> <tr> <th>Start Time</th> <th>End Time</th> <th>Cost</th> </tr> <tr> <td> 12:00</td> <td> 14:00</td> <td>45</td> </tr> </tbody> </table>
-  <tr>
-            <button id="myBtn" onclick="myFun2()">Cancel Reservation</button>
-
-          <p id="d"></p>
-
-    <tr>
-            <th scope="row"><button id="myBtn" onclick="myFun3()">Add Fines</button></th>
-          </tr>
-
-          <tr>
-            <th scope="row"><p id="dom"></p></th>
-          </tr>
-
-</div>
-
-</div>
-<div id="map_canvas"></div>
-
-
-
-<script>
-var x, i, j, selElmnt, a, b, c;
-/*look for any elements with the class "custom-select":*/
-x = document.getElementsByClassName("custom-select");
-for (i = 0; i < x.length; i++) {
-  selElmnt = x[i].getElementsByTagName("select")[0];
-  /*for each element, create a new DIV that will act as the selected item:*/
-  a = document.createElement("DIV");
-  a.setAttribute("class", "select-selected");
-  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-  x[i].appendChild(a);
-  /*for each element, create a new DIV that will contain the option list:*/
-  b = document.createElement("DIV");
-  b.setAttribute("class", "select-items select-hide");
-  for (j = 1; j < selElmnt.length; j++) {
-    /*for each option in the original select element,
-    create a new DIV that will act as an option item:*/
-    c = document.createElement("DIV");
-    c.innerHTML = selElmnt.options[j].innerHTML;
-    c.addEventListener("click", function(e) {
-        /*when an item is clicked, update the original select box,
-        and the selected item:*/
-        var y, i, k, s, h;
-        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-        h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
-          if (s.options[i].innerHTML == this.innerHTML) {
-            s.selectedIndex = i;
-            h.innerHTML = this.innerHTML;
-            y = this.parentNode.getElementsByClassName("same-as-selected");
-            for (k = 0; k < y.length; k++) {
-              y[k].removeAttribute("class");
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg&libraries=geometry&sensor=false">
+    </script>
+    <script type="text/javascript">
+      document.getElementById('bikeoptions').style.visibility='hidden';
+//--------------------------------------------------------------------------------------------------------
+      function searchFun() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("BikeTable");
+        tr = table.getElementsByTagName("tr");
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1];
+          td2 = tr[i].getElementsByTagName("td")[0];
+          td3 = tr[i].getElementsByTagName("td")[2];
+          td4 = tr[i].getElementsByTagName("td")[3];
+          if (td||td2||td3||td4) {
+            txtValue = td.textContent || td.innerText;
+            txtValue2 = td2.textContent || td2.innerText;
+            txtValue3 = td3.textContent || td3.innerText;
+            txtValue4 = td4.textContent || td4.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue4.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1 || txtValue3.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
             }
-            this.setAttribute("class", "same-as-selected");
-            break;
           }
         }
-        h.click();
-    });
-    b.appendChild(c);
-  }
-  x[i].appendChild(b);
-  a.addEventListener("click", function(e) {
-      /*when the select box is clicked, close any other select boxes,
-      and open/close the current select box:*/
-      e.stopPropagation();
-      closeAllSelect(this);
-      this.nextSibling.classList.toggle("select-hide");
-      this.classList.toggle("select-arrow-active");
-    });
-}
-function closeAllSelect(elmnt) {
-  /*a function that will close all select boxes in the document,
-  except the current select box:*/
-  var x, y, i, arrNo = [];
-  x = document.getElementsByClassName("select-items");
-  y = document.getElementsByClassName("select-selected");
-  for (i = 0; i < y.length; i++) {
-    if (elmnt == y[i]) {
-      arrNo.push(i)
-    } else {
-      y[i].classList.remove("select-arrow-active");
+      }
+  //---------------------------------------------------------------------------------------------------------
+  function reservationSearchFun() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("reservationSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("ReservationsTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      td2 = tr[i].getElementsByTagName("td")[1];
+      td3 = tr[i].getElementsByTagName("td")[2];
+      td4 = tr[i].getElementsByTagName("td")[3];
+      td5 = tr[i].getElementsByTagName("td")[4];
+      td6 = tr[i].getElementsByTagName("td")[5];
+      td7 = tr[i].getElementsByTagName("td")[6];
+      td8 = tr[i].getElementsByTagName("td")[7];
+      td9 = tr[i].getElementsByTagName("td")[8];
+      td10 = tr[i].getElementsByTagName("td")[9];
+      if (td||td2||td3||td4||td5||td6||td7||td8||td9||td10) {
+        txtValue = td.textContent || td.innerText;
+        txtValue2 = td2.textContent || td2.innerText;
+        txtValue3 = td3.textContent || td3.innerText;
+        txtValue4 = td4.textContent || td4.innerText;
+        txtValue5 = td5.textContent || td5.innerText;
+        txtValue6 = td6.textContent || td6.innerText;
+        txtValue7 = td7.textContent || td7.innerText;
+        txtValue8 = td8.textContent || td8.innerText;
+        txtValue9 = td9.textContent || td9.innerText;
+        txtValue10 = td10.textContent || td10.innerText;
+        if (txtValue10.toUpperCase().indexOf(filter) > -1||txtValue.toUpperCase().indexOf(filter) > -1||txtValue9.toUpperCase().indexOf(filter) > -1 || txtValue3.toUpperCase().indexOf(filter) > -1 ||txtValue4.toUpperCase().indexOf(filter) > -1||txtValue5.toUpperCase().indexOf(filter) > -1 || txtValue6.toUpperCase().indexOf(filter) > -1 || txtValue7.toUpperCase().indexOf(filter) > -1 || txtValue8.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
     }
   }
-  for (i = 0; i < x.length; i++) {
-    if (arrNo.indexOf(i)) {
-      x[i].classList.add("select-hide");
-    }
+  //---------------------------------------------------------------------------------------------------------
+  $(function() {
+
+
+  // This function gets cookie with a given name
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
   }
-}
-/*if the user clicks anywhere outside the select box,
-then close all select boxes:*/
-document.addEventListener("click", closeAllSelect);
-</script>
+  var csrftoken = getCookie('csrftoken');
 
+  /*
+  The functions below will create a header with csrftoken
+  */
 
+  function csrfSafeMethod(method) {
+      // these HTTP methods do not require CSRF protection
+      return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+  function sameOrigin(url) {
+      // test that a given url is a same-origin URL
+      // url could be relative or scheme relative or absolute
+      var host = document.location.host; // host + port
+      var protocol = document.location.protocol;
+      var sr_origin = '//' + host;
+      var origin = protocol + sr_origin;
+      // Allow absolute or scheme relative URLs to same origin
+      return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+          (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+          // or any other URL that isn't scheme relative or absolute i.e relative.
+          !(/^(\/\/|http:|https:).*/.test(url));
+  }
 
+  $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+              // Send the token to same-origin, relative URLs only.
+              // Send the token only if the method warrants CSRF protection
+              // Using the CSRFToken value acquired earlier
+              xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+      }
+  });
 
-   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
-
-    <script type="text/javascript">
-
-
-
-document.getElementById("myBtn").disabled = true;
-function myFunction() {
-  document.getElementById("myBtn").disabled = false;
-
-}
-function myFun1() {
-  document.getElementById("do").innerHTML = "Replaced";
-  document.getElementById("myBtn").disabled = true;
-
-}
-function myFun() {
-  document.getElementById("demo").innerHTML = "Blocked";
-  document.getElementById("myBtn").disabled = true;
-
-}
-function myFun2() {
-  document.getElementById("d").innerHTML = "Cancelled";
-  document.getElementById("myBtn").disabled = true;
-
-}
-function myFun3() {
-  document.getElementById("dom").innerHTML = "Sent to database";
-  document.getElementById("myBtn").disabled = true;
-
-}
+});
+  //---------------------------------------------------------------------------------------------------------
+      var bikeid;
+      $('.bikeButton').click(function(){
+        bikeid=this.name;
+        event.preventDefault();
+        $.ajax({
+          url : "/operator/bikes/", // the endpoint
+          type : "POST", // http method
+          data : { formtype: 'bikeselected', bikeid:bikeid}, // data sent with the post fo
+          // handle a successful response
+          success : function(json) {
+            //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+            //IF THERE ARE NO TIMES AVAILABLE THEN :
+            //alert('Sorry, there are no other times you can change, other reservations occupied')
+            //document.getElementById('pleaseclose').click();
+            document.getElementById('bikeoptions').style.visibility='visible';
+            $('.bikeid').text(json[0]);
+              if(json[1]!=null){
+                $('#ReservationsTable').find('tbody').empty();
+                for (var i = 1; i < Object.keys(json).length; i++) {
+                  str='';
+                  for (var x = 0; x < Object.keys(json[i]['bikes_on_reservation']).length; x++) {
+                    var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bikes_on_reservation'][x]['bike_image']);
+                      str+='<img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 white);filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);" src="'+url_mask+'">'+json[i]['bikes_on_reservation'][x]['bike_id'];
+                    }
+                  $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
+                      '</h4>Reserved on: '+json[i]['res_date']+'&nbsp; &nbsp; &nbsp; &nbsp;  Paid: '+json[i]['res_cost']+'</td>'
+                      +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
+                      +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
+                        json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
+                        +'<td style="color:white;display: block;">'+'  USER ID:'+json[i]['c_id']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+                      '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
+                      '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
+                      +'<td  style="display: block;width:100%;"><button type="button" name="'
+                      +json[i]['res_code']+'" class="btn btn-danger">Cancel Reservation</button>'+
+                        '<button type="button" style="width:50%;" class="btn btn-danger myBtnFeedback">PAY YOUR FINE!</button></td></tr>');
+                }
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+                  }
+        });
+      });
+//--------------------------------------------------------------------------------------------------
         function initMap() {
             var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);
             var endLatLng = new google.maps.LatLng(55.939940000000000,-3.1918600000000000);

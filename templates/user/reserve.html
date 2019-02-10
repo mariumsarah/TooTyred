@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta charset='utf-8' />
    <title>Reserve</title>
+
    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
    <style>
      body {
@@ -10,19 +12,17 @@
      padding-top: 70px;
      color:black;
     }
-    .alert{
-      position: absolute;
-      top: 70px;
-      left: 10px;
-      z-index: 99;
-      right:10px;
-    }
+.alert{
+     position: absolute; top: 60px; left: 10px; z-index: 99; right:10px;
+   }
+
     #map {
        position: absolute;
        top: 0;
        bottom: 0;
        width: 100%;
-       z-index:1;
+       z-index:-1;
+       padding-bottom: 80px;
     }
    .footer{
      height:80px;
@@ -102,19 +102,27 @@
    	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
    	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
    }
-   .directionButton {
-   background-color: #3dcacd;
-   display: block;
-   width: 100%;
-   height:100%;
-   float:left;
-   border-radius:12px;
-   font-size:15px;
-   font-weight:bold;
-   border: 2px solid grey;
-   -webkit-transition-duration: 0.4s; /* Safari */
-   transition-duration: 0.4s;
-   }
+
+
+::-webkit-scrollbar{
+    display:none;
+}
+.directionButton {
+      background-color: #3dcacd;
+      display: block;
+      width: 92%;
+      height:100%;
+      float:left;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:bold;
+   position: relative;
+     display: inline-block;
+      border: 2px solid grey;
+
+      }
+
+
    .directionButton:hover {
      background-color:  #3d3a3a; /* Green */
      color: #3dcacd;
@@ -314,39 +322,75 @@
      }
      .button-3 {border-radius: 8px; color:  #3d3a3a; background-color: #3dcacd; margin-left:2px;}
 
+   <!--Ed-->
+
+
+     #right-panel{
+       z-index: 2;
+       position: relative;
+       background: transparent;
+       font-family: 'Roboto','sans-serif';
+       border-radius:5px;
+     }
+
+     #right-panel i {
+
+       font-size: 12px;
+
+     }
+
+
+
      </style>
+
     {% endblock %}
     {% block body %}
+
     {% if messages %}
       {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert">
-          <button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert"><button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-          </button>
-          {{ message }}
+          </button>    {{ message }}
         </div>
       {% endfor %}
     {% endif %}
-    <div id='map'></div>
-    <!-- <div id="right-panel" ></div> -->
+       <!--Ed-->
+<div>
+
+   <div id='map'> </div>
+
+ <div id='right-panel' style=" width: auto;  overflow: scroll; height: 75px; line-height: 30px;   font-size: 18px;  padding-right: 10px;
+       padding-left: 10px;  width: auto; margin-right: 30px; margin-left: 30px; margin-top: 50px">
+
+     </div>
+
+ <div>
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
-    <div class="location">
-      <!--onclick="myloc()"-->
+
+      <!--Ed-->
+
+    <div class="location" onclick="myloc()">
+
       <img width="20px" height="20px" src="{% static 'icons/location.png' %}"  >
     </div>
+
+
+
     <div class="footer">
       <div class="footer-4">
-        <button class="directionButton">Direction to station</button>
-        <!--
-        <select id="optn" class="drp" >
+
+        <!-- Ed -->
+        <select  id="optn" class="directionButton">
            <option value="DRIVING">Driving</option>
           <option value="BICYCLING">Bicycling</option>
-        </select> -->
-        <button type="button" style="float:right;opacity:9; color:#3dcacd;" class="close closedirection">
+        </select>
+
+        <button type="button" style="float:right;opacity:9; color:#3dcacd;" class="close closedirection" onclick="reload_page()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     </div>
+  </div>
     <div class="mapinfo">
       <img style="text-align=right;" src="{% static 'icons/line.png' %}">
       Trails
@@ -547,6 +591,8 @@
       document.getElementById('modalButton1').style.display="none";
       document.getElementById("confirm2").style.display="none";
       document.getElementById("home-tab").style.display="none";
+      document.getElementById("right-panel").style.display="none";
+
       var x = 0;
       var startlocationid;
       var endlocationid;
@@ -568,9 +614,14 @@
       var timesselected=false;
       var repeat = false;
       var done=0;
+      var pos ;
+      var des;
+
       // Initialize and add the map
 //--------------------------------------------------------------------
       function initMap() {
+     var directionsService = new google.maps.DirectionsService;
+ var directionsDisplay = new google.maps.DirectionsRenderer;
       // The map, centered at Edinburgh
         map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat:55.94136542,lng:-3.18470478},
@@ -677,7 +728,7 @@
                           '</div>';
           var infowindow = new google.maps.InfoWindow({
                   content: contentString,
-                  maxWidth: 250
+                  maxWidth: 350
                 });
         google.maps.event.addListener(infowindow, 'domready', function() {
 
@@ -724,7 +775,7 @@
                $(this).css({opacity: '1'});
              });
         });
-        var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
+        var latln = {lat:parseFloat(marker1.lat),lng:parseFloat(marker1.lon)};
         var Marker = new google.maps.Marker({
             map: map,
             icon: "{% static 'icons/marker.png' %}",
@@ -737,6 +788,18 @@
               prev_infowindow=true;
               prev_window = infowindow;
               infowindow.open(map, Marker);
+
+              //--------------------
+
+
+        //Current Location
+       //  var lat = Marker.getPosition().lat();
+     //    var lng = Marker.getPosition().lng();
+
+         des = new google.maps.LatLng(latln);
+              window.des = des;
+
+
           });
           //var touchtime = 0;
           Marker.addListener('dblclick', () =>
@@ -761,8 +824,20 @@
           i=i+1;
         }
       });
-      var opt = { minZoom: 11.5, maxZoom: 18 };
+      var opt = { minZoom: 11.5, maxZoom: 15 };
       map.setOptions(opt);
+
+//---------------------------------------------------------
+//Directions Service and Display
+
+var bounds = new google.maps.LatLngBounds();
+var onChangeHandler = function() {
+         calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+       };
+
+ window.addEventListener('click', onChangeHandler);
+        document.getElementById('optn').addEventListener('change', onChangeHandler);
 
       }
 //--------------------------------------------------------------------
@@ -1199,6 +1274,8 @@
     function reload_page()
     {
       window.location.reload(true);
+      document.getElementById("right-panel").style.display="none";
+
     }
 //--------------------------------------------------------------------
     $(function() {
@@ -1312,7 +1389,85 @@ function bike_post() {
         });
 };
 //--------------------------------------------------------------------
+//Current Location
+function myloc(){
+ if (navigator.geolocation) {
+         navigator.geolocation.watchPosition(function(position) {
+
+           pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+ window.pos = pos;
+  var loc = new google.maps.Marker({
+        position: pos,
+         icon: "{% static 'icons/yourloc.png' %}",
+         animation: google.maps.Animation.DROP,
+         map: map
+     });
+
+    infoWindow.setPosition();
+    infoWindow.setContent('You are here');
+
+             infoWindow.open(map);
+             map.setCenter(pos);
+           }, function() {
+             handleLocationError(true, infoWindow, map.getCenter());
+           });
+         } else {
+           // Browser doesn't support Geolocation
+           handleLocationError(false, infoWindow, map.getCenter());
+         }
+
+ }
+
+       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+         infoWindow.setPosition(pos);
+         infoWindow.setContent(browserHasGeolocation ?
+                               'Error: The Geolocation service failed.' :
+                               'Error: Your browser doesn\'t support geolocation.');
+         infoWindow.open(map);
+       }
+
+
+
+//--------------------------------------------------------------------
+//Directions
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+//var start = document.getElementById('start').value;
+   // var  pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      //  var end = document.getElementById('end').value;
+
+        var optn = document.getElementById('optn').value;
+         directionsService.route({
+           origin: pos,
+           destination: des,
+           travelMode: optn,
+           drivingOptions: {
+     departureTime: new Date(Date.now()),  // for the time N milliseconds from now.
+     trafficModel: 'optimistic'
+   }
+        }, function(response, status) {
+           if (status === 'OK') {
+             directionsDisplay.setDirections(response);
+              // Direction Panel
+              document.getElementById("right-panel").style.display="block";
+
+            directionsDisplay.setPanel(document.getElementById('right-panel'));
+             document.getElementById('right-panel').style.background="white";
+        directionsDisplay.setMap(map);
+
+          bikeLayer.setMap(map);
+
+           } else {
+             window.alert('Directions request failed due to ' + status);
+          }
+         });
+       }
+
+//--------------------------------------------------------------------
+
+
+
   </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCa-MhtE2n9Sk8pNdkqhLjdw70Jr8fCZ4&callback=initMap">
   </script>
 {% endblock %}
