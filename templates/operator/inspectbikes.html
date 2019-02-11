@@ -90,6 +90,7 @@
         border: 1px solid #ddd; /* Add a grey border */
         border-radius:5px;
         color:black;
+        z-index:5;
       }
       #reservations{
         background-color:#3d3a3a;
@@ -118,11 +119,25 @@
       .btn{
         margin:6px;font-size:18px;
       }
+      .viewreservations{
+        position:absolute;
+        left:40%;
+        z-index:4;
+        color:black;
+      }
+      .reservationBikeImage{
+        width:50px;
+        height:50px;
+        -webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 white);
+        filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);
+        z-index:1;
+      }
      </style>
 {% endblock %}
 {% block body %}
 <div>
       <div class="container">
+            <button class="btn btn-success viewreservations">View all reservations</button>
             <input type="text" id="search" onkeyup="searchFun()" placeholder="Search for bikes based on...">
           <div id="map_canvas">
           </div>
@@ -184,11 +199,13 @@
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
         // Declare variables
-        var input, filter, table, tr, td, i, txtValue;
+        var input, filter, table, tr, td, i, txtValue,x,y,trues;
         input = document.getElementById("search");
-        filter = input.value.toUpperCase();
+        filter = input.value.toUpperCase().split('/');
         table = document.getElementById("BikeTable");
         tr = table.getElementsByTagName("tr");
+        trues={};
+        y=1;
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
           td = tr[i].getElementsByTagName("td")[1];
@@ -200,21 +217,40 @@
             txtValue2 = td2.textContent || td2.innerText;
             txtValue3 = td3.textContent || td3.innerText;
             txtValue4 = td4.textContent || td4.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue4.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1 || txtValue3.toUpperCase().indexOf(filter) > -1) {
+            for (x = 0; x < filter.length; x++) {
+                if (txtValue.toUpperCase().indexOf(filter[x]) > -1 || txtValue4.toUpperCase().indexOf(filter[x]) > -1 || txtValue2.toUpperCase().indexOf(filter[x]) > -1 || txtValue3.toUpperCase().indexOf(filter[x]) > -1) {
+                  trues[x]=0;
+                } else {
+                  trues[x]=1;
+                }
+            }
+            for (x = 0; x < filter.length; x++) {
+              if(trues[x]==1)
+              {
+                y=0;
+              }
+            }
+            if (y!=0) {
               tr[i].style.display = "";
             } else {
               tr[i].style.display = "none";
             }
+            y=1;
           }
         }
       }
   //---------------------------------------------------------------------------------------------------------
+  function checkAdult(age) {
+    return age = 0;
+  }
   function reservationSearchFun() {
     // Declare variables
-    var input, filter, table, tr, td, i, txtValue;
+    var input, filter, table, tr, td, i, txtValue,x,y,trues;
     input = document.getElementById("reservationSearch");
-    filter = input.value.toUpperCase();
+    filter = input.value.toUpperCase().split('/');
     table = document.getElementById("ReservationsTable");
+    trues={};
+    y=1;
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td")[0];
@@ -228,21 +264,36 @@
       td9 = tr[i].getElementsByTagName("td")[8];
       td10 = tr[i].getElementsByTagName("td")[9];
       if (td||td2||td3||td4||td5||td6||td7||td8||td9||td10) {
-        txtValue = td.textContent || td.innerText;
-        txtValue2 = td2.textContent || td2.innerText;
-        txtValue3 = td3.textContent || td3.innerText;
-        txtValue4 = td4.textContent || td4.innerText;
-        txtValue5 = td5.textContent || td5.innerText;
-        txtValue6 = td6.textContent || td6.innerText;
-        txtValue7 = td7.textContent || td7.innerText;
-        txtValue8 = td8.textContent || td8.innerText;
-        txtValue9 = td9.textContent || td9.innerText;
-        txtValue10 = td10.textContent || td10.innerText;
-        if (txtValue10.toUpperCase().indexOf(filter) > -1||txtValue.toUpperCase().indexOf(filter) > -1||txtValue9.toUpperCase().indexOf(filter) > -1 || txtValue3.toUpperCase().indexOf(filter) > -1 ||txtValue4.toUpperCase().indexOf(filter) > -1||txtValue5.toUpperCase().indexOf(filter) > -1 || txtValue6.toUpperCase().indexOf(filter) > -1 || txtValue7.toUpperCase().indexOf(filter) > -1 || txtValue8.toUpperCase().indexOf(filter) > -1) {
+        txtValue={};
+        txtValue[0] = td.textContent || td.innerText;
+        txtValue[1] = td2.textContent || td2.innerText;
+        txtValue[2] = td3.textContent || td3.innerText;
+        txtValue[3] = td4.textContent || td4.innerText;
+        txtValue[4]= td5.textContent || td5.innerText;
+        txtValue[5]= td6.textContent || td6.innerText;
+        txtValue[6] = td7.textContent || td7.innerText;
+        txtValue[7] = td8.textContent || td8.innerText;
+        txtValue[8] = td9.textContent || td9.innerText;
+        txtValue[9] = td10.textContent || td10.innerText;
+        for (x = 0; x < filter.length; x++) {
+          if (txtValue[0].toUpperCase().indexOf(filter[x]) > -1||txtValue[1].toUpperCase().indexOf(filter[x]) > -1||txtValue[2].toUpperCase().indexOf(filter[x]) > -1 || txtValue[3].toUpperCase().indexOf(filter[x]) > -1 ||txtValue[4].toUpperCase().indexOf(filter[x]) > -1||txtValue[5].toUpperCase().indexOf(filter[x]) > -1 || txtValue[6].toUpperCase().indexOf(filter[x]) > -1 || txtValue[7].toUpperCase().indexOf(filter[x]) > -1 || txtValue[8].toUpperCase().indexOf(filter[x]) > -1) {
+            trues[x]=0;
+          } else {
+            trues[x]=1;
+          }
+        }
+        for (x = 0; x < filter.length; x++) {
+          if(trues[x]==1)
+          {
+            y=0;
+          }
+        }
+        if (y!=0) {
           tr[i].style.display = "";
         } else {
           tr[i].style.display = "none";
         }
+        y=1;
       }
     }
   }
@@ -346,6 +397,42 @@
                   }
         });
       });
+//--------------------------------------------------------------------------------------------------
+$('.viewreservations').click(function(){
+  event.preventDefault();
+  $.ajax({
+    url : "/operator/bikes/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'viewreservations'}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+      $('#ReservationsTable').find('tbody').empty();
+        if(json[1]!=null){
+          for (var i = 1; i < Object.keys(json).length; i++) {
+            str='';
+            for (var x = 0; x < Object.keys(json[i]['bikes_on_reservation']).length; x++) {
+              var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bikes_on_reservation'][x]['bike_image']);
+                str+='<img class="reservationBikeImage" src="'+url_mask+'">'+json[i]['bikes_on_reservation'][x]['bike_id'];
+              }
+            $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
+                '</h4>Reserved on: '+json[i]['res_date']+'&nbsp; &nbsp; &nbsp; &nbsp;  Paid: '+json[i]['res_cost']+'</td>'
+                +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
+                +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
+                  json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
+                  +'<td style="color:white;display: block;">'+'  USER ID:'+json[i]['c_id']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+                '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
+                '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
+                +'<td  style="display: block;width:100%;"><button type="button" name="'
+                +json[i]['res_code']+'" class="btn btn-danger">Cancel Reservation</button>'+
+                  '<button type="button" style="width:50%;" class="btn btn-danger myBtnFeedback">PAY YOUR FINE!</button></td></tr>');
+          }
+        }
+    },
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+  });
+});
 //--------------------------------------------------------------------------------------------------
         function initMap() {
             var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);

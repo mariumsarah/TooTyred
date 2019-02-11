@@ -559,8 +559,8 @@
               <li class="list-group-item"  style="color:#3dcacd;">Total Hourly based cost is  €<span style="font-weight:bold" id="hourly"></span></li>
               <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
               <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
-              <li class="list-group-item"  style="color:#3dcacd;"><h3>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h3></li>
-              <li class="list-group-item"  style="color:#3dcacd;"><h3>YOU CANNOT CANCEL YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h3></li>
+              <li class="list-group-item"  style="color:#3dcacd;"><h4>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h4></li>
+              <li class="list-group-item"  style="color:#3dcacd;"><h4>YOU CANNOT CANCEL YOUR RESERVATION 24 HOURS BEFORE THE START OF YOUR RESERVATION!</h4></li>
             </ul>
             <form  method="post" name="myform">
               {% csrf_token %}
@@ -867,15 +867,17 @@ var onChangeHandler = function() {
         $('#endinfo').text("");
         resetSelect();
         done=0;
+        var qun;
         {% for bike in bike_type %}
              bike[{{ bike.bike_type_id }}] = 0;
           {% endfor %}
-        {% for bike in bike_type %}
-          for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
-          {
-          removeBike('bike{{ bike.bike_type_id }}');
-          }
-        {% endfor %}
+          {% for bike in bike_type %}
+           qun=Number($('#quantity{{bike.bike_type_id }}').text());
+            for(var i=0;i<qun;i++)//CHANGE TO AVAILABLE BIKES
+            {
+              removeBike('bike{{ bike.bike_type_id }}');
+            }
+          {% endfor %}
         $('#cost').text("0");
         $('#cyclecost').text("0");
         $('#totalcost').text("0");
@@ -929,7 +931,7 @@ var onChangeHandler = function() {
 //--------------------------------------------------------------------
     function removeBike(selector) {
            var num = selector[selector.length -1];
-           if($('#quantity'+num).text()>0)
+           if(Number($('#quantity'+num).text())>0)
             {
               var cost = {{ costperhour }}/4;
                $('#available'+num).text(Number($('#available'+num).text())+1);
@@ -990,11 +992,13 @@ var onChangeHandler = function() {
 //--------------------------------------------------------------------
     function resetSelectBike()
     {
+      var qun;
       {% for bike in bike_type %}
            bike[{{ bike.bike_type_id }}] = 0;
         {% endfor %}
         {% for bike in bike_type %}
-          for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
+         qun=Number($('#quantity{{bike.bike_type_id }}').text());
+          for(var i=0;i<qun;i++)//CHANGE TO AVAILABLE BIKES
           {
             removeBike('bike{{ bike.bike_type_id }}');
           }
@@ -1008,9 +1012,9 @@ var onChangeHandler = function() {
       disable("select_end_date");
       disable("select_end_time");
       disable("select_start_time");
-       document.getElementById("confirm").style.display="none";
-       $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
-         $("#cost").text("0");
+      document.getElementById("confirm").style.display="none";
+      $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
+      $("#cost").text("0");
     }
 //--------------------------------------------------------------------
     function resetHomeSelect(){
@@ -1047,15 +1051,17 @@ var onChangeHandler = function() {
         }
         else
         {
+          var qun;
           {% for bike in bike_type %}
-            bike[{{ bike.bike_type_id }}] = 0;
-          {% endfor %}
-          {% for bike in bike_type %}
-            for(var i=0;i<Number($('#available'+{{bike.bike_type_id }}).text());i++)//CHANGE TO AVAILABLE BIKES
-            {
+               bike[{{ bike.bike_type_id }}] = 0;
+            {% endfor %}
+            {% for bike in bike_type %}
+             qun=Number($('#quantity{{bike.bike_type_id }}').text());
+              for(var i=0;i<qun;i++)//CHANGE TO AVAILABLE BIKES
+              {
                 removeBike('bike{{ bike.bike_type_id }}');
               }
-          {% endfor %}
+            {% endfor %}
           $('#home-tab').text("Go back");
           $('#home-tab').css('display','block');
           $('#cyclecost').text("0");
@@ -1328,7 +1334,6 @@ var onChangeHandler = function() {
             }
         }
     });
-
 });
 //--------------------------------------------------------------------
     $('#timeform').on('submit', function(event){
