@@ -17,6 +17,7 @@ a, a:active, a:visited { color:#3dcacd; }
 .navbar-dark .navbar-toggle .icon-bar {
   background-color:  #3d3a3a; /* Changes regular toggle color */
 }
+
 .content {
   max-width: 500px;
   margin: auto;
@@ -107,4 +108,4 @@ a, a:active, a:visited { color:#3dcacd; }
   .navbar-collapse {
       overflow: hidden;
       max-height: none !important;
-  }
+  }}

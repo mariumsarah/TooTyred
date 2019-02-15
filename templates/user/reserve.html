@@ -1454,13 +1454,14 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
            if (status === 'OK') {
              directionsDisplay.setDirections(response);
               // Direction Panel
-              document.getElementById("right-panel").style.display="block";
-
+            document.getElementById("right-panel").style.display="block";
             directionsDisplay.setPanel(document.getElementById('right-panel'));
-             document.getElementById('right-panel').style.background="white";
-        directionsDisplay.setMap(map);
-
-          bikeLayer.setMap(map);
+            document.getElementById('right-panel').style.background="lightgrey";
+            document.getElementById('right-panel').style.borderRadius="5px";
+            document.getElementById('right-panel').style.border="3px solid grey";
+            document.getElementById('right-panel').style.height="100px";
+            directionsDisplay.setMap(map);
+            bikeLayer.setMap(map);
 
            } else {
              window.alert('Directions request failed due to ' + status);

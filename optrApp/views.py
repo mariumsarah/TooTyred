@@ -58,15 +58,42 @@ def stations(request):
         return render(request, 'operator/station.html',{'stationnumber':stationnumber,'station':Station.objects.get(station_id=stationnumber)})
 
 #The main operators page with all information about other pages
-def log(request):
-    return render(request, 'operator/home.html')
+#def log(request):
+#    return render(request, 'operator/home.html')
 
 #The track bikes page where all the bikes can be tracked
 def bikes(request):
     if(request.method == "POST"):
         if request.POST.get('formtype','') == 'bikeselected':
             response_date={}
-            response_date[0]=(request.POST.get('bikeid',''));
+            response_date[0]={}
+            response_date[0]['bike_id']=request.POST.get('bikeid','')
+            #IF ITS AN ONGOING RESERVATION
+            if Bike.objects.get(bike_id=request.POST.get('bikeid','')).bike_stationedat==None:
+                ongoingreservations = Reservation.objects.raw("select r.fine_desc as fine_desc, r.fine_cost as fine_cost,br.bor_bike_id as bor_bike_id,br.bor_reservation_id as bor_reservation_id, r.res_type as res_type,r.feedback as feedback,r.c_id as c_id,r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname,sd.name as endname,ss.lon as startlon,ss.lat as startlat,sd.lon as endlon,sd.lat as endlat,r.starttime as starttime,r.endtime as endtime from bike_on_reservation as br,reservation as r,stationroutes as sr,station_on_reservation as sor,station as ss,station as sd where br.bor_bike_id=%s and br.bor_reservation_id=r.reservation_id and sor.sor_reservation_id=r.reservation_id and sor.sor_route_id=sr.route_id and sr.start_station_id=ss.station_id and sr.end_station_id=sd.station_id and r.res_type=2",(int(request.POST.get('bikeid','')),))
+                for each in ongoingreservations:
+                    if(each.endtime>utc.localize(datetime.now())):
+                        response_date[0]['shouldlock']=str(0)
+                    else:
+                        response_date[0]['shouldlock']=str(1)
+                    response_date[0]['duration']=str((each.endtime-each.starttime).total_seconds()*1000)
+                    response_date[0]['startlon']=str(each.startlon)
+                    response_date[0]['type']=0
+                    response_date[0]['startlon']=str(each.startlon)
+                    response_date[0]['startlat']=str(each.startlat)
+                    response_date[0]['startname']=str(each.startname)
+                    response_date[0]['endlon']=str(each.endlon)
+                    response_date[0]['endlat']=str(each.endlat)
+                    response_date[0]['endname']=str(each.endname)
+            #IF ITS STATIONED OR OUTOFSERVICE
+            else:
+                bikeinfo = Bike.objects.raw("select s.name as name,b.bike_id as bike_id,s.station_id as station_id,s.lat as lat,s.lon as lon,b.bike_status as bike_status from bike as b, station as s where b.bike_stationedat=s.station_id and b.bike_id=%s",(int(request.POST.get('bikeid','')),))
+                #response_date[0][1]=bikeinfo.lat
+                for each in bikeinfo:
+                    response_date[0]['type']=1
+                    response_date[0]['lon']=str(each.lon)
+                    response_date[0]['lat']=str(each.lat)
+                    response_date[0]['stationname']=each.name
             reservations = Reservation.objects.raw("select r.fine_desc as fine_desc, r.fine_cost as fine_cost,br.bor_bike_id as bor_bike_id,br.bor_reservation_id as bor_reservation_id, r.res_type as res_type,r.feedback as feedback,r.c_id as c_id,r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname,sd.name as endname from bike_on_reservation as br,reservation as r,stationroutes as sr,station_on_reservation as sor,station as ss,station as sd where br.bor_bike_id=%s and br.bor_reservation_id=r.reservation_id and sor.sor_reservation_id=r.reservation_id and sor.sor_route_id=sr.route_id and sr.start_station_id=ss.station_id and sr.end_station_id=sd.station_id",(int(request.POST.get('bikeid','')),))
             i=1
             for each in reservations:
@@ -137,8 +164,8 @@ def bikes(request):
             return HttpResponse(json.dumps(response_date),
                 content_type="application/json")
     else:
-        return render(request, 'operator/inspectbikes.html',{'allbikes':Bike.objects.all()})
+        return render(request, 'operator/inspectbikes.html',{'allbikes':Bike.objects.all(),'station':Station.objects.all()})
 
 #Customer service
-def customerService(request):
-    return render(request, 'operator/customerservice.html')
+#def customerService(request):
+#    return render(request, 'operator/customerservice.html')
