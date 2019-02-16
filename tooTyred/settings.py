@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'home',
     'bootstrap3',
     'optrApp',
-    'manApp'
+    'manApp',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +70,6 @@ TEMPLATES = [
         },
     },
 ]
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static'),]
 WSGI_APPLICATION = 'tooTyred.wsgi.application'
 

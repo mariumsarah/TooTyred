@@ -12,5 +12,6 @@ py manage.py inspectdb
 IF THERE IS A PROBLEM WITH THE CSS file
 try the following
 1. Update cache on google chrome
-2. py manage.py collectstatic --noinput --clear
+2. py manage.py collectstatic
 ----------------------------------------------------------------------------
+py -m pip install -U channels
