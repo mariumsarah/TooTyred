@@ -12,10 +12,6 @@
      padding-top: 70px;
      color:black;
     }
-.alert{
-     position: absolute; top: 60px; left: 10px; z-index: 99; right:10px;
-   }
-
     #map {
        position: absolute;
        top: 0;
@@ -346,14 +342,6 @@
     {% endblock %}
     {% block body %}
 
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert" id="alert"><button style="padding-left:20px;"type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>    {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
        <!--Ed-->
 <div>
 
@@ -582,7 +570,6 @@
     </div>
     <!--This script tags covers the map and the opening of the dialog box-->
     <script>
-      setTimeout(function(){$("#alert").fadeOut();}, 20000);
       $(".closedirection").click(function(){
           $(".footer").slideUp(); });
       $(".location").click(function(){

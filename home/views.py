@@ -36,8 +36,8 @@ def reserve(request):
     if request.method == 'POST':
             #The form submitted time now get the bikes using time
             if request.POST.get('formtype','') == 'time':
-                startdatetime = datetime.strptime(request.POST.get('startdate','')+' '+request.POST.get('starttime',''),'%d %b %Y %I:%M %p')
-                enddatetime = datetime.strptime(request.POST.get('enddate','')+' '+request.POST.get('endtime',''),'%d %b %Y %I:%M %p')
+                startdatetime = utc.localize(datetime.strptime(request.POST.get('startdate','')+' '+request.POST.get('starttime',''),'%d %b %Y %I:%M %p'))
+                enddatetime = utc.localize(datetime.strptime(request.POST.get('enddate','')+' '+request.POST.get('endtime',''),'%d %b %Y %I:%M %p'))
                 startstationid = Station.objects.get(name = request.POST.get('startstation','')).station_id
                 endstationid = Station.objects.get(name = request.POST.get('endstation','')).station_id
                 return HttpResponse(
@@ -47,10 +47,10 @@ def reserve(request):
             else:
                 startstation = Station.objects.get(name=(request.POST.get("inputstartstation","")))
                 endstation = Station.objects.get(name=(request.POST.get("inputendstation","")))
-                startdatetime = datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p')
-                enddatetime = datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p')
+                startdatetime = utc.localize(datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p'))
+                enddatetime = utc.localize(datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p'))
                 totalcost = float(request.POST.get("inputtotal",""))
-                currentDateTime=datetime.now()
+                currentDateTime=utc.localize(datetime.now())
                 bikes = {}
                 inputbikelen = 0
                 for i in range(len(TypeOfBike.objects.all())):
@@ -100,6 +100,7 @@ def reserve(request):
     else:
         cost=20
         reservationdays = 14
+        checkMessages(request)
         if not Reservation.objects.filter(c=request.user.id).exists():
             messages.success(request,'Double click markers to select start and end station! Click once to learn more about the station!')
         return render(request, 'user/reserve.html', {'station':Station.objects.all(),'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
@@ -137,6 +138,23 @@ def reservations(request):
                     content_type="application/json"
                     )
             # --------------------------------------------------------------------------------------
+            elif request.POST.get('formtype','') == 'fine':
+                reservationnumber = request.POST.get('reservationcode','')
+                reservation = Reservation.objects.get(reservation_id=reservationnumber)
+                reservation.fine_desc=None
+                reservation.save()
+                response_data={}
+                response_data[0]=request.POST.get('reservationcode','')
+                messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nYour fine for reservation of code '+reservation.res_code+' has been succesfully paid! \n'
+                messagew+='\n The total fine you paid is €'+str(reservation.fine_cost)+'\n Hope you had a great experience on our website! And keep reserving!'
+                email = EmailMessage('Your TooTyred Reservation', messagew, to=[request.user.email])
+                email.send()
+                #reservation.feedback=request.POST.get('feedback','')
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                    )
+            # --------------------------------------------------------------------------------------
             elif request.POST.get('formtype','') == 'cancel':
                 reservationnumber = request.POST.get('reservationcode','')
                 reservation = Reservation.objects.get(reservation_id=reservationnumber)
@@ -162,10 +180,10 @@ def reservations(request):
             # --------------------------------------------------------------------------------------
             else:
                 reservationnumber = request.POST.get("reservation","")
-                startdatetime = datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p')
-                enddatetime = datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p')
+                startdatetime = utc.localize(datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p'))
+                enddatetime = utc.localize(datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p'))
                 totalcost = float(request.POST.get("inputtotal",""))
-                currentDateTime=datetime.now()
+                currentDateTime=utc.localize(datetime.now())
                 bikes = {}
                 inputbikelen = 0
                 for i in range(len(TypeOfBike.objects.all())):
@@ -202,13 +220,27 @@ def reservations(request):
                     reservation.save()
                     return redirect('/home/reservations/')
     else:
+        checkMessages(request)
+        ongoing = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=2",(request.user.id,))
         futurereservations = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=3",(request.user.id,))
         pastreservations = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=1",(request.user.id,))
+        for each in futurereservations:
+            each.starttime=each.starttime.strftime('%b. %d, %Y, %I:%M %p')
+            each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
+            each.res_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
+        for each in pastreservations:
+            each.starttime=each.starttime.strftime('%b. %d, %Y, %I:%M %p')
+            each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
+            each.re_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
+        for each in ongoing:
+            each.starttime=each.starttime.strftime('%b. %d, %Y, %I:%M %p')
+            each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
+            each.endtime=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
         bikesonreservations =  Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
         cost=20
         reservationdays = 14
         nows =  utc.localize(datetime.now()) + timedelta(days=1)
-        return render(request,"user/reservations.html",{'now': nows,'pastreservations':pastreservations,'station':Station.objects.all(),'futurereservations': futurereservations,'bikesonreservations':bikesonreservations,'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
+        return render(request,"user/reservations.html",{'now': nows,'pastreservations':pastreservations,'station':Station.objects.all(),'futurereservations': futurereservations,'ongoing': ongoing,'bikesonreservations':bikesonreservations,'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 #This function is used in reserve() and reservations() to get all the avaialable bike ids using the start time end time start station and end station
 def getBikes(startdatetime,enddatetime,startstationid,endstationid,typeindicator): #typeindicator indicates whos calling this function and determines what to return ()
@@ -320,6 +352,7 @@ def logout(request):
     return render(request,"user/home.html")
 
 def account(request):
+    checkMessages(request)
     editProfile = EditProfileForm(instance=request.user)
     changePassword = PasswordChangeForm(user=request.user)
     return render(request,"user/account.html",{'form1':editProfile,'form2':changePassword, 'user':request.user})
@@ -356,3 +389,9 @@ def changepassword(request):
 
 def termsandconditions(request):
     return render(request,"user/termsandconditions.html")
+
+def checkMessages(request):
+    for each in Reservation.objects.filter(c=request.user.id):
+        if each.fine_desc!=None:
+            messages.error(request,'Please pay your fines in the past reservations page or your fines will increase!')
+            break

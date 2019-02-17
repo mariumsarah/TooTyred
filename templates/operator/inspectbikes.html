@@ -3,6 +3,9 @@
 {% block head %}
   <title> Track Bikes</title>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+
+
   <style>
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0,color: white; }
@@ -132,6 +135,9 @@
         filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);
         z-index:1;
       }
+
+.modal-header{background-color:#3dcacd; }
+.modal-content{background-color:#3d3a3a;color:white;font-size:20px;}
      </style>
 {% endblock %}
 {% block body %}
@@ -179,10 +185,85 @@
           </div>
         </div>
         <div id='bikeoptions'>
-            <button style='color:black;' class="btn btn-success form-control" onclick='transferModal()'>TRANSFER <span class='bikeid'></span></button>
-            <button style='color:black;' class="btn btn-success form-control" onclick='replaceModal()'>REPLACE <span class='bikeid'></span></button>
-            <button class="btn btn-danger form-control" onclick='blockBikeModal()'>BLOCK <span class='bikeid'></span></button>
-            <button class="btn btn-danger form-control" onclick='unblockBikeModal()'>UNBLOCK <span class='bikeid'></span></button>
+            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal">TRANSFER <span class='bikeid'></span></button>
+<!-- Modal -->
+            <div class="modal fade firstModal" id="myModal" >
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Status</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p > Bikes transfered <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal2">REPLACE <span class='bikeid'></span></button>
+<!-- Modal -->
+          <div class="modal fade secondModal" id="myModal2" >
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Status</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Bikes Replaced <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+            <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
+            	<button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal3">BLOCK <span class='bikeid'></span></button>
+<!-- Modal -->
+          <div class="modal fade" id="myModal3" >
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Status</h4>
+                </div>
+                <div class="modal-body">
+                  <p >Bikes Blocked  <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+          <button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
+        <!-- Modal -->
+          <div class="modal fade" id="myModal4" >
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Status</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Bikes Unblocked  <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
         </div>
         <div id='reservations'>
           <table id="ReservationsTable" class="table table-design2 table-dark">
@@ -200,7 +281,6 @@
       document.getElementById('bikeoptions').style.visibility='hidden';
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
-        
         // Declare variables
         var input, filter, table, tr, td, i, txtValue,x,y,trues;
         input = document.getElementById("search");
@@ -460,8 +540,12 @@ function transferModal(){
   //same as how we reserve a bike in the users interface
   //if this is not possible then display alert saying sorry the bike has future reservations delete them first
   //else make a reservation for third company to transfer bike
-  alert(bikeID);
+
+
+
 }
+
+
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
@@ -730,5 +814,31 @@ document.getElementById('addmarker').style.display="none";
       document.getElementById("right-panel").style.display="none";
 
     }
+
+
+    var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
     </script>
 {% endblock %}
