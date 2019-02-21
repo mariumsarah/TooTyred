@@ -236,16 +236,16 @@
                   <h4 class="modal-title">Status</h4>
                 </div>
                 <div class="modal-body">
-                  <p >Bikes Blocked  <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
-
-
+                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>from enter the time below:</p>
+                  <input style='border-radius:5px;color:black'type='datetime-local' required/>
+                  <input style='border-radius:5px;color:black' type='submit' onclick='blockBikeModal()'/>
                 </div>
 
               </div>
 
             </div>
           </div>
-          <button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
+          <button style='color:black;' type="button" onclick='unblockBikeModal()' class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
         <!-- Modal -->
           <div class="modal fade" id="myModal4" >
             <div class="modal-dialog">
@@ -529,7 +529,7 @@ function processRefund(name){
 }
 //--------------------------------------------------------------------------------------------------
 function blockModal(name){
-  //
+
   alert(name);
 }
 //--------------------------------------------------------------------------------------------------
@@ -545,7 +545,11 @@ function transferModal(){
 
 }
 
-
+//--------------------------------------------------------------------------------------------------
+function reload_page()
+{
+  window.location.reload(true);
+}
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
@@ -553,15 +557,58 @@ function blockBikeModal(){
   //this is sucecssful else display alert saying sorry bike is has future reservations or is already blocked
   //set the bike as outofservice
   //in users>views.py if the bike is outofservice then dont display it as available for reservation
+  event.preventDefault();
+  $.ajax({
+    url : "/operator/log/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'blockBike', bikeid:bikeID}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+      //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+      //IF THERE ARE NO TIMES AVAILABLE THEN :
+      //alert('Sorry, there are no other times you can change, other reservations occupied')
+      //document.getElementById('pleaseclose').click();
+      if(json[0]==0){
+          alert('Bike '+json[1]+' was successfully blocked from the time specified'); // remove t // remove the value from the input
+          reload_page();}
+      else
+      {  alert('Bike '+json[1]+' could not be blocked! '); // remove t // remove the value from the input
+         reload_page();}
+    },
 
-  alert(bikeID);
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+  });
 }
 //--------------------------------------------------------------------------------------------------
 function unblockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
   //if the bike is outofservice this should be possible
   //else display alert saying sorry this is not possible
-  alert(bikeID);
+  event.preventDefault();
+  $.ajax({
+    url : "/operator/log/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'unblockBike', bikeid:bikeID}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+      //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+      //IF THERE ARE NO TIMES AVAILABLE THEN :
+      //alert('Sorry, there are no other times you can change, other reservations occupied')
+      //document.getElementById('pleaseclose').click();
+      if(json[0]==0){
+          alert('Bike '+json[1]+' was successfully unblocked!'); // remove t // remove the value from the input
+          reload_page();}
+      else
+      {  alert('Bike '+json[1]+' is not blocked at the moment! '); // remove t // remove the value from the input
+         reload_page();}
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+  });
 }
 //--------------------------------------------------------------------------------------------------
 function replaceModal(){

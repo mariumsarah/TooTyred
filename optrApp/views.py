@@ -163,6 +163,20 @@ def bikes(request):
                     i=i+1
             return HttpResponse(json.dumps(response_date),
                 content_type="application/json")
+        elif request.POST.get('formtype','') == 'blockBike':
+            response_date={}
+            #stores value whether the blocking was successfull or not
+            response_date[0]=1
+            response_date[1]=request.POST.get('bikeid','')
+            return HttpResponse(json.dumps(response_date),
+                content_type="application/json")
+        elif request.POST.get('formtype','') == 'unblockBike':
+            response_date={}
+            #stores value whether the blocking was successfull or not
+            response_date[0]=1
+            response_date[1]=request.POST.get('bikeid','')
+            return HttpResponse(json.dumps(response_date),
+                content_type="application/json")
     else:
         return render(request, 'operator/inspectbikes.html',{'allbikes':Bike.objects.all(),'station':Station.objects.all()})
 

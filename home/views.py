@@ -231,11 +231,11 @@ def reservations(request):
         for each in pastreservations:
             each.starttime=each.starttime.strftime('%b. %d, %Y, %I:%M %p')
             each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
-            each.re_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
+            each.res_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
         for each in ongoing:
             each.starttime=each.starttime.strftime('%b. %d, %Y, %I:%M %p')
             each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
-            each.endtime=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
+            each.res_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
         bikesonreservations =  Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
         cost=20
         reservationdays = 14
@@ -282,7 +282,7 @@ def getBikes(startdatetime,enddatetime,startstationid,endstationid,typeindicator
         AND bor_reservation_id = reservation_id AND sor_route_id = route_id AND sor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3) \
         AND NOT ((starttime < %s AND endtime >= %s) OR (starttime >= %s AND starttime <= %s)) GROUP BY bike_id', [startdatetime, startdatetime, startdatetime, enddatetime])
 
-    #bikes with no current or future reservations that is stationed at the inputted start station
+    #bikes with no current or future reservations that is stationed at the inputted start station AND IS NOT OUTOFSERVICE
     no_fut_ong_bikes = Bike.objects.raw(' SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND \
         bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = %s', [startstationid])
 
