@@ -3,9 +3,6 @@
 {% block head %}
   <title> Track Bikes</title>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-
-
-
   <style>
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0,color: white; }
@@ -135,14 +132,18 @@
         filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);
         z-index:1;
       }
-
-.modal-header{background-color:#3dcacd; }
-.modal-content{background-color:#3d3a3a;color:white;font-size:20px;}
+      .modal-header{
+        background-color:#3dcacd;
+      }
+      .modal-content{
+        background-color:#3d3a3a;
+        color:white;
+        font-size:20px;
+      }
      </style>
 {% endblock %}
 {% block body %}
 <div>
-
       <div class="container">
           <button id='addmarker'></button>
             <button class="btn btn-success viewreservations">View all reservations</button>
@@ -194,10 +195,13 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Status</h4>
+                    <h4 class="modal-title">Transfer</h4>
                   </div>
                   <div class="modal-body">
-                    <p > Bikes transfered <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                    <p >Transfer bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
+                    Start:<input style='border-radius:5px;color:black'type='datetime-local' required/><br>
+                    End: <input style='border-radius:5px;color:black'type='datetime-local' required/><br>
+                    <input style='border-radius:5px;color:black' type='submit' onclick='transferModal()'/>
                   </div>
 
                 </div>
@@ -213,10 +217,13 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Status</h4>
+                  <h4 class="modal-title">Replace</h4>
                 </div>
                 <div class="modal-body">
-                  <p>Bikes Replaced <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                  <p >Replace bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
+                  Start:<input style='border-radius:5px;color:black'type='datetime-local' required/><br>
+                  End: <input style='border-radius:5px;color:black'type='datetime-local' required/><br>
+                  <input style='border-radius:5px;color:black' type='submit' onclick='replaceModal()'/>
                 </div>
 
               </div>
@@ -233,10 +240,10 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Status</h4>
+                  <h4 class="modal-title">Block</h4>
                 </div>
                 <div class="modal-body">
-                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>from enter the time below:</p>
+                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
                   <input style='border-radius:5px;color:black'type='datetime-local' required/>
                   <input style='border-radius:5px;color:black' type='submit' onclick='blockBikeModal()'/>
                 </div>
@@ -720,9 +727,9 @@ document.getElementById('addmarker').style.display="none";
             // The marker, positioned at Uluru
             geojson.forEach(function(marker1) {
               var infowindow = new google.maps.InfoWindow({
-                      content:marker1.name,
+                      content:"<h5 style='padding:10px;color:black'>"+marker1.name+"</h5>",
                       position: new google.maps.LatLng(-32.0, 149.0),
-                      maxWidth: 350
+                      maxWidth: 350,
                     });
               var latln = {lat:parseFloat(marker1.lat),lng:parseFloat(marker1.lon)};
               var Marker = new google.maps.Marker({
@@ -759,7 +766,7 @@ document.getElementById('addmarker').style.display="none";
                    map: map
                });
                var ind = new google.maps.InfoWindow({
-                       content:str[3],
+                 content:"<h5 style='padding:10px;color:black'>"+str[3]+"</h5>",
                        position: new google.maps.LatLng(-32.0, 149.0),
                        maxWidth: 350
                      });
@@ -790,7 +797,7 @@ document.getElementById('addmarker').style.display="none";
                       map: map
                   });
                   var ind = new google.maps.InfoWindow({
-                          content:"Coming from "+str[3]+" landing at "+str[7],
+                          content:"<h5 style='padding:10px;color:black'>Coming from "+str[3]+" landing at "+str[7]+" </h5>",
                           position: new google.maps.LatLng(-32.0, 149.0),
                           maxWidth: 350
                         });

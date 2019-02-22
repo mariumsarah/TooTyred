@@ -747,7 +747,7 @@ CREATE TABLE `type_of_bike` (
 
 LOCK TABLES `type_of_bike` WRITE;
 /*!40000 ALTER TABLE `type_of_bike` DISABLE KEYS */;
-INSERT INTO `type_of_bike` VALUES (1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling. Mountain bikes share similarities with other bicycles, but incorporate features designed to enhance durability and performance in rough terrain.','Shimano XT','Mountain Bike',2.00,'shimano.png'),(2,'The tandem bicycle or twin is a form of bicycle designed to be ridden by more than one person.','Fuji X','Tandem Bike',4.00,'tandem.png'),(3,'The road bike is used  for traveling at speed on paved roads. ','Fuji Crank T ','Road Bike',1.25,'road.png'),(4,' Wheelchair bikes has an advanced wheelchair design enabling easy and comfortable pedaling to ensure maximum maneuverability with minimum effort.','VeloPlus','Wheelchair Bike',3.50,'veloplus.png');
+INSERT INTO `type_of_bike` VALUES (1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling.','Shimano XT','Mountain Bike',2.00,'shimano.png'),(2,'The tandem bicycle or twin is a form of bicycle designed to be ridden by more than one person.','Fuji X','Tandem Bike',4.00,'tandem.png'),(3,'The road bike is used  for traveling at speed on paved roads. ','Fuji Crank T ','Road Bike',1.25,'road.png'),(4,' Wheelchair bikes has an advanced wheelchair design enabling easy and comfortable pedaling to ensure maximum maneuverability with minimum effort.','VeloPlus','Wheelchair Bike',3.50,'veloplus.png');
 /*!40000 ALTER TABLE `type_of_bike` ENABLE KEYS */;
 UNLOCK TABLES;
 
