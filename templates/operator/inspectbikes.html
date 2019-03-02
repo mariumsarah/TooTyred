@@ -104,6 +104,12 @@
         overflow: scroll;
         z-index:1;
       }
+      .questionmark{
+        position:absolute;
+        left:54%;
+        z-index:4;
+        color:black;
+      }
       #bikeoptions{
         position:absolute;
         background-color:#3d3a3a;
@@ -122,6 +128,13 @@
       .viewreservations{
         position:absolute;
         left:40%;
+        z-index:4;
+        color:black;
+      }
+      .viewbikes{
+        position:absolute;
+        left:3%;
+        top:5%;
         z-index:4;
         color:black;
       }
@@ -146,7 +159,9 @@
 <div>
       <div class="container">
           <button id='addmarker'></button>
+            <button class="btn btn-success viewbikes">&#8635;</button>
             <button class="btn btn-success viewreservations">View all reservations</button>
+            <button class="btn btn-light questionmark">?</button>
             <input type="text" id="search" onkeyup="searchFun()" placeholder="Search for bikes based on...">
           <div id="map_canvas">
           </div>
@@ -199,8 +214,13 @@
                   </div>
                   <div class="modal-body">
                     <p >Transfer bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
-                    Start:<input style='border-radius:5px;color:black'type='datetime-local' required/><br>
-                    End: <input style='border-radius:5px;color:black'type='datetime-local' required/><br>
+                    <select id='station' style='color:black;'>
+                       <option selected="true" value="" disabled="disabled">Select station to transfer to</option>
+                       <option value="0">Storage</option>
+                      {% for stat in station %}
+                      <option value="{{ stat.station_id }}">{{ stat.name }}</option>
+                      {% endfor %}
+                    </select>
                     <input style='border-radius:5px;color:black' type='submit' onclick='transferModal()'/>
                   </div>
 
@@ -220,14 +240,11 @@
                   <h4 class="modal-title">Replace</h4>
                 </div>
                 <div class="modal-body">
-                  <p >Replace bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
-                  Start:<input style='border-radius:5px;color:black'type='datetime-local' required/><br>
-                  End: <input style='border-radius:5px;color:black'type='datetime-local' required/><br>
-                  <input style='border-radius:5px;color:black' type='submit' onclick='replaceModal()'/>
+                  <p >Replace bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                  Would you like to confirm replacement of this bike?<br><br>
+                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='replaceModal()'/>
                 </div>
-
               </div>
-
             </div>
           </div>
             <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
@@ -240,19 +257,21 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Block</h4>
+                  <h4 class="modal-title">BLOCK</h4>
                 </div>
                 <div class="modal-body">
-                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
-                  <input style='border-radius:5px;color:black'type='datetime-local' required/>
-                  <input style='border-radius:5px;color:black' type='submit' onclick='blockBikeModal()'/>
+                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                    Would you like to confirm blocking of this bike?<br><br>
+                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='blockBikeModal()'/>
+
                 </div>
 
               </div>
 
             </div>
           </div>
-          <button style='color:black;' type="button" onclick='unblockBikeModal()' class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
+          <button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
+
         <!-- Modal -->
           <div class="modal fade" id="myModal4" >
             <div class="modal-dialog">
@@ -261,14 +280,14 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Status</h4>
+                  <h4 class="modal-title">UNBLOCK</h4>
                 </div>
                 <div class="modal-body">
-                  <p>Bikes Unblocked  <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                  <p >Unblock bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                    Would you like to confirm unblocking of this bike?<br><br>
+                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='unblockBikeModal()'/>
                 </div>
-
               </div>
-
             </div>
           </div>
         </div>
@@ -330,9 +349,6 @@
         }
       }
   //---------------------------------------------------------------------------------------------------------
-  function checkAdult(age) {
-    return age = 0;
-  }
   function reservationSearchFun() {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue,x,y,trues;
@@ -493,7 +509,53 @@ $('.viewreservations').click(function(){
             }
   });
 });
+//--------------------------------------------------------------------------------------------------
+$('.viewbikes').click(function(){
+  event.preventDefault();
+  $.ajax({
+    url : "/operator/log/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'viewbikes'}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+        viewBikes(json);
+    },
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+  });
+});
+//--------------------------------------------------------------------------------------------------
+function viewBikes(json) {
+  $('#BikeTable').find('tbody').empty();
+    if(json[1]!=null){
+      for (var i = 1; i < Object.keys(json).length; i++) {
+        var d;
+        if(json[i]['bike_status']=="Outofservice")
+        {
+          d="background-color: #B22222;color:white;";
+        }
+        else if(json[i]['bike_status']=="active")
+        {
+          d='background-color: green;color:white;';
+        }
+        else{
+          d='background-color: #3d3a3a;color:#3dcacd;';
+        }
+        var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bike_image']);
+        $('#BikeTable').find('tbody').append('<tr style="'+d
+        +'"><td class="hidden">'+json[i]['bike_type']+'</td>'
+        +'<td><button class="bikeButton" onclick="viewbik(\''
+          +json[i]['bike_id']+'\')">.'+json[i]['bike_id']
+          +'.<img style="width:60px;height:60px;-webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 darkgrey);filter: drop-shadow(1px 1px 0 darkgrey) drop-shadow(-1px -1px 0 darkgrey);" src="'
+                        +url_mask
+                        +'"></button></td><td class="hidden">'+json[i]['bike_stationedat_name']
+                     +'</td><td class="hidden">'+  json[i]['bike_status']
+            +'</td></tr>');
+      }
+    }
 
+}
 //--------------------------------------------------------------------------------------------------
 function viewReservations(json) {
   $('#ReservationsTable').find('tbody').empty();
@@ -509,17 +571,50 @@ function viewReservations(json) {
             +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
             +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
               json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
-              +'<td style="color:white;display: block;">'+'<div style="border:1px solid black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id']+'<button class="btn btn-danger" onclick="blockModal(\''
-                +json[i]['c_id']+'\')">Block</button></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+              +'<td style="color:white;display: block;">'+'<div style="border:1px solid black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span><button class="btn btn-danger" onclick="blockModal(\''
+                +json[i]['c_id'].split(' ')[0]+'\')">Block</button></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
             '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
             '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
             +'<td style="display: block;width:100%;"><button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
-              +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" class="fined btn btn-danger" onclick="addFineModal(\''
-              +json[i]['reservation_id']+'\')">Add fine</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
+              +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
               +json[i]['reservation_id']+'\')">Process Refund</button>'+'</td></tr>');
       }
     }
 
+}
+//--------------------------------------------------------------------------------------------------
+
+function viewbik(name){
+  clearTimeout(moveMarker);
+  bikeid=name;
+  event.preventDefault();
+  $.ajax({
+    url : "/operator/log/", // the endpoint
+    type : "POST", // http method
+    data : { formtype: 'bikeselected', bikeid:bikeid}, // data sent with the post fo
+    // handle a successful response
+    success : function(json) {
+      //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+      //IF THERE ARE NO TIMES AVAILABLE THEN :
+      //alert('Sorry, there are no other times you can change, other reservations occupied')
+      //document.getElementById('pleaseclose').click();
+      document.getElementById('bikeoptions').style.visibility='visible';
+      $('.bikeid').text(json[0]['bike_id']);
+      viewReservations(json);
+      if(json[0]['type']==1)
+        {
+          $("#addmarker").text('1'+"/"+json[0]['lat']+"/"+json[0]['lon']+"/"+json[0]['stationname']);
+          document.getElementById("addmarker").click();
+        }
+      else{
+        $("#addmarker").text('0'+"/"+json[0]['startlat']+"/"+json[0]['startlon']+"/"+json[0]['startname']+"/"+json[0]['duration']+"/"+json[0]['endlat']+"/"+json[0]['endlon']+"/"+json[0]['endname']+"/"+json[0]['shouldlock']);
+        document.getElementById("addmarker").click();
+      }
+    },
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+            }
+  });
 }
 //--------------------------------------------------------------------------------------------------
 
@@ -542,12 +637,42 @@ function blockModal(name){
 //--------------------------------------------------------------------------------------------------
 function transferModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
+  var station=document.getElementById("station").options[document.getElementById("station").selectedIndex].value;
+  if(station=="")
+  {
+    alert('Please select a valid option');
+    return;
+  }
+    //if the bike is outofservice this should be possible
+    //else display alert saying sorry this is not possible
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: 'transferBike', bikeid:bikeID,station:station}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+        //IF THERE ARE NO TIMES AVAILABLE THEN :
+        //alert('Sorry, there are no other times you can change, other reservations occupied')
+        //document.getElementById('pleaseclose').click();
+        if(json[0]==0){
+            alert('Transfer of bike was not possible the bike has future reservations!'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The bike was successfully transfered to station '+json[1]); // remove t // remove the value from the input
+           reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
   //set start station end station
   //set start time and end time
   //same as how we reserve a bike in the users interface
   //if this is not possible then display alert saying sorry the bike has future reservations delete them first
   //else make a reservation for third company to transfer bike
-
 
 
 }
@@ -560,71 +685,81 @@ function reload_page()
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
-  //if the bike does not have future or ongoing reservations and if the bike is not outofservice already
-  //this is sucecssful else display alert saying sorry bike is has future reservations or is already blocked
-  //set the bike as outofservice
-  //in users>views.py if the bike is outofservice then dont display it as available for reservation
-  event.preventDefault();
-  $.ajax({
-    url : "/operator/log/", // the endpoint
-    type : "POST", // http method
-    data : { formtype: 'blockBike', bikeid:bikeID}, // data sent with the post fo
-    // handle a successful response
-    success : function(json) {
-      //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
-      //IF THERE ARE NO TIMES AVAILABLE THEN :
-      //alert('Sorry, there are no other times you can change, other reservations occupied')
-      //document.getElementById('pleaseclose').click();
-      if(json[0]==0){
-          alert('Bike '+json[1]+' was successfully blocked from the time specified'); // remove t // remove the value from the input
-          reload_page();}
-      else
-      {  alert('Bike '+json[1]+' could not be blocked! '); // remove t // remove the value from the input
-         reload_page();}
-    },
+   //if the bike is outofservice this should be possible
+    //else display alert saying sorry this is not possible
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: 'blockBike', bikeid:bikeID}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The bike has future reservations and cannot be blocked!'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The bike was successfully blocked!'); // remove t // remove the value from the input
+           reload_page();}
+      },
 
-    // handle a non-successful response
-    error : function(xhr,errmsg,err) {
-            }
-  });
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
 }
 //--------------------------------------------------------------------------------------------------
 function unblockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
-  //if the bike is outofservice this should be possible
-  //else display alert saying sorry this is not possible
-  event.preventDefault();
-  $.ajax({
-    url : "/operator/log/", // the endpoint
-    type : "POST", // http method
-    data : { formtype: 'unblockBike', bikeid:bikeID}, // data sent with the post fo
-    // handle a successful response
-    success : function(json) {
-      //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
-      //IF THERE ARE NO TIMES AVAILABLE THEN :
-      //alert('Sorry, there are no other times you can change, other reservations occupied')
-      //document.getElementById('pleaseclose').click();
-      if(json[0]==0){
-          alert('Bike '+json[1]+' was successfully unblocked!'); // remove t // remove the value from the input
-          reload_page();}
-      else
-      {  alert('Bike '+json[1]+' is not blocked at the moment! '); // remove t // remove the value from the input
-         reload_page();}
-    },
+   //if the bike is outofservice this should be possible
+    //else display alert saying sorry this is not possible
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: 'unblockBike', bikeid:bikeID}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The bike is already unblocked!'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The bike was successfully unblocked!'); // remove t // remove the value from the input
+           reload_page();}
+      },
 
-    // handle a non-successful response
-    error : function(xhr,errmsg,err) {
-            }
-  });
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
 }
 //--------------------------------------------------------------------------------------------------
 function replaceModal(){
-  //specify timing to replace
-  //start time end time
-  //if there is a reservation in that timing for the bike then display alert saying not possible
-  //else set the reservation for third company to come and replace it endstation startstation should be same
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
-  alert(bikeID);
+   //if the bike is outofservice this should be possible
+    //else display alert saying sorry this is not possible
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: 'replaceBike', bikeid:bikeID}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
+        //IF THERE ARE NO TIMES AVAILABLE THEN :
+        //alert('Sorry, there are no other times you can change, other reservations occupied')
+        //document.getElementById('pleaseclose').click();
+           if(json[0]==0){
+             alert('The bike was not replaced because its active or being tracked'); // remove t // remove the value from the input
+               reload_page();}
+           else
+           {  alert('The bike was successfully replaced'); // remove t // remove the value from the input
+             reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
 }
 //--------------------------------------------------------------------------------------------------
 document.getElementById('addmarker').style.display="none";

@@ -14,4 +14,8 @@ try the following
 1. Update cache on google chrome
 2. py manage.py collectstatic
 ----------------------------------------------------------------------------
-py -m pip install -U channels
+HERE IS HOW TO INITIALIZE DB AT DEPLOYMENT STAGE
+COPY PASTE ALL FROM TOOTYRED.SQL
+CHANGE DATETIME OF TOOTYRED UPDATE QUERIES TO NEXT 15 min INTERVAL
+copy paste queries to MySQL
+WAIT FOR 15 minutes

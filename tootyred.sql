@@ -131,7 +131,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$120000$kCJBCXnabLY4$xNxqQ6/JqmFgcz3hEmqJdVPwCtH9nsrCPv+CLi70sVA=','2019-01-24 10:01:46',1,'tootyredsuperuser','','','tootyredsuperuser@superuser.com',1,1,'2019-01-10 05:02:01'),(10,'pbkdf2_sha256$120000$0ATBH3RyTMRt$16qW0g5mm2t+POuN49OiT2PETodgoWnYtaMmrDpBUsU=','2019-01-24 10:02:34',0,'sarahm13654','sarah','marium','sarahm13654@gmail.com',0,1,'2019-01-12 13:26:14'),(11,'pbkdf2_sha256$120000$MGKoZ4xCC1US$JnofFiaDgQ1o6+z+4lYPzi4+JdAmHZFWTZoU7V0DrPs=','2019-01-24 10:01:58',0,'tootyredemployee','','','',1,1,'2019-01-24 08:54:32');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$120000$kCJBCXnabLY4$xNxqQ6/JqmFgcz3hEmqJdVPwCtH9nsrCPv+CLi70sVA=','2019-01-24 10:01:46',1,'tootyredsuperuser','','','tootyredsuperuser@superuser.com',1,1,'2019-01-10 05:02:01'),(10,'pbkdf2_sha256$120000$0ATBH3RyTMRt$16qW0g5mm2t+POuN49OiT2PETodgoWnYtaMmrDpBUsU=','2019-01-24 10:02:34',0,'sarahm13654','sarah','marium','sarahm13654@gmail.com',0,1,'2019-01-12 13:26:14'),(11,'pbkdf2_sha256$120000$MGKoZ4xCC1US$JnofFiaDgQ1o6+z+4lYPzi4+JdAmHZFWTZoU7V0DrPs=','2019-01-24 10:01:58',0,'operatorjohn','','','',1,1,'2019-01-24 08:54:32');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,7 +375,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2019-01-10 06:08:21','2','test',1,'[{\"added\": {}}]',4,1),(2,'2019-01-10 06:12:41','3','testing',1,'[{\"added\": {}}]',4,1),(3,'2019-01-10 06:12:52','1','UserProfile object (1)',3,'',8,1),(4,'2019-01-10 06:13:12','2','test',3,'',4,1),(5,'2019-01-10 06:13:12','3','testing',3,'',4,1),(6,'2019-01-10 08:09:38','4','test1',3,'',4,1),(7,'2019-01-10 08:09:38','5','test2',3,'',4,1),(8,'2019-01-10 08:32:58','6','test1',3,'',4,1),(9,'2019-01-11 14:33:38','7','sarahm@gmail.com',3,'',4,1),(10,'2019-01-12 13:25:40','8','sarahm13654',3,'',4,1),(11,'2019-01-12 13:25:41','9','sarahm1365429',3,'',4,1),(12,'2019-01-24 08:54:33','11','tootyredemployee',1,'[{\"added\": {}}]',4,1),(13,'2019-01-24 09:42:49','11','tootyredemployee',2,'[{\"changed\": {\"fields\": [\"is_staff\"]}}]',4,1);
+INSERT INTO `django_admin_log` VALUES (1,'2019-01-10 06:08:21','2','test',1,'[{\"added\": {}}]',4,1),(2,'2019-01-10 06:12:41','3','testing',1,'[{\"added\": {}}]',4,1),(3,'2019-01-10 06:12:52','1','UserProfile object (1)',3,'',8,1),(4,'2019-01-10 06:13:12','2','test',3,'',4,1),(5,'2019-01-10 06:13:12','3','testing',3,'',4,1),(6,'2019-01-10 08:09:38','4','test1',3,'',4,1),(7,'2019-01-10 08:09:38','5','test2',3,'',4,1),(8,'2019-01-10 08:32:58','6','test1',3,'',4,1),(9,'2019-01-11 14:33:38','7','sarahm@gmail.com',3,'',4,1),(10,'2019-01-12 13:25:40','8','sarahm13654',3,'',4,1),(11,'2019-01-12 13:25:41','9','sarahm1365429',3,'',4,1),(12,'2019-01-24 08:54:33','11','operatorjohn',1,'[{\"added\": {}}]',4,1),(13,'2019-01-24 09:42:49','11','operatorjohn',2,'[{\"changed\": {\"fields\": [\"is_staff\"]}}]',4,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -551,7 +551,7 @@ CREATE TABLE `reservation` (
   `endtime` datetime NOT NULL,
   `c_rating` int(11) DEFAULT NULL,
   `feedback` text DEFAULT NULL,
-  `c_id` int(11) NOT NULL,
+  `c_id` int(11) DEFAULT NULL,
   `fine_cost` decimal(11,2) DEFAULT NULL,
   `fine_desc` text,
   PRIMARY KEY (`reservation_id`),
@@ -719,7 +719,7 @@ CREATE TABLE `status_of_bike` (
 
 LOCK TABLES `status_of_bike` WRITE;
 /*!40000 ALTER TABLE `status_of_bike` DISABLE KEYS */;
-INSERT INTO `status_of_bike` VALUES (1,'stationed'),(2,'OutOfservice'),(3,'active');
+INSERT INTO `status_of_bike` VALUES (1,'stationed'),(2,'OutOfservice'),(3,'active'),(4,'stored'),(5,'tracked');
 /*!40000 ALTER TABLE `status_of_bike` ENABLE KEYS */;
 UNLOCK TABLES;
 

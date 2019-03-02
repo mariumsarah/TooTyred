@@ -98,7 +98,7 @@
      $("#myFineModal").modal();
      payfinereser=this.name.split(' ')[1];
      $('#finecost').text(this.name.split(' ')[0]);
-     $('#finereason').text(this.name.split(' ')[2]);
+     $('#finereason').text(this.name.split(' ').slice(1).join(' '));
   });
 });
 </script>
@@ -423,7 +423,14 @@ $("#whichtrip").text(feedbackreservation);
  background-color: red;
  opacity: 1;
 }
-
+.costq,.costm,.av,.qu{
+ border: 1px solid #3dcacd;
+ padding:2px;
+ border-radius:4px;
+  height:100%;
+  width:50%;
+  float:left;
+}
 
 
 .modal-content{
@@ -456,6 +463,29 @@ transition:0.3s;
 .warning p {
     font: small-caps bold 1.2rem sans-serif;
     text-align: center;
+}
+.bikeInformation{
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1.0);
+      transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+      z-index:1;
+}
+.bikeInfo{
+  position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background-color:#3d3a3a;
+     padding: 1rem 1.5rem;
+     width: 24rem;
+     border-radius: 0.5rem;
 }
 
  </style>
@@ -581,7 +611,8 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
        <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
        <tr>
                 <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
-            <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button>
+            <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Add bikes</button>
+              <button id="modalButton2" name='{{ record.reservation_id }}' type="button" class="btn btn-success modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal2">Edit time</button></td>
 <!--------------
               <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
                 <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
@@ -709,35 +740,53 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
                       </div>
                   </li>
                   {% for bike in bike_type %}
-                    <li class="list-group-item bike">
+                  <li class="list-group-item bike">
                       <div class="row">
-                        <div class="column-1">
-                          <div class="dx">
-                            <span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
+                          <div class="column-1">
+                            <div class="col3">
+                                <span id="bike{{ bike.bike_type_id }}"> {{ bike.bike_type }}</span>
+                            </div>
+                            <div class="col1">
+                                <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+  drop-shadow(-1px -1px 0 white);
+  filter: drop-shadow(1px 1px 0 white)
+          drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
+                            </div>
+                            <div class="col2">
+                              <button class="button-3" onclick="addBike('bike{{ bike.bike_type_id }}')">+</button>
+                              <button class="button-3" onclick="removeBike('bike{{ bike.bike_type_id }}')">-</button>
+                              <div id='modalBike{{ bike.bike_type_id }}' class='bikeInformation'>
+                                <div class='bikeInfo'>
+                                    <button type="button btn-success" style='color:black;float:right;border-radius:10px;' onclick="displayBikeInfoClose('bike{{ bike.bike_type_id }}')">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <img style="align:center;width:90px;height:90px;-webkit-filter: drop-shadow(1px 1px 0 black)
+    drop-shadow(-1px -1px 0 white);
+    filter: drop-shadow(1px 1px 0 white)
+            drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
+                                  <h1>{{ bike.bike_type }}</h1>
+                                  <h4>Model: {{ bike.bike_model }}</h4>
+                                  <br>
+                                  <p>{{ bike.bike_info }}</p>
+                                  <br><u>Cost per fifteen minutes: {{ bike.bike_cost }}</u>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div class="col1">
-                            <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
-                              drop-shadow(-1px -1px 0 white);
-                              filter: drop-shadow(1px 1px 0 white)
-                              drop-shadow(-1px -1px 0 white);" src="{% static 'bikes/'|add:bike.bike_image %}">
+                          <div class="column-2">
+                            <div class="num1">
+                              <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
+                              <div class="qu">QTY:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
+                            </div>
+                            <div class="num2">
+                              <div class="costq">€*QTY <br><span id="quantitycost{{ bike.bike_type_id }}">0</span></div>
+                              <div class="costm">€/15min <br><span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span></div>
+                              <!--<div class="costi"><span>{{ bike.bike_model }}</span> is a
+                              {{ bike.bike_info }}
+                            </div>-->
+                            </div>
+                            <button type="button" class="btn-success" onclick="displayBikeInfo('bike{{ bike.bike_type_id }}')">Learn more</button>
                           </div>
-                          <div class="col2">
-                            <button class="button-3" onclick="addBike('bike{{ bike.bike_type_id }}')">+</button>
-                            <button class="button-3" onclick="removeBike('bike{{ bike.bike_type_id }}')">-</button>
-                          </div>
-                        </div>
-                        <div class="column-2">
-                          <div class="num1">
-                          <div class="av">Available:<span id="available{{ bike.bike_type_id }}">{{ maxbikes }}</span></div>
-                          <div class="qu">Quantity:<span id="quantity{{ bike.bike_type_id }}">0</span></div>
-                          </div>
-                          <div class="num2">
-                          <div class="cq">Cost*Quantity: €<span id="quantitycost{{ bike.bike_type_id }}">0</span></div>
-                          <div class="cm">Cost/15mins: €<span id="costperfifteen{{ bike.bike_type_id }}">{{ bike.bike_cost }}</span></div>
-                          <div class="ci"><span>{{ bike.bike_model }}</span> is a
-                          {{ bike.bike_info }}
-                          </div>
-                        </div>
                       </div>
                   </li>
                   {% endfor %}
@@ -838,6 +887,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   var bike = {}
     {% for bike in bike_type %}
           bike[{{ bike.bike_type_id }}] = 0;
+          document.getElementById("modalBike"+{{bike.bike_type_id}}).style.display="none";
     {% endfor %}
   var bikesselected=false;
   var timesselected=false;
@@ -955,6 +1005,16 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
               document.getElementById("confirm2").style.display="none";
           }
   }
+  //--------------------------------------------------------------------
+  function displayBikeInfo(selector) {
+         var num = selector[selector.length -1];
+         document.getElementById("modalBike"+num).style.display="block";
+  }
+  function displayBikeInfoClose(selector) {
+         var num = selector[selector.length -1];
+         document.getElementById("modalBike"+num).style.display="none";
+  }
+  //-------------------------------------------------------------------
   function addBike(selector) {
     var num = selector[selector.length -1];
     if(Number($('#available'+num).text())>0)

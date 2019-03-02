@@ -197,3 +197,12 @@ class StationOnReservation(models.Model):
         unique_together = (('sor_route', 'sor_reservation'),)
 #A table to keep track of station systems
 # QR code for reservations
+
+class contactUs(models.Model):
+    mail_id = models.AutoField(primary_key=True)
+    fn = models.CharField(max_length=30)
+    ln = models.CharField(max_length=40)
+
+    class Meta:
+
+        db_table = '#'

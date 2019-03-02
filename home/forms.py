@@ -73,3 +73,9 @@ class RegistrationForm(UserCreationForm):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.required = True
+
+class enquiryForm(forms.Form):
+    firstname = forms.CharField();
+    lastname = forms.CharField();
+    email = forms.EmailField(validators=[validate_email])
+    message = forms.CharField(widget=forms.Textarea)

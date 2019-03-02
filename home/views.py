@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Station, TypeOfBike,Stationroutes, StationOnReservation,CustomerRating, Reservation, BikeOnReservation, ReservationType,Bike, StatusOfBike
-from .forms import RegistrationForm, EditProfileForm
+from .forms import RegistrationForm, EditProfileForm, enquiryForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
@@ -15,7 +15,20 @@ import pytz
 utc=pytz.UTC
 
 def home(request):
-    return render(request, 'user/home.html')
+    bikeDescription =  TypeOfBike.objects.all();
+    if request.method == 'POST':
+            home =  enquiryForm(request.POST)
+            if form.is_valid():
+                text = form.cleaned_data['message']
+                fn = form.cleaned_data['fn']
+                ln = form.cleaned_data['ln']
+                email = form.cleaned_data['email']
+                form.save()
+                messages.success(request,'Thank you for reaching out to us! We will reply to you ASAP')
+
+    else:
+        form = enquiryForm()
+        return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form})
 
 def register(request):
     if request.method == 'POST':
@@ -23,10 +36,10 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request,'You are now registered!')
+            return redirect('/home/login/')
         else:
             messages.error(request,'The form is invalid.')
-
-        return render(request,'user/reg_form.html',{'form': form})
+            return render(request,'user/reg_form.html',{'form': form})
     else:
         form = RegistrationForm()
         return render(request,'user/reg_form.html',{'form': form})
@@ -283,8 +296,8 @@ def getBikes(startdatetime,enddatetime,startstationid,endstationid,typeindicator
         AND NOT ((starttime < %s AND endtime >= %s) OR (starttime >= %s AND starttime <= %s)) GROUP BY bike_id', [startdatetime, startdatetime, startdatetime, enddatetime])
 
     #bikes with no current or future reservations that is stationed at the inputted start station AND IS NOT OUTOFSERVICE
-    no_fut_ong_bikes = Bike.objects.raw(' SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND \
-        bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = %s', [startstationid])
+    no_fut_ong_bikes = Bike.objects.raw('SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND \
+        bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = %s AND bike_status=1', [startstationid])
 
     if not fut_ong_bikes and not no_fut_ong_bikes:
         return result

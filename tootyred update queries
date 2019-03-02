@@ -1,0 +1,131 @@
+#sets global scheduler to enable mysql events, events allow us to have a function that would run in a specific time specified by user
+SET GLOBAL event_scheduler = ON;
+
+#sets the delimiter to something else than ";", this allows us to write multiple statements inside an event function
+DELIMITER $$
+
+#drops event, used for testing
+DROP EVENT IF EXISTS autoupdate$$
+
+CREATE EVENT autoupdate
+ON SCHEDULE EVERY 15 MINUTE
+STARTS '2019-02-23 10:00:00'
+DO
+BEGIN
+
+DECLARE n INT DEFAULT 0;
+DECLARE i INT DEFAULT 0;
+DECLARE res_id INT DEFAULT 0;
+DECLARE res_id_station INT DEFAULT 0;
+DECLARE bi_id INT DEFAULT 0;
+DECLARE bi_id_type INT DEFAULT 0;
+DECLARE new_bi_id INT DEFAULT 0;
+DECLARE ins_t_count INT DEFAULT 0;
+DECLARE ins_c_count INT DEFAULT 0;
+DECLARE ins_c_type INT DEFAULT 0;
+DECLARE done INT DEFAULT FALSE;
+DECLARE bikes_in_res CURSOR FOR Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+
+#changes reservations that did not unlock on time to past reservation and giving fine if the user did not unlock after 15 minutes of their starting reservation time
+UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time' WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
+
+#changes reservations that did not lock on time to past reservation and giving fine if the user did not lock after 15 minutes of their ending reservation time
+UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time' WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
+
+
+
+Select count(*) FROM reservation WHERE (now() >= endtime AND res_type = 2) OR (now() >= starttime AND res_type = 3) INTO n;
+
+SET i = 0;
+
+WHILE i < n DO
+SET res_id = (Select reservation_id FROM reservation WHERE (now() >= endtime AND res_type = 2) OR (now() >= starttime AND res_type = 3) LIMIT i,1);
+SET res_id_station = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id);
+SELECT concat('Current Reservation Id being checked: ', res_id);
+Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+
+
+	OPEN bikes_in_res;
+	read_loop: LOOP
+		FETCH bikes_in_res INTO bi_id;
+		SET bi_id_type = (Select bike_type FROM bike WHERE bike_id = bi_id);
+
+		IF done THEN
+      			LEAVE read_loop;
+    		END IF;
+
+		IF (SELECT count(*) FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id) AND bike_type = bi_id_type AND bike_status!=4 AND bike_status!=2) > 0 THEN
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id) AND bike_type = bi_id_type AND bike_status!=4 AND bike_status!=2 LIMIT 1);
+
+
+
+		ELSEIF (SELECT count(*) FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status!=4 AND bike_status!=2) > 0 THEN
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status != 4 AND bike_status!=2 LIMIT 1);
+
+		UPDATE tootyred.bike SET bike_stationedat = res_id_station WHERE bike_id = new_bi_id;
+
+
+		ELSE
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_status = 4 AND bike_type = bi_id_type LIMIT 1);
+
+		UPDATE tootyred.bike SET bike_stationedat = res_id_station, bike_status = 1 WHERE bike_id = new_bi_id;
+
+		END IF;
+
+	SELECT concat('Current Bike ID being changed: ', bi_id);
+	SELECT concat('Bike ID of Current Bike ID being changed: ', bi_id_type);
+	SELECT concat('Current New Bike ID being changed: ', new_bi_id);
+
+
+	UPDATE tootyred.bike_on_reservation, tootyred.reservation SET bor_bike_id = new_bi_id WHERE reservation_id = bor_reservation_id AND starttime >= (SELECT endtime FROM reservation WHERE reservation_id = res_id) AND bor_bike_id = bi_id;
+
+
+
+	IF (SELECT res_type FROM reservation WHERE reservation_id = res_id) = 2 THEN
+
+	UPDATE tootyred.bike SET bike_status = 5 WHERE bike_id = bi_id;
+
+	END IF;
+
+
+
+	Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+
+
+
+	END LOOP read_loop;
+	CLOSE bikes_in_res;
+	SET done = FALSE;
+SET i = i + 1;
+END WHILE;
+
+
+select count(*) FROM type_of_bike INTO ins_t_count;
+SET ins_c_count = 0;
+
+
+WHILE ins_c_count < ins_t_count DO
+
+	SET ins_c_type = (select bike_type_id FROM type_of_bike LIMIT ins_c_count,1);
+	IF (Select count(*) FROM bike WHERE bike_status = 4 AND bike_type = ins_c_type) < 15 THEN
+
+	INSERT INTO `bike` (bike_type,travel_count,bike_status,bike_stationedat) VALUES
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL),
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL),
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL);
+
+	END IF;
+	SET ins_c_count = ins_c_count + 1;
+END WHILE;
+
+
+
+
+END$$
+
+DELIMITER ;

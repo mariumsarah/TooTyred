@@ -1,44 +1,209 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap3 %}
 {% block head %}
+  {% bootstrap_javascript %}
+   {% bootstrap_messages %}
   <title>TooTyred Bike Reservation
   </title>
+
+  <style>
+  body{
+    background-color: #A8D5D2;
+    opacity: 90%;
+  }
+video{
+  -webkit-filter: blur(10px);
+}
+h5{
+  color: black;
+}
+.hoverable{
+  background-color: white;
+}
+table{
+   background-color: white;
+
+}
+.hoverable:hover{
+   background-color: lightgrey;
+}
+
+
+.flip-box {
+  background-color: transparent;
+  width: 215px;
+  height: 250px;
+  border: 1px solid #f1f1f1;
+  perspective: 1000px;
+  position: relative;
+   border-radius: 25px;
+   margin:1%;
+   -moz-box-shadow: 0px 8px 8px #000; width: 200px;
+-webkit-box-shadow: 0px 8px 8px #000; width: 200px;
+box-shadow: 0px 8px 8px #000; width: 200px;
+}
+
+.flip-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  background-color: #414141;
+  border-radius: 25px;
+}
+
+.flip-box:hover .flip-box-inner {
+  transform: rotateY(180deg);
+
+}
+
+.flip-box-front, .flip-box-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-color: #414141;
+  border-radius: 25px;
+}
+video {
+  transform:scaleX(2);
+}
+
+.flip-box-front {
+  background-color: #009688;
+  color: white;
+}
+
+.flip-box-back {
+  background-color: white;
+  color: black;
+  transform: rotateY(180deg);
+}
+
+.centeralign{
+  transform: translateY(-50%);
+}
+
+.card{
+
+  margin-top: 2%;
+
+}
+.align-self-center{
+  padding:2%;
+}
+
+</style>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
+  </script>
+<script type="text/javascript">
+    top.visible_div_id = 'right';
+    function toggle_visibility(id) {
+      var old_e = document.getElementById(top.visible_div_id);
+      var new_e = document.getElementById(id);
+      if(old_e) {
+        console.log('old', old_e, 'none');
+        old_e.style.display = 'none';
+      }
+      console.log('new', new_e, 'block');
+      new_e.style.display = 'block';
+      top.visible_div_id = id;
+    }
+
+ function leftFun(){
+      document.getElementById("left_toggle_btn").classList.add('clicked_btn');
+      document.getElementById("left_toggle_btn").classList.remove('not_clicked_btn');
+      document.getElementById("right_toggle_btn").classList.remove('clicked_btn');
+      document.getElementById("right_toggle_btn").classList.add('not_clicked_btn');
+     }
+
+    function rightFun(){
+      document.getElementById("right_toggle_btn").classList.add('clicked_btn');
+      document.getElementById("right_toggle_btn").classList.remove('not_clicked_btn');
+      document.getElementById("left_toggle_btn").classList.remove('clicked_btn');
+      document.getElementById("left_toggle_btn").classList.add('not_clicked_btn');
+    }
+  </script>
+  <script type="text/javascript">
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({
+        placement : 'top',
+        trigger : 'hover'
+    });
+});
+</script>
 {% endblock %}
 {% block body %}
-<div class="container">
-  <div id="home">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+<div class="container" >
+  <div id="home" style="padding: 0%; height: 100%;margin-top: -1.5%;"> <!--  margin-top: -1.8% -->
+    <div id="myCarousel"  class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>
       </ol>
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="{% static 'homepage/bike-share-for-all-image.jpg' %}" alt="Los Angeles" style="width:100%;height: 500px;">
+
+      <div class="carousel-inner" style="padding:0px;" >
+      <div   style=" width: 100%; height: 100%; z-index: -1; ">
+       <video src ="{% static 'homepage/video2.mp4' %}" type = "video/mp4s" autoplay="autoplay" loop="loop" style="max-height: 570px;" />
+       </div>
+
+        <div class="item active "  style="position: relative; bottom: 100px; ">
+
+
+          <div class="carousel-caption d-none d-md-block"  >
+            <img src="{% static 'icons/logo.png' %}" width="25%" height="25%"><br>
+            <h1 style="color:white; font-size: 42px; ">Too tired to walk? <br><span style="color: #00d5ff;">Cycle the block!</span></h1>
+
+          </div>
         </div>
-        <div class="item">
-          <img src="{% static 'homepage/bikes_dynamic_earth.jpg' %}" alt="Chicago" style="width:100%;height: 500px;">
+        <div class="item"  style="position: relative; bottom: 200px;left:-22%;">
+
+          <div class="carousel-caption d-none d-md-block ">
+            <h1 style="color:white; font-size: 42px;">Check out our new bikes!</h1>
+            <p>...</p>
+          </div>
         </div>
-        <div class="item">
-          <img src="{% static 'homepage/img-home-2.jpg' %}" alt="New york" style="width:100%;height: 500px;">
+        <div class="item"  style="position: relative; bottom: 200px;left:-27%;">
+
+          <div class="carousel-caption d-none d-md-block " >
+            <h1 style="color:white; font-size: 42px;">Summer offer</h1>
+            <p>...</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div id="howitworks" class="container-fluid">
-    <center>
-    <h1>How it works</h1>
-    <div class="row">
+  <div id="howitworks" class="container-fluid" style="background-color:#E9E9E8;">
+
+    <h1 style="color: #414141; font-size: 55px; margin-left: 2%; ">How it works?</h1>
+
+    <h2 style="color: #414141;  margin-left: 2%; "> Its as easy as counting to 5..</h2>
+    <center style="margin-top: 2%;">
+    <div class="row" style="margin-left: 1%;"   >
       <div class="column">
         <div class="flip-box">
-          <div class="flip-box-inner">
-            <div class="flip-box-front">
-              <h2>LOGIN</h2>
-              <img src="{% static 'homepage/images3.jpg' %}" style="width:50%;height:50%;">
+          <div class="flip-box-inner" >
+            <div class="flip-box-front" >
+              <h2>Step 1</h2>
+         <!--     <img src="{% static 'homepage/images3.jpg' %}" style="width:50%;height:50%;"> -->
+              <h3> Log In</h3>
             </div>
-            <div class="flip-box-back">
-              <p>The user should login into their account for access to all functionalities of TooTyred.</p>
+            <div class="flip-box-back"  >
+               <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">Log In</h3>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href="#" class="card-link">Login </a> <br>
+                  <a href="#" class="card-link">Register</a>
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
@@ -47,11 +212,21 @@
         <div class="flip-box">
           <div class="flip-box-inner">
             <div class="flip-box-front">
-              <h2>RESERVE</h2>
-              <img src="{% static 'homepage/order.png' %}" style="width:50%;height:50%;">
+              <h2>Step 2</h2>
+              <!--<img src="{% static 'homepage/order.png' %}" style="width:50%;height:50%;">-->
+              <h3> Reserve </h3>
             </div>
             <div class="flip-box-back">
-              <p>The user chooses the location, bike types, the cost of rental per hour, start time and end time of the reservation from a list of available timings .</p>
+              <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">Reserve</h3>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
@@ -60,11 +235,21 @@
         <div class="flip-box">
           <div class="flip-box-inner">
             <div class="flip-box-front">
-              <h2>UNLOCK </h2>
-              <img src="{% static 'homepage/Unlock-512.png' %}" style="width:50%;height:50%;">
+              <h2>Step 3</h2>
+             <!-- <img src="{% static 'homepage/Unlock-512.png' %}" style="width:50%;height:50%;"> -->
+              <h3> Unlock </h3>
             </div>
             <div class="flip-box-back">
-              <p>he system creates a unique QR code for each reservation.The customer can then unlock the bike at the closeby station using that QR code</p>
+               <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">Unlock</h3>
+                  <p class="card-text">he system creates a unique QR code for each reservation.The customer can then unlock the bike at the closeby station using that QR code</p>
+                </div>
+              </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -73,11 +258,21 @@
         <div class="flip-box">
           <div class="flip-box-inner">
             <div class="flip-box-front">
-              <h2>DRIVE</h2>
-              <img src="{% static 'homepage/RS1087_Rideabikecol-web.jpg' %}" style="width:50%;height:50%;">
+              <h2>Step 4</h2>
+             <!-- <img src="{% static 'homepage/RS1087_Rideabikecol-web.jpg' %}" style="width:50%;height:50%;">-->
+             <h3> Drive </h3>
             </div>
             <div class="flip-box-back">
-              <p>Enjoy their tour to their chosen destination</p>
+               <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">Drive</h3>
+                  <p class="card-text">Enjoy their tour to their chosen destination</p>
+
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
@@ -86,115 +281,418 @@
         <div class="flip-box">
           <div class="flip-box-inner">
             <div class="flip-box-front">
-              <h2>DROP</h2>
-              <img src="{% static 'homepage/return.jpg' %}" style="width:50%;height:50%;">
+              <h2>Step 5</h2>
+             <!-- <img src="{% static 'homepage/return.jpg' %}" style="width:50%;height:50%;"> -->
+             <h3> Drop off </h3>
             </div>
             <div class="flip-box-back">
-              <p>Drop the bike at station closer to their destination and  fill in a feedback form once they open the application after locking a product to a system.
-              </p>
+               <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">Drop Off</h3>
+                  <p class="card-text">Drop the bike at station closer to their destination and  fill in a feedback form once they open the application after locking a product to a system.</p>
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <br>
-    <p>TooTyred enables its users to register at one's convenience.</p>
-    <p>The hiring system works on first come and first serve bases.</p>
-    <p> The reservation cannot be changed 12 hours before the time of reservation </p>
-    <p>The system does not allow the user to make two reservations with the same date and time</p>
-    <p> The reservation will be cancelled in case the user fails to claim it 15 minutes after the start time. </p>
-    <p>The system removes reservation if user does not arrive after 15 minutes of reservation time.</p>
-    <p>All the payment/ credit card procedures are conducted via a payment gateway to insure legality and protecting of privacy</p>
+    <div style="padding: 2%; width: 100%; height: 100%; font-size:19px; text-align: left;">TooTyred enables its users to register at one's convenience.
+    The hiring system works on first come and first serve bases.
+     The reservation cannot be changed 12 hours before the time of reservation
+    The system does not allow the user to make two reservations with the same date and time
+     The reservation will be cancelled in case the user fails to claim it 15 minutes after the start time.
+    The system removes reservation if user does not arrive after 15 minutes of reservation time.
+    All the payment/ credit card procedures are conducted via a payment gateway to insure legality and protecting of privacy</div>
   </div>
-  <div id="cycles" class="container-fluid">
-    <center>
-      <h1>Cycle?</h1>
-    </center>
-    <div class="panel-group" id="accordion">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Bike Types</a>
-          </h4>
+
+<div id="howitworks" class="container-fluid"  style="background-color: #E9E9E8;">
+
+ <div id="myCarousel1"  class="carousel slide" data-ride="carousel">
+  <!--<div style="width: 100%; background-color: #009688; height: 100%;">-->
+   <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Why Cycle?</h1>
+   <!--</div>-->
+
+
+      <div class="carousel-inner" style="padding:0px;" >
+      <div   style=" width: 100%; height: 100%; z-index: -1; ">
+
+       </div>
+
+        <div class="item active "  >
+         <img src ="{% static 'homepage/benefit.png' %}"  style=" width:100%; height:100%;" />
+          <div class="carousel-caption d-none d-md-block" style="" >
+
+          </div>
+
         </div>
-        <div id="collapse1" class="panel-collapse collapse in">
-          <div class="panel-body" style="background-color:#F0FFFF;color:black;width:100%;">
-            <h2> Hybrid Bike </h2>
-            <p> A bicycle ideal for fitness, and long distance touring is a hybrid bicycle. Hybrid bicycles are basically a combination of a road bike (700c road bicycle wheels) and a mountain bike (flat handlebars). These bikes are more towards performance and offer an efficient riding position. There are a wide variety of hybrid bicycles available in the market. Some have wider tires and a suspension fork up front, to take the sting out of rough roads, while others have narrower tires and a rigid fork for more efficient tarmac riding. </p>
-            <br>
-            <h2>Road Bike </h2>
-            <p> Designed for performance and speed, road bikes are light and meant to be ridden on paved roads. The geometry of these bikes offers a short wheelbase, low bottom bracket, and the steep headtube that lets the rider to react instantly. The bike also offers a low centre of gravity which is suitable for turning. Other characteristics of these bicycles are the thin tyres 20-25mm width placed on 700C wheels. The bike also comes with a drop bar handlebar that positions the rider in an aero position. </p>
-            <br>
-            <h2> Mountain Bike </h2>
-            <p> If you are looking for a bicycle that can be ridden with ease on city and off-road, mountain bike is what you should be looking at. As the bicycle comes with wide tyres that offer extra traction and an upright frame offering higher clearance, it is easy to ride on a variety of surfaces, including gravel, dirt, rock and sand. Besides, these type of cycles also has a wide range of gearing that offers a variety of gears to choose while riding on flat or steep terrains. MTB’s are usually available in 2 types; the hardtail (front suspension) and a dual suspension bicycle (front and rear suspension). </p>
-            <br>
-            <h2> Fat Bike </h2>
-            <p> These type of cycles comes with fat tyres which are oversized. Such types of bicycles are meant to be ridden on snow, sand, dirt tracks and on rocky terrains. The wide tires are what make it possible to offer the rider more traction and cushioning. Also, the versatile bikes come with wide tires that make carrying loads much easier </p>
-            <br>
-            <h2> Time Trial Bike </h2>
-            <p> These bikes are a modulated version of road bikes with more emphasis on an aerodynamic frame design and also an addition of time trail specific handlebar extension to make the riding posture aero </p>
-            <br>
-            <h2> BMX Biker </h2>
-            <p> If you are looking to perform stunts on a bicycle, a BMX bicycle is what you should be looking at. These types of cycles come with small frame and wheels. They also have a flat handlebar and no gears. In spite of their small size, the bikes are strong and can handle the weight of an average adult while performing the stunts. The best part about BMX bikes is the 360° rotational axis and extension tubes from the front and back tire hub flanges which are all used to perform tricks. </p>
-            <br>
-            <h2> Folding Bike </h2>
-            <p>Dislike commuting by public transport? Get yourself a foldable bicycle. The bicycles are designed specifically for commuting. The bikes are light can be easily folded into a compact form (size of a suitcase) that can be carried around easily on public buses or trains.</p>
+        <div class="item"  >
+         <img src ="{% static 'homepage/benefit2.png' %}"  style=" width:100%; height:100%;" />
+          <div class="carousel-caption d-none d-md-block ">
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+<!--      <div>
+            <div>
+              <h4 class="panel-title">
+              </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse in">
+                <div class="panel-body" style="background-color:#F0FFFF;color:black;width:100%;">
+                  <p> 1. Cycling improves mental well-being </p>
+                  <p> 2. Cycling promotes weight loss </p>
+                  <p> 3. Cycling builds muscle </p>
+                  <p> 4. Enjoy second breakfasts </p>
+                  <p> 5. Better lung health </p>
+                  <p> 6. Cuts heart disease and cancer risk </p>
+                  <p> 7. Cycling is low impact </p>
+                  <p> 8. Cycling saves time </p>
+                  <p> 9. Cycling improves navigational skills </p>
+                  <p> 10. Sleep better </p>
+                  <p> 11. Boost your brain power </p>
+                  <p> 12. Improve handling and spacial awareness </p>
+                  <p> 13. Strengthen your immune system </p>
+                </div>
+            </div>
+          </div>-->
+
+  </div>
+<div id="cycles" style="background-color:#E9E9E8;" class="container-fluid">
+        <h2 style="color: black; font-size: 40px; margin-left: 2%; ">Whatever the reason, we have got you covered!</h2>
+      <div class="card-body" style="margin-bottom: 5%; ">
+      <div >
+      <div >
+        <div >
+        </div>
+        <div >
+      <div class="row" style="margin-left: 0.3%; ">
+             {% for bike in bikeDesc %}
+
+              <div class="column" style=" margin-left:0.5%; width:24%;">
+        <div class="flip-box" style="width:100%;"  >
+          <div class="flip-box-inner" style="width:100%;">
+            <div class="flip-box-front" style="width:100%;">
+              <h2>{{ bike.bike_type }}</h2>
+              <img src="{% static 'bikes/'|add:bike.bike_image %}" style="width:75%;height:50%;">
+
+            </div>
+            <div class="flip-box-back">
+               <div class="col align-self-center" style=" height: 100%;">
+
+               <div class="card" style="width: 100%; height:100%;margin:0px;">
+                <div class="card-body" style="width: 100%; height:100%;">
+                  <h3 class="card-title">{{ bike.bike_type }}</h3>
+                  <p class="card-text">{{bike.bike_info }}</p>
+                </div>
+              </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Why Cycle?</a>
-        </h4>
-      </div>
-      <div id="collapse2" class="panel-collapse collapse in">
-          <div class="panel-body" style="background-color:#F0FFFF;color:black;width:100%;">
-            <p> 1. Cycling improves mental well-being </p>
-            <p> 2. Cycling promotes weight loss </p>
-            <p> 3. Cycling builds muscle </p>
-            <p> 4. Enjoy second breakfasts </p>
-            <p> 5. Better lung health </p>
-            <p> 6. Cuts heart disease and cancer risk </p>
-            <p> 7. Cycling is low impact </p>
-            <p> 8. Cycling saves time </p>
-            <p> 9. Cycling improves navigational skills </p>
-            <p> 10. Sleep better </p>
-            <p> 11. Boost your brain power </p>
-            <p> 12. Improve handling and spacial awareness </p>
-            <p> 13. Strengthen your immune system </p>
-          </div>
+
+
+             {% endfor %}
+           </div>
+
+        </div>
       </div>
     </div>
-  </div>
+    </div>
+</div>
+<script>
+  function initMap() {
+      // The map, centered at Edinburgh
+        map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat:55.94136542,lng:-3.18470478},
+                zoom: 12,
+                zoomControl: false,
+                streetViewControl:false,
+                styles:
+                [
+                  {
+                    "featureType": 'poi',
+                    "stylers": [{"visibility": 'off'}]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "all",
+                      "stylers": [
+                          {
+                              "hue": "#ff0000"
+                          },
+                          {
+                              "saturation": -100
+                          },
+                          {
+                              "lightness": -30
+                          }
+                      ]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "labels.text.fill",
+                      "stylers": [
+                          {
+                              "color": "#ffffff"
+                          }
+                      ]
+                  },
+                  {
+                      "featureType": "all",
+                      "elementType": "labels.text.stroke",
+                      "stylers": [
+                          {
+                              "color": "#353535"
+                          }
+                      ]
+                  },
+                ]
+              });
+              var bikeLayer = new google.maps.BicyclingLayer();
+              bikeLayer.setMap(map);
+              var allowedBounds = new google.maps.LatLngBounds(
+                  new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
+                  new google.maps.LatLng(56.042897365961046,-2.918450843462324));
+              // Define the rectangle and set its editable property to true.
+              google.maps.event.addListener(map, 'dragend', function() {
+                  if (allowedBounds.contains(map.getCenter())) return;
+                  // Out of bounds - Move the map back within the bounds
+                  var c = map.getCenter(),
+                      x = c.lng(),
+                      y = c.lat(),
+                      maxX = allowedBounds.getNorthEast().lng(),
+                      maxY = allowedBounds.getNorthEast().lat(),
+                      minX = allowedBounds.getSouthWest().lng(),
+                      minY = allowedBounds.getSouthWest().lat();
+                  if (x < minX) x = minX;
+                  if (x > maxX) x = maxX;
+                  if (y < minY) y = minY;
+                  if (y > maxY) y = maxY;
+                  map.setCenter(new google.maps.LatLng(y, x));
+                });
+      // The marker, positioned at Uluru
+      var geojson = [
+      {% for stat in station %}
+          {% if not forloop.first %},{% endif %}
+          {
+              station_id: "{{ stat.station_id }}",
+              address: "{{ stat.address }}",
+              lat: "{{ stat.lat }}",
+              lon: "{{ stat.lon }}",
+              name: "{{ stat.name }}",
+              images: "{{ stat.image }}",
+              info: "{{ stat.info }}",
+              is_active: "{{ stat.is_active }}",
+              fine_cost: "{{ stat.fine_cost }}",
+              fine_desc: "{{ stat.fine_desc }}"
+          }
+      {% endfor %}
+      ];
+      infoWindow = new google.maps.InfoWindow;
+      var prev_infowindow=false;
+      var prev_window;
+      // The marker, positioned at Uluru
+      geojson.forEach(function(marker1) {
+        if(marker1.is_active==1)
+        {
+          var url_mask = "{% static 'stations/12345' %}".replace(/12345/, marker1.images);
+          var contentString ='<div id="iw-container">' +
+                            '<div class="iw-title">'+marker1.name+'</div>' +
+                            '<div class="iw-content">' +
+                              '<div class="iw-subTitle">'+marker1.address+'</div>' +
+                              '<img src='+url_mask+' alt='+marker1.name+' height="115" width="83">' +
+                              '<p>'+marker1.info+'</p>'  +
+                            '</div>' +
+                            '<div class="iw-bottom-gradient"></div>' +
+                          '</div>';
+          var infowindow = new google.maps.InfoWindow({
+                  content: contentString,
+                  maxWidth: 250
+                });
+        google.maps.event.addListener(infowindow, 'domready', function() {
+
+             // Reference to the DIV that wraps the bottom of infowindow
+             var iwOuter = $('.gm-style-iw');
+
+             /* Since this div is in a position prior to .gm-div style-iw.
+              * We use jQuery and create a iwBackground variable,
+              * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
+             */
+             var iwBackground = iwOuter.prev();
+
+             // Removes background shadow DIV
+             iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+             // Removes white background DIV
+             iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+
+             // Moves the infowindow 115px to the right.
+
+
+             // Moves the shadow of the arrow 76px to the left margin.
+             iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+
+             // Moves the arrow 76px to the left margin.
+             iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+
+             // Changes the desired tail shadow color.
+             iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1','background-color': '#3d3a3a'});
+
+             // Reference to the div that groups the close button elements.
+             var iwCloseBtn = iwOuter.next();
+
+             // Apply the desired effect to the close button
+             iwCloseBtn.css({ right: '50px', top: '10px'});
+
+             // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
+             if($('.iw-content').height() < 140){
+               $('.iw-bottom-gradient').css({display: 'none'});
+             }
+
+             // The API automatically applies 0.7 opacity to the button after the mouseout event. This function reverses this event to the desired value.
+             iwCloseBtn.mouseout(function(){
+               $(this).css({opacity: '1'});
+             });
+        });
+        var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
+        var Marker = new google.maps.Marker({
+            map: map,
+            icon: "{% static 'icons/marker.png' %}",
+           position: latln
+        });
+            Marker.addListener('click', function() {
+              if( prev_infowindow ) {
+                 prev_window.close();
+              }
+              prev_infowindow=true;
+              prev_window = infowindow;
+              infowindow.open(map, Marker);
+          });
+          //var touchtime = 0;
+          Marker.addListener('dblclick', () =>
+             {
+                 if(x==1)
+                 {
+                   Marker.setIcon("{% static 'icons/red.png' %}");
+                   endlocationid=marker1.station_id;
+                   endlocationname=marker1.name;
+                   prev_window.close();
+                   document.getElementById("modalButton").click();
+                 }
+                 else{
+                   Marker.setIcon("{% static 'icons/green.png' %}");
+                   startlocationid=marker1.station_id;
+                   startlocationname=marker1.name;
+                 }
+                 x=x+1;
+             }
+          );
+          markerlist[i]=Marker;
+          i=i+1;
+        }
+      });
+      var opt = { minZoom: 11.5, maxZoom: 18 };
+      map.setOptions(opt);
+
+      }
+</script>
+
   <div id="stationmap" class="container-fluid">
-    <center>
-      <h1>Station Map</h1>
-    </center>
-    <p>This is the stationsmap of the page.</p>
+
+      <h1 style="color: white; font-size: 55px; margin-left: 2%; ">Station Map</h1>
+   <div id='map' style="z-index: 1000"></div>
   </div>
   <div id="pricing" class="container-fluid">
+    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Pricing</h1>
+      <div style=" width: 95%; margin-left: 2.5%;margin-top:2%;margin-bottom: 2%; font-size:19px; color: black;">TooTyred enables its users to register at one's convenience.
+    The hiring system works on first come and first serve bases.</div>
     <center>
-      <h1>Pricing</h1>
-    </center>
-    <p>This is the pricing of the page.</p>
+   <div style="width:90%;">
+    <table class="table table-bordered" >
+  <thead style="background-color:#009688; color:white; font-size: 22px;">
+    <tr>
+      <th scope="col">Bike Type</th>
+      <th scope="col">Cost Per Hour</th>
+      <th scope="col">Currently Available</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody style="color:black;font-size: 20px;">
+
+    {% for bike in bikeDesc %}
+    <tr class="hoverable"data-toggle="popover" title="{{bike.bike_type}}" data-html="true" data-content="<center><img style='width:50%; height:50%;' src='{% static 'bikes/'|add:bike.bike_image %}'></center><br></img>{{bike.bike_info}}" >
+      <th scope="row"  >{{bike.bike_type}}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+</center>
   </div>
   <div id="aboutus" class="container-fluid">
-    <center>
-      <h1>About us</h1>
-    </center>
-    <div class="content">
-      <p>TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.</p>
-      <p> We aim to reduce pollution and also bear in mind the health benefits it gives to our users.</p>
-      <p> One must register/login using their account in order to access our bikes and to make reservations/manage reservations. </p>
+    <div style="width: 55%; float: left;">
+    <h1 style="color: white; font-size: 55px; margin-left: 2%; ">About us</h1>
+
+    <div style=" font-size: 18px; margin-left: 2%; width: 75%; color: white;" >
+      TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
+       We aim to reduce pollution and also bear in mind the health benefits it gives to our users.<br><br>
+      One must register/login using their account in order to access our bikes and to make reservations/manage reservations.
     </div>
   </div>
-  <div id="contact" class="container-fluid">
-    <center>
-      <h1>Contact</h1>
-    </center>
-    <p>This is the contact of the page.</p>
+<div style="float: right;width: 40%; height: 109%;margin-top: -4.5%;">
+
+  <img src="{% static 'homepage/im.png' %}" style="height: 100%;">
+</div>
+
+  </div>
+  <div id="contact"  style="background-color: #e9e9e8; height: 100%" class="container-fluid">
+
+    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Contact</h1>
+    <div style="margin-top: 2%;">
+      <div style="width:40%; margin-left: 2%; font-size: 18px; float: left; margin-top: 1%; color:black;">
+         TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
+
+          TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.
+
+
+      </div>
+      <div style="width:50%; float:right;  margin-bottom: 2%; ">
+  <form   method="post" style="width:90%;color:black;">
+      {% csrf_token %}
+     <!-- {{ form.as_p }}-->
+      {% bootstrap_form form %}
+     <!--  <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">First Name</label>
+          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
+
+        </div>
+      <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Last Name</label>
+          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
+
+      </div>
+      <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Email address</label>
+          <input type="email" class="form-control" id="exampleFormControlInput1" style="width:90%;" placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+          <label for="exampleFormControlTextarea1" style="font-size: 16px; color:black;">Example textarea</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" style="width: 90%;" rows="3"></textarea>
+      </div>-->
+        <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
+  </form>
+  </div></div>
   </div>
 </div>
 <script>
@@ -226,7 +724,7 @@ $(document).ready(function(){
       // Store hash
       var hash = this.hash;
 
-      // Using jQuery's animate() method to add smooth page scroll
+      // Using jQuery's animate() method to add smooth page s{{croll}
       // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
       $('html, body').animate({
         scrollTop: $(hash).offset().top
