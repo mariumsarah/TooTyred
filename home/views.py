@@ -28,7 +28,7 @@ def home(request):
 
     else:
         form = enquiryForm()
-        return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form})
+        return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form,'station':Station.objects.all()})
 
 def register(request):
     if request.method == 'POST':

@@ -95,10 +95,76 @@ video {
 .align-self-center{
   padding:2%;
 }
+#map {
+  position: fixed;
+  height:80%;
+  width: 100%;
+  z-index:-1;
+  display:inline-block;
+  padding-bottom: 80px;
+   background-color:black;
+}
+::-webkit-scrollbar{
+    display:none;
+}
+
+   .gm-style-iw {
+   	width: 200px !important;
+   	top: 15px !important;
+   	left: 0px !important;
+   	background-color: #3d3a3a !important;
+    color:white;
+   	box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+   	border: 1px solid rgba(72, 181, 233, 0.6);
+   	border-radius: 2px 2px 10px 10px;
+   }
+   #iw-container {
+   	margin-bottom: 10px;
+   }
+   #iw-container .iw-title {
+   	font-family: 'Open Sans Condensed', sans-serif;
+   	font-size: 22px;
+   	font-weight: 400;
+   	padding: 10px;
+   	background-color: #3dcacd;
+   	color: white;
+   	margin: 0;
+   	border-radius: 2px 2px 0 0;
+   }
+   #iw-container .iw-content {
+   	font-size: 13px;
+   	line-height: 18px;
+   	font-weight: 400;
+   	margin-right: 1px;
+   	padding: 15px 5px 20px 15px;
+   	max-height: 140px;
+   	overflow-y: auto;
+    color:white;
+   	overflow-x: hidden;
+   }
+   .iw-content img {
+   	float: right;
+   	margin: 0 5px 5px 10px;
+   }
+   .iw-subTitle {
+   	font-size: 16px;
+   	font-weight: 700;
+   	padding: 5px 0;
+   }
+   .iw-bottom-gradient {
+   	position: absolute;
+   	width: 326px;
+   	height: 25px;
+   	bottom: 10px;
+   	right: 18px;
+   	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+   }
+
 
 </style>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg &callback=initMap">
-  </script>
 <script type="text/javascript">
     top.visible_div_id = 'right';
     function toggle_visibility(id) {
@@ -398,7 +464,6 @@ $(document).ready(function(){
         </div>
       </div>
 
-
              {% endfor %}
            </div>
 
@@ -407,10 +472,101 @@ $(document).ready(function(){
     </div>
     </div>
 </div>
+  <div id="stationmap" class="container-fluid">
+
+      <h1 style="color: white; font-size: 55px; margin-left: 2%; ">Station Map</h1>
+   <div id='map' style="z-index: 1"></div>
+  </div>
+  <div id="pricing" class="container-fluid">
+    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Pricing</h1>
+      <div style=" width: 95%; margin-left: 2.5%;margin-top:2%;margin-bottom: 2%; font-size:19px; color: black;">TooTyred enables its users to register at one's convenience.
+    The hiring system works on first come and first serve bases.</div>
+    <center>
+   <div style="width:90%;">
+    <table class="table table-bordered" >
+  <thead style="background-color:#009688; color:white; font-size: 22px;">
+    <tr>
+      <th scope="col">Bike Type</th>
+      <th scope="col">Cost Per Hour</th>
+      <th scope="col">Currently Available</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody style="color:black;font-size: 20px;">
+
+    {% for bike in bikeDesc %}
+    <tr class="hoverable"data-toggle="popover" title="{{bike.bike_type}}" data-html="true" data-content="<center><img style='width:50%; height:50%;' src='{% static 'bikes/'|add:bike.bike_image %}'></center><br></img>{{bike.bike_info}}" >
+      <th scope="row"  >{{bike.bike_type}}</th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+</center>
+  </div>
+  <div id="aboutus" class="container-fluid">
+    <div style="width: 55%; float: left;">
+    <h1 style="color: white; font-size: 55px; margin-left: 2%; ">About us</h1>
+
+    <div style=" font-size: 18px; margin-left: 2%; width: 75%; color: white;" >
+      TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
+       We aim to reduce pollution and also bear in mind the health benefits it gives to our users.<br><br>
+      One must register/login using their account in order to access our bikes and to make reservations/manage reservations.
+    </div>
+  </div>
+<div style="float: right;width: 40%; height: 109%;margin-top: -4.5%;">
+
+  <img src="{% static 'homepage/im.png' %}" style="height: 100%;">
+</div>
+
+  </div>
+  <div id="contact"  style="background-color: #e9e9e8; height: 100%" class="container-fluid">
+
+    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Contact</h1>
+    <div style="margin-top: 2%;">
+      <div style="width:40%; margin-left: 2%; font-size: 18px; float: left; margin-top: 1%; color:black;">
+         TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
+
+          TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.
+
+
+      </div>
+      <div style="width:50%; float:right;  margin-bottom: 2%; ">
+  <form   method="post" style="width:90%;color:black;">
+      {% csrf_token %}
+     <!-- {{ form.as_p }}-->
+      {% bootstrap_form form %}
+     <!--  <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">First Name</label>
+          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
+
+        </div>
+      <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Last Name</label>
+          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
+
+      </div>
+      <div class="form-group">
+          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Email address</label>
+          <input type="email" class="form-control" id="exampleFormControlInput1" style="width:90%;" placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+          <label for="exampleFormControlTextarea1" style="font-size: 16px; color:black;">Example textarea</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" style="width: 90%;" rows="3"></textarea>
+      </div>-->
+        <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
+  </form>
+  </div></div>
+  </div>
+</div>
 <script>
+  var infoWindow;
   function initMap() {
       // The map, centered at Edinburgh
-        map = new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat:55.94136542,lng:-3.18470478},
                 zoom: 12,
                 zoomControl: false,
@@ -515,7 +671,7 @@ $(document).ready(function(){
                           '</div>';
           var infowindow = new google.maps.InfoWindow({
                   content: contentString,
-                  maxWidth: 250
+                  maxWidth: 350
                 });
         google.maps.event.addListener(infowindow, 'domready', function() {
 
@@ -550,7 +706,7 @@ $(document).ready(function(){
              var iwCloseBtn = iwOuter.next();
 
              // Apply the desired effect to the close button
-             iwCloseBtn.css({ right: '50px', top: '10px'});
+             iwCloseBtn.css({ right: '50px', top: '10px',});
 
              // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
              if($('.iw-content').height() < 140){
@@ -562,7 +718,7 @@ $(document).ready(function(){
                $(this).css({opacity: '1'});
              });
         });
-        var latln = {lat:Number(marker1.lat),lng:Number(marker1.lon)};
+        var latln = {lat:parseFloat(marker1.lat),lng:parseFloat(marker1.lon)};
         var Marker = new google.maps.Marker({
             map: map,
             icon: "{% static 'icons/marker.png' %}",
@@ -574,8 +730,19 @@ $(document).ready(function(){
               }
               prev_infowindow=true;
               prev_window = infowindow;
-              infowindow.open(map, Marker);
-          });
+              if(!Marker.open){
+                  infowindow.open(map,Marker);
+                  Marker.open = true;
+              }
+              else{
+                  infowindow.close();
+                  Marker.open = false;
+              }
+              google.maps.event.addListener(map, 'click', function() {
+                  infowindow.close();
+                  Marker.open = false;
+              });
+            });
           //var touchtime = 0;
           Marker.addListener('dblclick', () =>
              {
@@ -595,107 +762,12 @@ $(document).ready(function(){
                  x=x+1;
              }
           );
-          markerlist[i]=Marker;
           i=i+1;
         }
       });
-      var opt = { minZoom: 11.5, maxZoom: 18 };
+      var opt = { minZoom: 11.5, maxZoom: 15 };
       map.setOptions(opt);
-
       }
-</script>
-
-  <div id="stationmap" class="container-fluid">
-
-      <h1 style="color: white; font-size: 55px; margin-left: 2%; ">Station Map</h1>
-   <div id='map' style="z-index: 1000"></div>
-  </div>
-  <div id="pricing" class="container-fluid">
-    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Pricing</h1>
-      <div style=" width: 95%; margin-left: 2.5%;margin-top:2%;margin-bottom: 2%; font-size:19px; color: black;">TooTyred enables its users to register at one's convenience.
-    The hiring system works on first come and first serve bases.</div>
-    <center>
-   <div style="width:90%;">
-    <table class="table table-bordered" >
-  <thead style="background-color:#009688; color:white; font-size: 22px;">
-    <tr>
-      <th scope="col">Bike Type</th>
-      <th scope="col">Cost Per Hour</th>
-      <th scope="col">Currently Available</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody style="color:black;font-size: 20px;">
-
-    {% for bike in bikeDesc %}
-    <tr class="hoverable"data-toggle="popover" title="{{bike.bike_type}}" data-html="true" data-content="<center><img style='width:50%; height:50%;' src='{% static 'bikes/'|add:bike.bike_image %}'></center><br></img>{{bike.bike_info}}" >
-      <th scope="row"  >{{bike.bike_type}}</th>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-   {% endfor %}
-  </tbody>
-</table>
-</div>
-</center>
-  </div>
-  <div id="aboutus" class="container-fluid">
-    <div style="width: 55%; float: left;">
-    <h1 style="color: white; font-size: 55px; margin-left: 2%; ">About us</h1>
-
-    <div style=" font-size: 18px; margin-left: 2%; width: 75%; color: white;" >
-      TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
-       We aim to reduce pollution and also bear in mind the health benefits it gives to our users.<br><br>
-      One must register/login using their account in order to access our bikes and to make reservations/manage reservations.
-    </div>
-  </div>
-<div style="float: right;width: 40%; height: 109%;margin-top: -4.5%;">
-
-  <img src="{% static 'homepage/im.png' %}" style="height: 100%;">
-</div>
-
-  </div>
-  <div id="contact"  style="background-color: #e9e9e8; height: 100%" class="container-fluid">
-
-    <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Contact</h1>
-    <div style="margin-top: 2%;">
-      <div style="width:40%; margin-left: 2%; font-size: 18px; float: left; margin-top: 1%; color:black;">
-         TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
-
-          TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.
-
-
-      </div>
-      <div style="width:50%; float:right;  margin-bottom: 2%; ">
-  <form   method="post" style="width:90%;color:black;">
-      {% csrf_token %}
-     <!-- {{ form.as_p }}-->
-      {% bootstrap_form form %}
-     <!--  <div class="form-group">
-          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">First Name</label>
-          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
-
-        </div>
-      <div class="form-group">
-          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Last Name</label>
-          <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
-
-      </div>
-      <div class="form-group">
-          <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">Email address</label>
-          <input type="email" class="form-control" id="exampleFormControlInput1" style="width:90%;" placeholder="name@example.com">
-      </div>
-      <div class="form-group">
-          <label for="exampleFormControlTextarea1" style="font-size: 16px; color:black;">Example textarea</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" style="width: 90%;" rows="3"></textarea>
-      </div>-->
-        <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
-  </form>
-  </div></div>
-  </div>
-</div>
-<script>
   var acc = document.getElementsByClassName("accordion");
   var i;
 
@@ -736,5 +808,7 @@ $(document).ready(function(){
     }  // End if
   });
 });
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCa-MhtE2n9Sk8pNdkqhLjdw70Jr8fCZ4&callback=initMap">
 </script>
 {% endblock %}
