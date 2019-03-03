@@ -612,7 +612,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
        <tr>
                 <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
                 <td>
-                  <button name='{{ record.reservation_id }}' type="button" class="btn btn-success modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit Reservation</button>
+                  <button name='{{ record.reservation_id }}' type="button" class="btn btn-success edits modalss" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit Reservation</button>
                 </td>
 <!--------------
               <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
@@ -822,7 +822,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
             <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
             <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
             <li class="list-group-item"  style="color:#3dcacd;"><h4>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!<br> An email will be sent if your reservation is cancelled due to issues</h4></li>
-            <li class="list-group-item"  style="color:#3dcacd;"><h4></h4></li>
+            <li class="list-group-item"  style="color:#3dcacd;"><h4>YOU CANNOT EDIT YOUR RESERVATION ONE HOUR IN ADVANCE!</h4></li>
           </ul>
           <form  method="post" name="myform">
               {% csrf_token %}
@@ -927,7 +927,19 @@ function minutesToString(i)
 }
   //------------
   var bikesres=[];
-  $(".modals").click(function() {
+    $('document').ready(function(){
+      $(".edits").each(function() {
+        var now=new Date();
+        now.setHours( now.getHours() + 1 );
+        now.setMinutes( now.getMinutes() + 15 );
+        var starts=new Date($('#stt'+this.name).text());
+        if(now>starts)
+        {
+          this.style.display="none"
+        }
+        });
+     });
+  $(".modalss").click(function() {
     reservationnumber=this.name;
     var slides = document.getElementsByClassName("bikesreserved"+reservationnumber);
     for(var f=0;f<4;f++)

@@ -145,6 +145,22 @@
      bottom: 20px;
      z-index:5;
    }
+   .location1 {
+     width: 40px;
+     height: 40px;
+     background-color: #3dcacd;
+     border-radius: 45%;
+     box-shadow: 0 6px 10px 0 #666;
+     transition: all 0.1s ease-in-out;
+     font-size: 30px;
+     color: black;
+     text-align: center;
+     line-height: 35px;
+     position: fixed;
+     left: 120px;
+     bottom: 20px;
+     z-index:5;
+   }
    .location:hover {
      box-shadow: 0 6px 14px 0 #666;
      transform: scale(1.05);
@@ -379,7 +395,7 @@
     <button id="modalButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"></button>
 
       <!--Ed-->
-
+<button class="location1" id='cross' onclick="cross()">X</button>
     <div class="location" onclick="myloc()">
 
       <img width="20px" height="20px" src="{% static 'icons/location.png' %}"  >
@@ -588,6 +604,7 @@
               <li class="list-group-item"  style="color:#3dcacd;">Total Bike selected cost is €<span style="font-weight:bold" id="bikebased"></span></li>
               <li class="list-group-item"  style="color:#3dcacd;">The Final Total cost to pay  €<span style="font-weight:bold;font-size:20px;" id="finaltotal"></span></li>
               <li class="list-group-item"  style="color:#3dcacd;"><h4>MAKE SURE TO ARRIVE AT THE STATION ON TIME! OR YOU WILL BE FINED!</h4></li>
+              <li class="list-group-item"  style="color:#3dcacd;"><h4><h4>YOU CANNOT EDIT YOUR RESERVATION ONE HOUR IN ADVANCE!</h4></li>
 
             </ul>
             <form  method="post" name="myform">
@@ -619,7 +636,7 @@
       document.getElementById("confirm2").style.display="none";
       document.getElementById("home-tab").style.display="none";
       document.getElementById("right-panel").style.display="none";
-
+  document.getElementById("cross").style.display="none";
       var x = 0;
       var startlocationid;
       var endlocationid;
@@ -847,6 +864,7 @@
                    Marker.setIcon("{% static 'icons/red.png' %}");
                    endlocationid=marker1.station_id;
                    endlocationname=marker1.name;
+                   document.getElementById("cross").style.display="none";
                    prev_window.close();
                    document.getElementById("modalButton").click();
                  }
@@ -854,6 +872,7 @@
                    Marker.setIcon("{% static 'icons/green.png' %}");
                    startlocationid=marker1.station_id;
                    startlocationname=marker1.name;
+                   document.getElementById("cross").style.display="block";
                  }
                  x=x+1;
              }
@@ -886,6 +905,13 @@ var onChangeHandler = function() {
          document.getElementById("home-tab").click();
      });
 //--------------------------------------------------------------------
+    function cross(){
+      for(var d=0;d<markerlist.length;d++){
+        markerlist[d].setIcon("{% static 'icons/marker.png' %}");
+      }
+      reset();
+      document.getElementById("cross").style.display="none";
+    }
     function reset() {
       document.getElementById("home-tab").style.display="none";
         startlocationname = "";
