@@ -979,12 +979,16 @@ function minutesToString(i)
           return '12:00 AM';
         }
      }
-     else if(time.length=5)
+     else if(time.length==5)
      {
        var hours = time[3];
        if(hours.split(":").length==1)
        {
           hours=hours.split(":")[0]+':00';
+       }
+       if(hours.charAt(0)==='0')
+       {
+         hours=hours.substr(1);
        }
         return hours+' '+time[4];
      }
@@ -1365,7 +1369,7 @@ timesselected=true;
               }
             ampm = hours % 24 < 12 ? 'AM' : 'PM';
             hours = hours % 12;
-            if (hours === 0){
+            if (hours == 0){
                 hours = 12;
               }
             select.append($('<option></option>')
