@@ -611,8 +611,9 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
        <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
        <tr>
                 <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
-            <td><button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Add bikes</button>
-              <button id="modalButton2" name='{{ record.reservation_id }}' type="button" class="btn btn-success modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal2">Edit time</button></td>
+                <td>
+                  <button name='{{ record.reservation_id }}' type="button" class="btn btn-success modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit Reservation</button>
+                </td>
 <!--------------
               <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
                 <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
@@ -625,12 +626,12 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       </tr>
       <tr> <td colspan='2'>
         {% for bike in bikesonreservations %}
-        {% if bike.bor_reservation_id == record.reservation_id %}
-      <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
-drop-shadow(-1px -1px 0 white);
-filter: drop-shadow(1px 1px 0 white)
-drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
-        {% endif %}
+            {% if bike.bor_reservation_id == record.reservation_id %}
+          <img name='{{ bike.bike_type.bike_type_id }}' class='bikesreserved{{ record.reservation_id }}' style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
+    drop-shadow(-1px -1px 0 white);
+    filter: drop-shadow(1px 1px 0 white)
+    drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+            {% endif %}
           {% endfor %}
       </td>
        </tr>
@@ -696,17 +697,17 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
                </li>
                <li class="list-group-item time">
                  <select class="styled-select black rounded" id="select_end_date">
-                   <option disabled selected value>Select End Date</option>
+                   <option id='first' disabled selected value>Select End Date</option>
                  </select>
                </li>
                <li class="list-group-item time">
                  <select class="styled-select black rounded" id="select_start_time">
-                   <option disabled selected value>Select Start Time</option>
+                   <option id='second' disabled selected value>Select Start Time</option>
                  </select>
                </li>
                <li class="list-group-item time">
                  <select class="styled-select black rounded" id="select_end_time">
-                   <option disabled selected value>Select End Time</option>
+                   <option id='third' selected value>Select End Time</option>
                  </select>
                </li>
                <li class="list-group-item">
@@ -883,7 +884,10 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   var endTime;
   var startDate;
   var endDate;
-  var bru=true;
+  var startTime1;
+  var endTime1;
+  var startDate1;
+  var endDate1;
   var bike = {}
     {% for bike in bike_type %}
           bike[{{ bike.bike_type_id }}] = 0;
@@ -894,20 +898,61 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   var repeat = false;
   var done=0;
   var reservationnumber;
+  //------------
+  function getOption(sel,text) {
+    var opt;
+    for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+        opt = sel.options[i];
+        if ( opt.text ==  text ) {
+            sel.selectedIndex=i;
+            break;
+        }
+    }
+}
+//=-------------------------------
+function minutesToString(i)
+{
+  var hours = Math.floor(i / 60);
+  var minutes = i % 60;
+  var ampm
+  if (minutes < 10){
+      minutes = '0' + minutes; // adding leading zero
+    }
+  ampm = hours % 24 < 12 ? 'AM' : 'PM';
+  hours = hours % 12;
+  if (hours == 0){
+      hours = 12;
+    }
+  return hours + ':' + minutes + ' ' + ampm;
+}
+  //------------
+  var bikesres=[];
   $(".modals").click(function() {
     reservationnumber=this.name;
+    var slides = document.getElementsByClassName("bikesreserved"+reservationnumber);
+    for(var f=0;f<4;f++)
+    {
+      bikesres[f]=0;
+    }
+  for(var i = 0; i < slides.length; i++)
+  {
+     bikesres[slides[i].name]++;
+  }
   });
    $('#exampleModal').on('show.bs.modal', function (event) {
        var modal = $(this);
        modal.find('.tit').text('Edit your reservation');
        $('#startloc').text($('#st'+reservationnumber).text());
        $('#endloc').text($('#en'+reservationnumber).text());
-       startTime=formatToStringTime($('#stt'+reservationnumber).text().split(' '));
-       endTime=formatToStringTime($('#ent'+reservationnumber).text().split(' '));
-       startDate=formatToStringDate($('#stt'+reservationnumber).text().split(' '));
-       endDate=formatToStringDate($('#ent'+reservationnumber).text().split(' '));
-       timesselected=true;
-       document.getElementById("confirm").click();
+       startTime1=formatToStringTime($('#stt'+reservationnumber).text().split(' '));
+       endTime1=formatToStringTime($('#ent'+reservationnumber).text().split(' '));
+       startDate1=formatToStringDate($('#stt'+reservationnumber).text().split(' '));
+       endDate1=formatToStringDate($('#ent'+reservationnumber).text().split(' '));
+      // timesselected=true;
+      // document.getElementById("confirm").click();
+      $('#startinfo').text('Start: '+ startDate1+' '+startTime1);
+      $('#endinfo').text('End: '+ endDate1+' '+endTime1);
+      document.getElementById("home-tab").click();
    });
    function formatToStringTime(time)
    {
@@ -971,8 +1016,8 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
                         {% for bike in bike_type %}
     document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[{{ bike.bike_type_id }}]);
                           {% endfor %}
-    document.getElementById("inputstarttime").value=(startTime);
-    document.getElementById("inputendtime").value=(endTime);
+    document.getElementById("inputstarttime").value=minutesToString(Number(startTime));
+    document.getElementById("inputendtime").value=minutesToString(Number(endTime));
     document.getElementById("inputstartdate").value=(startDate);
     document.getElementById("inputenddate").value=(endDate);
     document.getElementById("inputtotal").value=($('#totalcost').text());
@@ -1053,7 +1098,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       {% endfor %}
       {% for bike in bike_type %}
        qun=Number($('#quantity{{bike.bike_type_id }}').text());
-        for(var i=0;i<qun;i++)//CHANGE TO AVAILABLE BIKES
+        for(var i=0;i<qun-bikesres[{{ bike.bike_type_id }}];i++)//CHANGE TO AVAILABLE BIKES
         {
           removeBike('bike{{ bike.bike_type_id }}');
         }
@@ -1063,14 +1108,24 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       $('#cyclecost').text(Number($('#totalcost').text())-Number($('#cost').text()));
   }
   function resetSelect(){
-    populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
+    populateDate('#select_start_date','Select Start date',14,new Date); // use selector for your select
     disable("select_end_date");
     disable("select_end_time");
     disable("select_start_time");
-     document.getElementById("confirm").style.display="none";
+    var element = document.getElementById("select_start_date");
+    element.value = startDate1;
+    $('#select_start_date').change();
+    document.getElementById("select_end_date").value = endDate1;
+    $('#select_end_date').change();
+    getOption(document.getElementById("select_start_time"),startTime1);
+    $('#select_start_time').change();
+      getOption(document.getElementById("select_end_time"),endTime1);
+    $('#select_end_time').change();
      $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
        $("#cost").text("0");
+       document.getElementById("confirm").style.display="block";
   }
+
   function resetHomeSelect(){
     if(timesselected==true)
     {
@@ -1079,11 +1134,19 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       document.getElementById("home-tab").style.display="none";
     }
     else {
-      populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
+      populateDate('#select_start_date','Select Start date',14,new Date); // use selector for your select
       disable("select_end_date");
       disable("select_end_time");
       disable("select_start_time");
-       document.getElementById("confirm").style.display="none";
+      var element = document.getElementById("select_start_date");
+      element.value = startDate1;
+      $('#select_start_date').change();
+      document.getElementById("select_end_date").value = endDate1;
+      $('#select_end_date').change();
+      getOption(document.getElementById("select_start_time"),startTime1);
+      $('#select_start_time').change();
+        getOption(document.getElementById("select_end_time"),endTime1);
+      $('#select_end_time').change();
        if(bikesselected==false || (bikesselected== true && repeat==false))
        {
             resetSelectBike();
@@ -1094,15 +1157,61 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
           $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
           $("#cost").text("0");
        }
+         $('#cyclecost').text(Number($('#totalcost').text())-Number($('#cost').text()));
     }
   }
-
+  function reset() {
+    document.getElementById("home-tab").style.display="none";
+      startlocationname = "";
+      endlocationname="";
+      x = 0;
+      startlocationid="";
+      endlocationid="";
+      for(var d=0;d<markerlist.length;d++){
+        markerlist[d].setIcon("{% static 'icons/marker.png' %}");
+      }
+      startTime="";
+      endTime="";
+      startDate="";
+      endDate="";
+      $('#startinfo').text("");
+      $('#endinfo').text("");
+      resetSelect();
+      done=0;
+      var qun;
+      {% for bike in bike_type %}
+           bike[{{ bike.bike_type_id }}] = 0;
+        {% endfor %}
+        for(var f=0;f<4;f++)
+        {
+          bikesres[f]=0;
+        }
+        {% for bike in bike_type %}
+         qun=Number($('#quantity{{bike.bike_type_id }}').text());
+          for(var i=0;i<qun;i++)//CHANGE TO AVAILABLE BIKES
+          {
+            removeBike('bike{{ bike.bike_type_id }}');
+          }
+        {% endfor %}
+      $('#cost').text("0");
+      $('#cyclecost').text("0");
+      $('#totalcost').text("0");
+      bikesselected=false;
+      timesselected=false;
+  }
   function resetBikeSelect(){
-
       if(timesselected==false)
       {
-        $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
-          $("#cost").text("0");
+        //$("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
+          //$("#cost").text("0");
+        //  var x;
+          {% for bike in bike_type %}
+            $('#quantity{{bike.bike_type_id }}').text(bikesres[{{ bike.bike_type_id }}]);
+            $('#quantitycost{{bike.bike_type_id }}').text(((Number($('#quantity{{bike.bike_type_id }}').text()))*((Number($('#costperfifteen{{bike.bike_type_id }}').text())))));
+            {% endfor %}
+            $('#home-tab').text("Go back");
+            $('#home-tab').css('display','block');
+            $('#confirm2').css('display','block');
       }
       else
       {
@@ -1135,9 +1244,11 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
             cost=costperfifteen+cost;
           }
         }
-        $('#cost').text(Number(cost));
+        //$('#cost').text(Number(cost));
         $('#totalcost').text($('#cos'+reservationnumber).text());
         $('#cyclecost').text(Number($('#totalcost').text())-Number($('#cost').text()));
+        $('#home-tab').text("Go back");
+        $('#home-tab').css('display','block');
       }
   }
   function convertMinutes(i)
@@ -1162,7 +1273,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
     }
   }
   function timeSelect(){
-
+timesselected=true;
     {% for bike in bike_type %}
         bike[{{ bike.bike_type_id }}]=Number($('#quantity{{ bike.bike_type_id }}').text());
       {% endfor %}
@@ -1184,19 +1295,172 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
     document.getElementById("home-tab").click();
   }
   function bikeSelect() {
-if(bru==true){
-    //select all times from all dates that are not full
-    $('#startinfo').text('Start: '+ startDate+' '+startTime);
-    $('#endinfo').text('End: '+ endDate+' '+endTime);
-    timesselected=true;
+  startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
+  endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
+  startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
+  endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
+
+  $('#startinfo').text('Start: '+ startDate+' '+minutesToString(startTime));
+  $('#endinfo').text('End: '+ endDate+' '+minuteToString(endTime));
+  timesselected=true;
     if(bikesselected==true && timesselected==true)
     {
       confirmed();
     //  alert('Done2');
     }
   }
-  }
+  //--------------------------------------------------------------------
+      function populateDate(selector,text,days,curr)
+      {
+        var x;
+        //book today too unless its 11
+        if((curr.getMinutes()+(curr.getHours()*60))>= (1440-60-15) && selector=='#select_start_date')
+        {
+            x=1;
+            days=days+1;
+        }
+        else if(selector=='#select_end_date' && curr.toDateString() == new Date().toDateString())
+        {
+          var dates= new Date();
+          if((dates.getMinutes()+(dates.getHours()*60))< (1440-60-15)  && (dates.getMinutes()+(dates.getHours()*60))>= (1440-60-15-15))
+          {x=1;}
+          else{x=0;}
+        }
+        else
+          x=0;
+        var options = "";
+        var first = curr.getDate();
+        var firstday = (new Date(curr.setDate(first))).toString();
+        $(selector).empty().append('<option disabled selected value>' +text+ '</option>');
+        for (var i = x; i < days; i++) {
+            var next = new Date(curr.getTime());
+            next.setDate(first + i);
+            $(selector).append('<option>' + formatDate((next.toString())) + '</option>');
+        }
+      }
+  //--------------------------------------------------------------------
+      //https://stackoverflow.com/questions/8918168/javascript-dynamic-time-drop-down
+      function populate(selector,text,x,y) {
+        //select all times from all dates that are not full
+        var select = $(selector);
+        var hours, minutes, ampm;
+        select.empty().append($('<option disabled selected value>'+text+'</option>'));
+        for(var i = x; i <= y; i += 15){
+            hours = Math.floor(i / 60);
+            minutes = i % 60;
+            if (minutes < 10){
+                minutes = '0' + minutes; // adding leading zero
+              }
+            ampm = hours % 24 < 12 ? 'AM' : 'PM';
+            hours = hours % 12;
+            if (hours === 0){
+                hours = 12;
+              }
+            select.append($('<option></option>')
+            .attr('value', i)
+            .text(hours + ':' + minutes + ' ' + ampm));
+      }
+      }
 
+
+  //--------------------------------------------------------------------
+      $('#select_start_date').change(function() {
+      var parts = $(this).val().split(' ');
+      dateselected=new Date(parts[2],monthNames.indexOf(parts[1]),parts[0]);
+      populateDate("#select_end_date",'Select End date',2,dateselected);
+      enable("select_end_date");
+      disable("select_end_time");
+      disable("select_start_time");
+      $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
+      $("#cost").text("0");
+      document.getElementById("confirm").style.display="none";
+      });
+
+  //--------------------------------------------------------------------
+      $('#select_end_date').change(function() {
+       disable("select_end_time");
+       enable("select_start_time");
+       var parts = $(this).val().split(' ');
+       dateselected=new Date(parts[2],monthNames.indexOf(parts[1]),parts[0]);
+       var start=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value.split(' ');
+       var st=new Date(start[2],monthNames.indexOf(start[1]),start[0]);
+       var end=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value.split(' ');
+       var en=new Date(end[2],monthNames.indexOf(end[1]),end[0]);
+       if(st.toDateString() == new Date().toDateString() && en.toDateString() != new Date().toDateString())
+       {
+         var dates = new Date();
+         if(st.getDate()==(dates.getDate()+1) && (dates.getMinutes()+(dates.getHours()*60)) >= 1380)
+           populate('#select_start_time','Select Start time',(((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15))+((new Date().getHours())*60)+60-1440,1425);
+         else
+          populate('#select_start_time','Select Start time',(((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15))+((new Date().getHours())*60)+60,1425);
+       }
+       else if(st.toDateString() == new Date().toDateString() && en.toDateString() == new Date().toDateString())
+       {
+         var dates = new Date();
+         if(st.getDate()==(dates.getDate()+1) && (dates.getMinutes()+(dates.getHours()*60)) >= 1380)
+           populate('#select_start_time','Select Start time',(((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15))+((new Date().getHours())*60)+60-1440,1425);
+         else
+          populate('#select_start_time','Select Start time',(((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15))+((new Date().getHours())*60)+60,1410);
+       }
+       else {
+         var dates = new Date();
+         if(st.getDate()==(dates.getDate()+1) && (dates.getMinutes()+(dates.getHours()*60)) >= 1380)
+           populate('#select_start_time','Select Start time',(((new Date().getMinutes()) + ((15 - ((new Date().getMinutes()) % 15))) % 15))+((new Date().getHours())*60)+60-1440,1425);
+         else
+          populate('#select_start_time','Select Start time',0,1425);
+       }
+       $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
+       $("#cost").text("0");
+       document.getElementById("confirm").style.display="none";
+      });
+
+  //--------------------------------------------------------------------
+      $('#select_start_time').change(function() {
+      enable("select_end_time");
+      var start=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value.split(' ');
+      var st=new Date(start[2],monthNames.indexOf(start[1]),start[0]);
+      var end=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value.split(' ');
+      var en=new Date(end[2],monthNames.indexOf(end[1]),end[0]);
+      if(st.toDateString() == en.toDateString())
+      {
+        populate('#select_end_time','Select End time',Number($(this).val())+15,1425);
+      }
+      else {
+        populate('#select_end_time','Select End time',0,Number($(this).val()));
+      }
+      $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
+        $("#cost").text("0");
+      document.getElementById("confirm").style.display="none";
+      });
+
+  //--------------------------------------------------------------------
+      $('#select_end_time').change(function() {
+            document.getElementById("confirm").style.display="block";
+            var cost=0;
+            var costperfifteen={{ costperhour }}/4;
+            startTime=document.getElementById("select_start_time").options[document.getElementById("select_start_time").selectedIndex].value;
+            endTime=document.getElementById("select_end_time").options[document.getElementById("select_end_time").selectedIndex].value;
+            startDate=document.getElementById("select_start_date").options[document.getElementById("select_start_date").selectedIndex].value;
+            endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
+            if(startDate==endDate)
+            {
+                for(var i = Number(startTime); i < Number(endTime); i += 15){
+                  cost=costperfifteen+cost;
+            }
+            }
+            else {
+              for(var i = Number(startTime); i < 1440; i += 15){
+                  cost=costperfifteen+cost;
+                }
+            for(var i = 0; i < Number(endTime); i += 15){
+                cost=costperfifteen+cost;
+              }
+            }
+            $('#cost').text(Number(cost));
+            $('#totalcost').text(Number(cost)+Number($('#cyclecost').text()));
+      });
+
+  //--------------------------------------------------------------------
   $(document).ready(function(){
  setInterval(function(){ reload_page(); },60*60000);
   });
@@ -1269,28 +1533,36 @@ function time_post() {
 $.ajax({
       url : "/home/reserve/", // the endpoint
       type : "POST", // http method
-      data : { formtype : 'time', starttime: startTime , endtime: endTime, startdate: startDate, enddate: endDate,startstation: $('#startloc').text(),endstation:$('#endloc').text()}, // data sent with the post request
+      data : { formtype : 'time', starttime:minutesToString(startTime) , endtime: minutesToString(endTime), startdate: startDate, enddate: endDate,startstation: $('#startloc').text(),endstation:$('#endloc').text()}, // data sent with the post request
 
       // handle a successful response
       success : function(json) {
-        if (
-        //this part checks if all the available bikes added together ==0 if yes then returns 0
-        {% for bike in bike_type %}
-        json.result{{ bike.bike_type_id }} +
-      {% endfor %}0 == 0)
-      {
-        alert("Sorry, there are no bikes available for that timing, try again");
-      bru=false;
-      document.getElementById('clickme').click();
-    //  reload_page();
-      }
+    //     if (
+    //     //this part checks if all the available bikes added together ==0 if yes then returns 0
+    //     {% for bike in bike_type %}
+    //     json.result{{ bike.bike_type_id }} +
+    //   {% endfor %}0 == 0)
+    //   {
+    //     alert("Sorry, there are no bikes available for that timing, try again");
+    //   bru=false;
+    //   document.getElementById('clickme').click();
+    // //  reload_page();
+    //   }
       //This else loop sets the available bikes for each of the bike types
-      else{
+      // else{
+      if (
+            //this part checks if all the available bikes added together ==0 if yes then returns 0
+          {% for bike in bike_type %}
+            json.result{{ bike.bike_type_id }} +
+          {% endfor %}0 == 0)
+          {
+            alert("Sorry, there are no bikes available for that timing, but you surely can remove chosen bikes!");
+          }
         {% for bike in bike_type %}
         $('#available{{ bike.bike_type_id }}').text(json.result{{ bike.bike_type_id }}); // remove the value from the input
       {% endfor %}
       document.getElementById("profile-tab").click();
-    }
+    // }
       },
 
       // handle a non-successful response

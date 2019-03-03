@@ -554,6 +554,7 @@ CREATE TABLE `reservation` (
   `c_id` int(11) DEFAULT NULL,
   `fine_cost` decimal(11,2) DEFAULT NULL,
   `fine_desc` text,
+  `fined_at` datetime DEFAULT NULL,
   PRIMARY KEY (`reservation_id`),
   KEY `fk_res_type` (`res_type`),
   KEY `fk_c_rating` (`c_rating`),

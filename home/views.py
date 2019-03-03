@@ -77,6 +77,9 @@ def reserve(request):
                 # for each of the bike types
                 biked = getBikes(startdatetime, enddatetime, startstation.station_id, endstation.station_id, 2)
                 print (biked[0].bike_type.bike_type_id)
+                bikelen=0
+                for i in range(len(biked)):
+                    bikelen += biked[i].bike_type.bike_type_id
                 if inputbikelen > len(biked): #Check if the total number of bikes selected is greater than the no of bikes that can be reserved, then do an error as we cannot reserve the amount the user wanted
                        #do error here
                     print('error123')
@@ -192,6 +195,10 @@ def reservations(request):
                     )
             # --------------------------------------------------------------------------------------
             else:
+                #-----------------EDGAR
+                #----------------HERE YOU NEED TO HANDLE THE CASE OF WHEN THE NUMBER OF BIKES IS REDUCED BY THE USER
+                #inputbikelen CONSISTS OF THE NEWLY SELECTED LIST OF BIKES INCLUDING THE PREVIOUSLY RESERVED ONES
+                #NOTE: SIMILARLY I WILL DO IT FOR CANCEL RESERVATION AND FOR REPORT ISSUE
                 reservationnumber = request.POST.get("reservation","")
                 startdatetime = utc.localize(datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p'))
                 enddatetime = utc.localize(datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p'))
@@ -205,33 +212,34 @@ def reservations(request):
                     inputbikelen += bikes[i]   #gets the total number of bikes that user wanted on the bike select page
                 #For each bike type
                 biked = {}  #these are the bikes that are allowed to be reserved by the user
+                print(inputbikelen)
                 finalbikes = {} #these are the bikes that WILL be reserved to the user
                 # for each of the bike types
                 biked = getBikes(startdatetime, enddatetime, Station.objects.get(name=(request.POST.get("inputstartstation",""))).station_id, Station.objects.get(name=(request.POST.get("inputendstation",""))).station_id, 2)
                 print (biked[0].bike_type.bike_type_id)
-                if inputbikelen > len(biked): #Check if the total number of bikes selected is greater than the no of bikes that can be reserved, then do an error as we cannot reserve the amount the user wanted
-                    #do error here
-                    print('error123')
-                else:
-                    #this whole part checks the biked tuple and selects the bikes of certain types on what the user wanted, the bikes gets stored in the finalbikes tuple
-                    x = 0
-                    for b in range(len(biked)):
-                        #print('asdasdasd $s', biked[b])
-                        #print('123', bikes[biked[b].bike_type.bike_type_id-1])
-                        if bikes[biked[b].bike_type.bike_type_id-1] > 0:
-                            bikes[biked[b].bike_type.bike_type_id-1] -= 1
-                            finalbikes[x] = biked[b]
-                            inputbikelen -= 1
-                            x += 1
-                            if inputbikelen == 0:
-                                break
-                    reservation = Reservation.objects.get(reservation_id=reservationnumber)
-                    reservation.res_cost = totalcost
-                    reservation.res_date = currentDateTime
-                    for reservationBike in range(len(finalbikes)):
-                        bikereservation = BikeOnReservation.objects.create(bor_bike=finalbikes[reservationBike],bor_reservation_id=reservation.reservation_id)
-                    reservation.save()
-                    return redirect('/home/reservations/')
+                bikelen=0
+                print(len(biked))
+                for i in range(len(biked)):
+                    bikelen += biked[i].bike_type.bike_type_id
+                #this whole part checks the biked tuple and selects the bikes of certain types on what the user wanted, the bikes gets stored in the finalbikes tuple
+                x = 0
+                for b in range(len(biked)):
+                    #print('asdasdasd $s', biked[b])
+                    #print('123', bikes[biked[b].bike_type.bike_type_id-1])
+                    if bikes[biked[b].bike_type.bike_type_id-1] > 0:
+                        bikes[biked[b].bike_type.bike_type_id-1] -= 1
+                        finalbikes[x] = biked[b]
+                        inputbikelen -= 1
+                        x += 1
+                        if inputbikelen == 0:
+                            break
+                reservation = Reservation.objects.get(reservation_id=reservationnumber)
+                reservation.res_cost = totalcost
+                reservation.res_date = currentDateTime
+                for reservationBike in range(len(finalbikes)):
+                    bikereservation = BikeOnReservation.objects.create(bor_bike=finalbikes[reservationBike],bor_reservation_id=reservation.reservation_id)
+                reservation.save()
+                return redirect('/home/reservations/')
     else:
         checkMessages(request)
         ongoing = Reservation.objects.raw("select r.reservation_id as reservation_id,r.res_code as res_code,r.res_cost as res_cost,r.res_date as res_date,r.starttime as starttime,r.endtime as endtime,r.c_rating as c_rating,ss.name as startname, sse.name as endname  from stationroutes sr,station_on_reservation s, reservation r,station ss,station sse where s.sor_route_id=sr.route_id and r.reservation_id = s.sor_reservation_id and sr.start_station_id = ss.station_id and sr.end_station_id = sse.station_id and r.c_id=%s and r.res_type=2",(request.user.id,))

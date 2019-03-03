@@ -29,11 +29,10 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 
 #changes reservations that did not unlock on time to past reservation and giving fine if the user did not unlock after 15 minutes of their starting reservation time
-UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time' WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
+UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time', fined_at = now() WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
 
 #changes reservations that did not lock on time to past reservation and giving fine if the user did not lock after 15 minutes of their ending reservation time
-UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time' WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
-
+UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time', fined_at = now() WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
 
 
 Select count(*) FROM reservation WHERE (now() >= endtime AND res_type = 2) OR (now() >= starttime AND res_type = 3) INTO n;
@@ -123,8 +122,8 @@ WHILE ins_c_count < ins_t_count DO
 	SET ins_c_count = ins_c_count + 1;
 END WHILE;
 
-
-
+#checks if the last fine was given more than 7 days, set account as inactive, i used SECOND instead of DAY to check since there are cases where the user was fined at 3:00 pm, but when the seventh day comes, he would set as inactive directly at 12:00 am. The user would be fined at 6 days and 15 hours instead of 7
+UPDATE auth_user SET is_active = 0 WHERE id = (select c_id FROM reservation WHERE TIMESTAMPDIFF(SECOND, fined_at, now) > 604800 GROUP BY c_id);
 
 END$$
 
