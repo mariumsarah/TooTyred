@@ -24,7 +24,7 @@ a, a:active, a:visited { color:#3dcacd; }
   padding: 10px;
 }
 #howitworks,#cycles{padding-top:50px;height: 100%;box-shadow:-10px 8px 15px #808080, 10px 8px 15px #808080;}
-#home,#whycycle,#stationmap,#pricing,#aboutus,#contact
+#home,#stationmap,#pricing,#aboutus,#contact
 {
   padding-top:50px;height:600px;
   box-shadow:-10px 8px 15px #808080, 10px 8px 15px #808080;

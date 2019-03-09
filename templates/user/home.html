@@ -380,7 +380,7 @@ $(document).ready(function(){
 
  <div id="myCarousel1"  class="carousel slide" data-ride="carousel">
   <!--<div style="width: 100%; background-color: #009688; height: 100%;">-->
-   <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Why Cycle?</h1>
+   <h1 id='whycyc' style="color: black; font-size: 55px; margin-left: 2%; ">Why Cycle?</h1>
    <!--</div>-->
 
 
@@ -438,13 +438,14 @@ $(document).ready(function(){
         <div >
         </div>
         <div >
+            <center style="margin-top:2%;">
       <div class="row" style="margin-left: 0.3%; ">
              {% for bike in bikeDesc %}
 
-              <div class="column" style=" margin-left:0.5%; width:24%;">
-        <div class="flip-box" style="width:100%;"  >
-          <div class="flip-box-inner" style="width:100%;">
-            <div class="flip-box-front" style="width:100%;">
+              <div class="column">
+        <div class="flip-box"  >
+          <div class="flip-box-inner">
+            <div class="flip-box-front" >
               <h2>{{ bike.bike_type }}</h2>
               <img src="{% static 'bikes/'|add:bike.bike_image %}" style="width:75%;height:50%;">
 
@@ -466,7 +467,7 @@ $(document).ready(function(){
 
              {% endfor %}
            </div>
-
+            </center>
         </div>
       </div>
     </div>
@@ -508,37 +509,27 @@ $(document).ready(function(){
 </center>
   </div>
   <div id="aboutus" class="container-fluid">
-    <div style="width: 55%; float: left;">
-    <h1 style="color: white; font-size: 55px; margin-left: 2%; ">About us</h1>
-
-    <div style=" font-size: 18px; margin-left: 2%; width: 75%; color: white;" >
+    <div style="width: 100%; float: left;">
+      <h1 style="color: white; font-size: 55px; margin-left: 2%; ">About us</h1>
+      <div style=" font-size: 18px; margin-left: 2%; width: 75%; color: white;" >
       TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
        We aim to reduce pollution and also bear in mind the health benefits it gives to our users.<br><br>
       One must register/login using their account in order to access our bikes and to make reservations/manage reservations.
+      </div>
+    </div>
+    <div style="float: right;bacgrkound-color:white;width: 100%; margin-top: -4.5%;">
+      <img src="{% static 'homepage/im.png' %}" style="height: 100%;">
     </div>
   </div>
-<div style="float: right;width: 40%; height: 109%;margin-top: -4.5%;">
-
-  <img src="{% static 'homepage/im.png' %}" style="height: 100%;">
-</div>
-
-  </div>
   <div id="contact"  style="background-color: #e9e9e8; height: 100%" class="container-fluid">
-
     <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Contact</h1>
-    <div style="margin-top: 2%;">
-      <div style="width:40%; margin-left: 2%; font-size: 18px; float: left; margin-top: 1%; color:black;">
-         TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.<br><br>
-
-          TooTyred is a bike sharing system  regulated by P.A.S.S.E.S Enterprise for a local company based in Edinburgh.People hiring a bike get to have an adventurous and fun trips. They can choose their location and drop their bikes in the station closer to their destination.
-
-
-      </div>
-      <div style="width:50%; float:right;  margin-bottom: 2%; ">
-  <form   method="post" style="width:90%;color:black;">
-      {% csrf_token %}
+    <center>
+    <div>
+      <div style="width:100%; float:right;  margin-bottom: 2%; ">
+        <form   method="post" style="width:90%;color:black;">
+          {% csrf_token %}
      <!-- {{ form.as_p }}-->
-      {% bootstrap_form form %}
+          {% bootstrap_form form %}
      <!--  <div class="form-group">
           <label for="exampleFormControlInput1" style="font-size: 16px; color:black;">First Name</label>
           <input type="text" class="form-control" style="width: 90%;" placeholder="First name">
@@ -557,9 +548,9 @@ $(document).ready(function(){
           <label for="exampleFormControlTextarea1" style="font-size: 16px; color:black;">Example textarea</label>
           <textarea class="form-control" id="exampleFormControlTextarea1" style="width: 90%;" rows="3"></textarea>
       </div>-->
-        <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
-  </form>
-  </div></div>
+          <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
+        </form>
+  </div></div></center>
   </div>
 </div>
 <script>

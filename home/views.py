@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from datetime import datetime, timedelta,timezone
 from django.http import HttpResponse,JsonResponse
+from django.db import connection
 import json
 import time
 from django.core.mail import EmailMessage
@@ -72,7 +73,8 @@ def reserve(request):
                     inputbikelen += bikes[i]   #gets the total number of bikes that user wanted on the bike select page
                 #For each bike type
                 biked = {}  #these are the bikes that are allowed to be reserved by the user
-                finalbikes = {} #these are the bikes that WILL be reserved to the user
+                finalbikes = set() #these are the bikes that WILL be reserved to the user
+                print('types of bikes and shit', bikes)
 
                 # for each of the bike types
                 biked = getBikes(startdatetime, enddatetime, startstation.station_id, endstation.station_id, 2)
@@ -89,26 +91,32 @@ def reserve(request):
                     for b in range(len(biked)):
                         #print('asdasdasd $s', biked[b])
                         #print('123', bikes[biked[b].bike_type.bike_type_id-1])
-                        if bikes[biked[b].bike_type.bike_type_id-1] > 0:
-                            bikes[biked[b].bike_type.bike_type_id-1] -= 1
-                            finalbikes[x] = biked[b]
-                            inputbikelen -= 1
-                            x += 1
-                            if inputbikelen == 0:
-                                break
+                        if inputbikelen <= 0:
+                            break
+                        else:
+                            if bikes[biked[b].bike_type.bike_type_id-1] > 0:
+                                bikes[biked[b].bike_type.bike_type_id-1] -= 1
+                                finalbikes.add(biked[b])
+                                inputbikelen -= 1
+                                x += 1
+
+
+                    print(finalbikes)
                     user = User.objects.get(id=request.user.id)
                     random = get_random_string(length=6, allowed_chars='1234567890')
                     while(Reservation.objects.filter(res_code=random).exists()):
                         random = get_random_string(length=6, allowed_chars='1234567890')
                     reservation = Reservation.objects.create(res_type=ReservationType.objects.get(res_type_name='future'),res_cost=totalcost,res_date=currentDateTime,starttime=startdatetime,endtime=enddatetime,c=user,res_code=random)
                     stationreservation = StationOnReservation.objects.create(sor_reservation=reservation,sor_route=Stationroutes.objects.get(start_station_id=startstation.station_id,end_station_id=endstation.station_id))
-                    for biken in range(len(finalbikes)):
-                        bikereservation = BikeOnReservation.objects.create(bor_bike=finalbikes[biken],bor_reservation_id=reservation.reservation_id)
+                    for biken in finalbikes:
+                        bikereservation = BikeOnReservation.objects.create(bor_bike=biken,bor_reservation_id=reservation.reservation_id)
 
                     # this is the part that takes time when reserving
                     messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nHere are the details of the reservation you just made on TooTyred.com! \n Your reservation starts on '+startdatetime.strftime('%d %b %Y %I:%M %p')+' at the station '+startstation.name+', '+startstation.address+'\n Your reservation ends on '+enddatetime.strftime('%d %b %Y %I:%M %p')+' at the station '+endstation.name+', '+endstation.address+'\n Your reservation ID is '+str(reservation.reservation_id)+ '\n Your reservation QR code is '+reservation.res_code+'\n The bikes you selected are \n'
-                    for i in range(len(finalbikes)):
-                        messagew+=str(i+1)+' '+finalbikes[i].bike_type.bike_type+' \n'
+                    count = 1;
+                    for i in finalbikes:
+                        messagew+=str(count)+' '+i.bike_type.bike_type+' \n'
+                        count += 1;
                     messagew+='\n Your total cost that you paid for this reservation is €'+str(totalcost)+'\n Thank you for reserving a bike on our website! Hope you have a great ride!'
                     email = EmailMessage('Your TooTyred Reservation', messagew, to=[request.user.email])
                     email.send()
@@ -123,30 +131,29 @@ def reserve(request):
 
 def reservations(request):
     if request.method == 'POST':
-            # --NOT IMPLEMENTED------------------------------------------------------------------------------------
-            if request.POST.get('formtype','') == 'timeedit':
-                reservationnumber = request.POST.get('reservationnumber','')
-                response_data={}
-                response_data[0]=request.POST.get('reservationnumber','')
-                #get all the times available for start time and end time
-                # if there is a reservation for Bikes A,B,C from 5PM to 6PM on Jan 1
-                #get all times the reservations can be moved backwards or forward
-                #so if the bikes A,B,C are at the station from 3PM to 8PM on Jan 1
-                # return the times 3PM Jan1,3:15PM Jan1,3:30PM Jan1,3:45PM Jan 1.....6PM Jan1
-
-                return HttpResponse(
-                    json.dumps(response_data),
-                    content_type="application/json"
-                    )
-            # --------------------------------------------------------------------------------------
-            elif request.POST.get('formtype','') == 'feedback':
+            if request.POST.get('formtype','') == 'feedback':
                 reservationnumber = request.POST.get('reservationcode','')
                 reservation = Reservation.objects.get(res_code=reservationnumber)
                 response_data={}
                 response_data[0]=request.POST.get('reservationcode','')
-                print(reservation.c_rating)
-                reservation.c_rating=CustomerRating.objects.get(rating_id=request.POST.get('rating',''))
-                reservation.feedback=request.POST.get('feedback','')
+                #if the reservation is ongoing
+                if(reservation.res_type==ReservationType.objects.get(res_type_id=2)):
+                    print('its an issue ')
+                    #EDGARRR
+                    #So over here what happens is that the user has just reported some problem with their biken
+                    # and they are on an ongoing reservationt
+                    # what we do here is
+                    #send the bikes on this reservation to storage
+                    # we then do the same thing as in canel for the bikes on the reservation if there are future reservation on the bike id find a replacement or get another bike like this from storage
+                    # make the reservation past
+                    # set the cost of  the reservation to 0 and if there fines
+                    # set fine_desc to null and set fine cost to null if any
+                    reservation.c_rating=None
+                    reservation.feedback="REPORT: "+request.POST.get('feedback','')
+                else:
+                    print(reservation.c_rating)
+                    reservation.c_rating=CustomerRating.objects.get(rating_id=request.POST.get('rating',''))
+                    reservation.feedback=request.POST.get('feedback','')
                 reservation.save()
                 #reservation.feedback=request.POST.get('feedback','')
                 return HttpResponse(
@@ -182,6 +189,11 @@ def reservations(request):
                 email.send()
                 #remove all bikes on that reservation
                 bikes = BikeOnReservation.objects.filter(bor_reservation_id=reservation.reservation_id)
+                # EDGARRR
+                # bikes contains all the bikes on the reservation that need to be deleted
+                # this part of the code will consider future reservations these bikes are on
+                # and then assign new bikes for those future reservations
+                # after that the bikes are deleted from the reservation in the next line
                 bikes.delete()
                 #remove all station on that reservation
                 StationOnReservation.objects.filter(sor_reservation_id=reservation.reservation_id).delete()
@@ -195,10 +207,8 @@ def reservations(request):
                     )
             # --------------------------------------------------------------------------------------
             else:
-                #-----------------EDGAR
-                #----------------HERE YOU NEED TO HANDLE THE CASE OF WHEN THE NUMBER OF BIKES IS REDUCED BY THE USER
-                #inputbikelen CONSISTS OF THE NEWLY SELECTED LIST OF BIKES INCLUDING THE PREVIOUSLY RESERVED ONES
-                #NOTE: SIMILARLY I WILL DO IT FOR CANCEL RESERVATION AND FOR REPORT ISSUE
+                startstation1 = Station.objects.get(name=(request.POST.get("inputstartstation","")))
+                endstation1 = Station.objects.get(name=(request.POST.get("inputendstation","")))
                 reservationnumber = request.POST.get("reservation","")
                 startdatetime = utc.localize(datetime.strptime(request.POST.get("inputstartdate","")+' '+request.POST.get("inputstarttime",""),'%d %b %Y %I:%M %p'))
                 enddatetime = utc.localize(datetime.strptime(request.POST.get("inputenddate","")+' '+request.POST.get("inputendtime",""),'%d %b %Y %I:%M %p'))
@@ -210,35 +220,149 @@ def reservations(request):
                     bikes[i] = int(request.POST.get("inputbike"+str(i+1)))
                     print(bikes[i])
                     inputbikelen += bikes[i]   #gets the total number of bikes that user wanted on the bike select page
+
+                print('this is bikes, old bikes needs to be the same as this', bikes)
+
+                finalbikes = set() #these are the bikes that WILL be reserved to the user
+
+
+                #oldbikes =
+
+                #for each bike type, check:
+                #for loop on each bike type:
+                #if new bike type number > old bike type number, add bike from biked
+                #if new bike type number < old bike type number, remove bike (if that bike has future reservation, transfer it directly)
+                #if new bike type number = old bike type number, do nothing for that bike type
+
+
+
+                reservation = Reservation.objects.get(reservation_id=reservationnumber)
+
+                oldstartdatetime = reservation.starttime
+                oldenddatetime = reservation.endtime
+
+
+
+                if(startdatetime != oldstartdatetime or enddatetime != oldenddatetime):
+                    initialbikes = set()
+                    countno = 0;
+                    initbikequery = Bike.objects.raw('SELECT bike_id FROM bike, bike_on_reservation WHERE bike_id = bor_bike_id AND bor_reservation_id = %s', [reservationnumber])
+                    for bike in initbikequery:
+                        print("aeiou", bike)
+                        initialbikes.add(bike)
+                    for bike in initialbikes:
+
+                        bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [oldstartdatetime, bike.bike_id])
+                        if bike_check_resquery:
+                            newstationedatquery = Stationroutes.objects.raw('SELECT route_id, start_station_id AS s_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = %s', [bike_check_resquery[0].reservation_id])
+                            newbikequery = Bike.objects.raw('SELECT bike_id FROM bike WHERE bike_status = 4 AND bike_type = %s', [bike.bike_type.bike_type_id])
+
+                            print('this is the bike type', bike.bike_type.bike_type_id)
+
+                            with connection.cursor() as c:
+                                c.execute('UPDATE tootyred.bike_on_reservation SET bor_bike_id = %s WHERE bor_bike_id = %s AND bor_reservation_id = %s', [newbikequery[countno].bike_id, bike.bike_id, reservationnumber])
+                            newbike = Bike.objects.get(bike_id = newbikequery[countno].bike_id)
+                            countno += 1
+
+                            newbike.bike_status = StatusOfBike.objects.get(bike_status_id = 1)
+                            newbike.bike_stationedat = startstation1
+                            bike.bike_stationedat = Station.objects.get(station_id = newstationedatquery[0].s_id)
+
+                            newbike.save()
+                            bike.save()
+                        else:
+                            newbikequery = Bike.objects.raw('SELECT bike_id FROM bike WHERE bike_status = 4 AND bike_type = %s', [bike.bike_type.bike_type_id])
+
+                            print('this is the bike type', bike.bike_type.bike_type_id)
+
+                            with connection.cursor() as c:
+                                c.execute('UPDATE tootyred.bike_on_reservation SET bor_bike_id = %s WHERE bor_bike_id = %s AND bor_reservation_id = %s', [newbikequery[countno].bike_id, bike.bike_id, reservationnumber])
+                            newbike = Bike.objects.get(bike_id = newbikequery[countno].bike_id)
+                            countno += 1
+
+                            newbike.bike_status = StatusOfBike.objects.get(bike_status_id = 1)
+                            newbike.bike_stationedat = startstation1
+                            bike.bike_stationedat = None
+                            bike.bike_status = StatusOfBike.objects.get(bike_status_id = 4)
+
+                            newbike.save()
+                            bike.save()
+
+
+                oldbikes = {}
+                oldinputbikelen = 0
+                for i in range(len(TypeOfBike.objects.all())):
+                    getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                    oldbikes[i] = getoldbiketypecount[0].count1
+                    print('getoldbiketypecount: ', getoldbiketypecount[0].count1)
+                    oldinputbikelen += oldbikes[i]
+
+
+                bikestodelete = set()
+                for i in range(len(TypeOfBike.objects.all())):
+                    getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                    if bikes[i] >= oldbikes[i]:
+                        bikes[i] = bikes[i] - oldbikes[i]
+                    else:
+                        removebikecount = oldbikes[i] - bikes[i]
+                        for oldbike in getoldbikespertype:
+                            if removebikecount > 0:
+                                bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [oldstartdatetime, oldbike.bike_id])
+                                if bike_check_resquery:
+                                    newstationedatquery = Stationroutes.objects.raw('SELECT route_id, start_station_id AS s_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = %s', [bike_check_resquery[0].reservation_id])
+
+                                    bikestodelete.add(oldbike.bike_id)
+                                    oldbike.bike_stationedat = Station.objects.get(station_id = newstationedatquery[0].s_id)
+                                    oldbike.save()
+                                    removebikecount -= 1
+                                    #do same as one bellow
+                                    #for cursor, use delete instead of update
+                                else:
+                                    bikestodelete.add(oldbike.bike_id)
+                                    removebikecount -= 1
+
+
+                inputbikelen = inputbikelen - oldinputbikelen
+                print('this is the new length boi ', inputbikelen)
+
                 #For each bike type
                 biked = {}  #these are the bikes that are allowed to be reserved by the user
                 print(inputbikelen)
-                finalbikes = {} #these are the bikes that WILL be reserved to the user
+
                 # for each of the bike types
-                biked = getBikes(startdatetime, enddatetime, Station.objects.get(name=(request.POST.get("inputstartstation",""))).station_id, Station.objects.get(name=(request.POST.get("inputendstation",""))).station_id, 2)
-                print (biked[0].bike_type.bike_type_id)
+                biked = getBikes(startdatetime, enddatetime, startstation1.station_id, endstation1.station_id, 2)
+
                 bikelen=0
-                print(len(biked))
+
                 for i in range(len(biked)):
-                    bikelen += biked[i].bike_type.bike_type_id
+                    print('bikes that can be put on the database thingy :::', biked[i].bike_id)
                 #this whole part checks the biked tuple and selects the bikes of certain types on what the user wanted, the bikes gets stored in the finalbikes tuple
+
                 x = 0
                 for b in range(len(biked)):
                     #print('asdasdasd $s', biked[b])
                     #print('123', bikes[biked[b].bike_type.bike_type_id-1])
+
                     if bikes[biked[b].bike_type.bike_type_id-1] > 0:
                         bikes[biked[b].bike_type.bike_type_id-1] -= 1
-                        finalbikes[x] = biked[b]
+                        finalbikes.add(biked[b])
                         inputbikelen -= 1
                         x += 1
-                        if inputbikelen == 0:
-                            break
-                reservation = Reservation.objects.get(reservation_id=reservationnumber)
+
+
+                print('this is the final bike list :::: ',finalbikes)
                 reservation.res_cost = totalcost
                 reservation.res_date = currentDateTime
-                for reservationBike in range(len(finalbikes)):
-                    bikereservation = BikeOnReservation.objects.create(bor_bike=finalbikes[reservationBike],bor_reservation_id=reservation.reservation_id)
+                reservation.starttime = startdatetime
+                reservation.endtime = enddatetime
+                for reservationBike in finalbikes:
+                    bikereservation = BikeOnReservation.objects.create(bor_bike= reservationBike,bor_reservation_id=reservation.reservation_id)
                 reservation.save()
+
+                for oldbike in bikestodelete:
+                    with connection.cursor() as c:
+                        c.execute('DELETE FROM tootyred.bike_on_reservation  WHERE bor_bike_id = %s AND bor_reservation_id = %s', [oldbike, reservationnumber])
+
                 return redirect('/home/reservations/')
     else:
         checkMessages(request)
@@ -298,6 +422,23 @@ def getBikes(startdatetime,enddatetime,startstationid,endstationid,typeindicator
               FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3))\
                AND bike_stationedat = %s)', [startdatetime, getstationid, startdatetime, getstationid])
         '''
+
+
+    #reservation1 = Reservation.objects.get(reservation_id=9)
+    #print('gayshit 123 %d', [reservation1.starttime])
+
+    initialbikes = set()
+    initialbikes2 = set()
+    initbikequery = Bike.objects.raw('SELECT bike_id FROM bike, bike_on_reservation WHERE bike_id = bor_bike_id AND bor_reservation_id = 8')
+    for bike in initbikequery:
+        print("aeiou", bike.bike_id)
+        initialbikes.add(bike)
+        initialbikes2.add(bike)
+
+    booleancheck = initialbikes == initialbikes2
+
+    print("booleancheck ", booleancheck)
+
     #bikes that are on current or future reservations that doesnt intersect with the timings that we want
     fut_ong_bikes = Bike.objects.raw('SELECT bike_id FROM bike, reservation, bike_on_reservation, station_on_reservation, stationroutes WHERE bor_bike_id = bike_id \
         AND bor_reservation_id = reservation_id AND sor_route_id = route_id AND sor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3) \

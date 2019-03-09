@@ -5,61 +5,185 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <link rel="stylesheet" href= "{% static 'css/manager/usagereports.css' %}" type="text/css">
+
+
+<style>
+body{
+background-color: #C0C0C0;
+ font-family: 'Poppins', sans-serif;
+}
+.button {
+
+	color:black;
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: black;
+  background-color:#3dcacd ;
+  width:100%;
+  border: none;
+  border-radius: 15px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+}
+
+.button:hover {
+	background-color: #a9cce3 ;cursor: pointer;
+
+ visibility: visible;
+ opacity: 0.7; }
+ .button {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+
+
+
+.modal-content{
+	border-radius: 20px;
+	background-color: #F6F5F5;
+	text-align: center;
+font-family: 'Poppins', sans-serif;
+}
+
+.modal-body{
+		border-radius: 20px;
+	background-color: #F6F5F5;
+	font-family: 'Poppins', sans-serif;
+
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #3dcacd;
+  border-radius: 15px;
+  color:black;
+
+}
+
+.container {
+  position: relative;
+  width: 100%;
+}
+.container:hover .overlay,.overlay2,.overlay3 {
+  opacity: 1;
+}
+
+.refresh{
+	background: white;
+}
+
+.text {
+  color: black;
+  font-size: 20px;
+  position: absolute;
+  height:80%;
+  width:50%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+</style>
 {% endblock %}
 {% block body %}
 <div class="container" >
 
   <h3>Heat map of the most accessed stations for the bikes</h3>
+  <br>
 
-  <div id="map"></div>
-    <br>
    <p>Press refresh to toogle heatmap</p>
   <button class="refresh" onclick="toggleHeatmap()">Refresh</button>
+
   <div id="gap"></div>
-  <table id="t1" align="center" >
-      <tr>
-        <td style=" background:  #4D6D9A;">
-            <a href="#custom-modal1" style="color: black">
-              <div class="card-box" style=" border:1px solid black;">
-                  <i class="fa fa-file-text-o float-right text-white"  ></i>
-                  <h6 class="text-white text-uppercase m-b-20" style="text-align: center;">Visitors</h6>
-                  <h1 class="m-b-20 text-white counter" style="text-align: center;">1,587</h1>
-              </div>
-            </a>
-        </td>
-        <td style=" background: #8683D1;">
-            <a href="#custom-modal2"  data-target="#customModal1" data-toggle="modal" style="color: black">
+  <div  id="map"></div>
+    <br>
+
+
+
+        <div class="row" style="margin-left: 22%;">
+                  <div class="column"  >
+        <div class="container">
+
+            <a  href="#custom-modal2"  data-target="#customModal1" data-toggle="modal" style="color: black;">
+            	<button class="button" >
                 <div class="card-box" style=" border:1px solid black;">
                   <i class="fa fa-bar-chart float-right text-white"></i>
                   <h6 class="text-white text-uppercase m-b-20" style="text-align: center;">Users</h6>
                   <h1 class="m-b-20 text-white counter" style="text-align: center;">{{userscount}}</h1>
+                  </div>
+
+<div class="overlay">
+    <div class="text">Views details of registered users</div>
+  </div>
+
                 </div>
+            </button>
             </a>
-        </td>
-      </tr>
-      <tr>
-        <td style=" background: #99CED3;">
-          <a href="#custom-modal3"  data-target="#customModal2" data-toggle="modal" style="color: black">
+        </div>
+
+         <div class="column"  >
+      <div class="container">
+
+          <a href="#custom-modal3"  data-target="#customModal2" data-toggle="modal" style="color: black;">
+          	<button class="button">
               <div class="card-box" style=" border:1px solid black;">
                   <i class="fa fa-user-o float-right text-white"></i>
                   <h6 class="text-white text-uppercase m-b-20" style="text-align: center;">Bikes</h6>
                   <h1 class="m-b-20 text-white counter" style="text-align: center;">{{count}}</h1>
+
               </div>
+              <div class="overlay">
+    <div class="text">Displays details of bikes</div>
+     </div>
+
+        </div>
+          </button>
           </a>
-        </td>
-        <td style=" background:  #EDB5BF;">
-          <a href="#custom-modal4"  data-target="#customModal3" data-toggle="modal" style="color: black">
+      </div>
+
+       <div class="column"   >
+        <div class="container">
+          <a href="#custom-modal4"  data-target="#customModal3" data-toggle="modal" style="color: black;">
+          	<button class="button">
               <div class="card-box" style=" border:1px solid black;">
                   <i class="fa fa-bell-o float-right text-white"></i>
                   <h6 class="text-white text-uppercase m-b-20" style="text-align: center;">Feedbacks</h6>
                   <h1 class="m-b-20 text-white counter" style="text-align: center;">{{feedbackcount}}</h1>
-              </div>
+                  </div>
+               <div class="overlay">
+    <div class="text">Views feedback given by a user</div>
+     </div>
+
+        </div>
+          </button>
           </a>
-        </td>
-      </tr>
-  </table>
-    <br>
-    </br>
+
+      </div>
+  </div>
+
+   <br>
+   <br>
+
+
+
+
 
    <div class="content-page" >
          <div id="container">
@@ -118,20 +242,25 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
+
                     <div class="modal-body">
-                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                        <div class="card-body">
+
+
                           <div>
+
                               Toggle columns (click to show / hide columns):
+                              <br>
                               <a href="#" class="toggle-vis" data-column="0"><b>User ID</b></a> |
                               <a href="#" class="toggle-vis" data-column="1"><b>Name</b></a> |
                               <a href="#" class="toggle-vis" data-column="2"><b>Email</b></a> |
-                              <a href="#" class="toggle-vis" data-column="3"><b>Staff?</b></a> |
-                              <a href="#" class="toggle-vis" data-column="4"><b>Join date</b></a>
+                              <a href="#" class="toggle-vis" data-column="3"><b>Staff?</b></a>
+
 
                           </div>
+
                           <div class="table-responsive" style="padding-top: 20px; " >
-                            <table id="example1" class="table table-bordered table-hover display">
+
+                            <table  class="table table-bordered table-hover display">
                              <thead>
                                 <tr>
                                   <th>ID</th>
@@ -151,14 +280,10 @@
                                  {% endfor %}
                               </tbody>
                             </table>
-                          </div>
-                        </div>
                       </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+
+
                   </div>
                 </div>
             </div>
@@ -174,16 +299,15 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" id="t2">
-                        <div class="card-body">
+
                           <div>
                               Toggle columns (click to show / hide columns):
+                              <br>
                               <a href="#" class="toggle-vis" data-column="0"><b>Reservation ID</b></a> |
-                              <a href="#" class="toggle-vis" data-column="1"><b>Feedback</b></a> |
-
+                              <a href="#" class="toggle-vis" data-column="1"><b>Feedback</b></a>
                           </div>
-                          <div class="table-responsive"">
-                            <table id="example2" class="table table-bordered table-hover display" >
+                          <div class="table-responsive">
+                            <table  class="table table-bordered table-hover display" >
                                 <thead>
                                   <tr>
                                     <th>Reservation ID</th>
@@ -200,14 +324,10 @@
                                   {% endfor %}
                                 </tbody>
                             </table>
-                          </div>
-                        </div>
+
                       </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -223,10 +343,10 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" id="t2">
-                          <div class="card-body">
+
                             <div>
                               Toggle columns (click to show / hide columns):
+                              <br>
                               <a href="#" class="toggle-vis" data-column="0"><b>Bike ID</b></a> |
                               <a href="#" class="toggle-vis" data-column="1"><b>Bike Type</b></a> |
                               <a href="#" class="toggle-vis" data-column="2"><b>Travel count</b></a> |
@@ -234,7 +354,7 @@
 
                             </div>
                             <div class="table-responsive">
-                              <table id="example3" class="table table-bordered table-hover display">
+                              <table  class="table table-bordered table-hover display">
                                  <thead>
                                   <tr>
                                     <th>Bike ID</th>
@@ -258,14 +378,10 @@
                                   {% endfor %}
                                 </tbody>
                               </table>
-                            </div>
-                          </div>
+
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -478,6 +594,7 @@ var Bikenamelt = {{Bikenamelt|safe}};
 
     map = new google.maps.Map(document.getElementById('map'), {
                     center: {lat:55.94136542,lng:-3.18470478},
+
           zoom: 12,
           zoomControl: false,
           streetViewControl:false,
@@ -485,6 +602,7 @@ var Bikenamelt = {{Bikenamelt|safe}};
           [
         {
           "featureType": 'poi',
+
           "stylers": [{"visibility": 'off'}]
         },
             {

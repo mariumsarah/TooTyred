@@ -578,7 +578,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
          {% for record in pastreservations %}
          <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
          <tr>
-           <td  style="width:100%;"> <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button></td>
+           <td  style="width:100%;">{% if record.c_rating == None %} <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button>{% endif %}</td>
            <td  style="width:100%;">{% if record.fine_desc != None %}<button type="button" style="width:100%;" name="{{ record.fine_cost }} {{ record.reservation_id }} {{ record.fine_desc }}" class="btn btn-danger myBtnFine">PAY {{ record.fine_cost }} FINE NOW!</button>{% endif %} </td>
           </tr>
          <tr>
@@ -890,7 +890,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   var endDate1;
   var bike = {}
     {% for bike in bike_type %}
-          bike[{{ bike.bike_type_id }}] = 0;
+          bike[Number({{ bike.bike_type_id }})-1] = 0;
           document.getElementById("modalBike"+{{bike.bike_type_id}}).style.display="none";
     {% endfor %}
   var bikesselected=false;
@@ -948,7 +948,7 @@ function minutesToString(i)
     }
   for(var i = 0; i < slides.length; i++)
   {
-     bikesres[slides[i].name]++;
+     bikesres[Number(slides[i].name)-1]++;
   }
   });
    $('#exampleModal').on('show.bs.modal', function (event) {
@@ -1030,7 +1030,7 @@ function minutesToString(i)
       document.getElementById("reservationt").value=reservationnumber;
     document.getElementById("inputendstation").value=($('#endloc').text());
                         {% for bike in bike_type %}
-    document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[{{ bike.bike_type_id }}]);
+    document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[Number({{ bike.bike_type_id }})-1]);
                           {% endfor %}
     document.getElementById("inputstarttime").value=minutesToString(Number(startTime));
     document.getElementById("inputendtime").value=minutesToString(Number(endTime));
@@ -1114,7 +1114,7 @@ function minutesToString(i)
       {% endfor %}
       {% for bike in bike_type %}
        qun=Number($('#quantity{{bike.bike_type_id }}').text());
-        for(var i=0;i<qun-bikesres[{{ bike.bike_type_id }}];i++)//CHANGE TO AVAILABLE BIKES
+        for(var i=0;i<qun-bikesres[Number({{ bike.bike_type_id }})-1];i++)//CHANGE TO AVAILABLE BIKES
         {
           removeBike('bike{{ bike.bike_type_id }}');
         }
@@ -1196,7 +1196,7 @@ function minutesToString(i)
       done=0;
       var qun;
       {% for bike in bike_type %}
-           bike[{{ bike.bike_type_id }}] = 0;
+           bike[Number({{ bike.bike_type_id }})-1] = 0;
         {% endfor %}
         for(var f=0;f<4;f++)
         {
@@ -1222,7 +1222,7 @@ function minutesToString(i)
           //$("#cost").text("0");
         //  var x;
           {% for bike in bike_type %}
-            $('#quantity{{bike.bike_type_id }}').text(bikesres[{{ bike.bike_type_id }}]);
+            $('#quantity{{bike.bike_type_id }}').text(bikesres[Number({{ bike.bike_type_id }})-1]);
             $('#quantitycost{{bike.bike_type_id }}').text(((Number($('#quantity{{bike.bike_type_id }}').text()))*((Number($('#costperfifteen{{bike.bike_type_id }}').text())))));
             {% endfor %}
             $('#home-tab').text("Go back");
@@ -1233,7 +1233,7 @@ function minutesToString(i)
       {
         var qun;
         {% for bike in bike_type %}
-             bike[{{ bike.bike_type_id }}] = 0;
+             bike[Number({{ bike.bike_type_id }})-1] = 0;
           {% endfor %}
           {% for bike in bike_type %}
            qun=Number($('#quantity{{bike.bike_type_id }}').text());
@@ -1291,11 +1291,11 @@ function minutesToString(i)
   function timeSelect(){
 timesselected=true;
     {% for bike in bike_type %}
-        bike[{{ bike.bike_type_id }}]=Number($('#quantity{{ bike.bike_type_id }}').text());
+        bike[Number({{ bike.bike_type_id }})-1]=Number($('#quantity{{ bike.bike_type_id }}').text());
       {% endfor %}
     var total = 0;
     {% for bike in bike_type %}
-          total = total+bike[{{ bike.bike_type_id }}];
+          total = total+bike[Number({{ bike.bike_type_id }})-1];
       {% endfor %}
     if((total)>0)
     {
@@ -1608,31 +1608,6 @@ $.ajax({
 });
 };
 //-------------------------------------
-$('.timeedit').on('submit', function(event){
-event.preventDefault();
-edit_post();
-});
-// AJAX for posting
-function edit_post() {
-$.ajax({
-  url : "/home/reservations/", // the endpoint
-  type : "POST", // http method
-  data : { formtype: 'timeedit', reservationnumber:reser}, // data sent with the post fo
-  // handle a successful response
-  success : function(json) {
-    //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
-    //IF THERE ARE NO TIMES AVAILABLE THEN :
-    //alert('Sorry, there are no other times you can change, other reservations occupied')
-    //document.getElementById('pleaseclose').click();
-        alert(json[1]); // remove t // remove the value from the input
-  },
-
-  // handle a non-successful response
-  error : function(xhr,errmsg,err) {
-          }
-});
-};
-
 // AJAX for posting
 function cancel_reser() {
 $.ajax({
@@ -1682,6 +1657,7 @@ $.ajax({
   // handle a successful response
   success : function(json) {
     alert('Feedback Sent');
+    reload_page();
     //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
     //IF THERE ARE NO TIMES AVAILABLE THEN :
     //alert('Sorry, there are no other times you can change, other reservations occupied')
@@ -1702,7 +1678,9 @@ $.ajax({
   data : { formtype: 'feedback', reservationcode:reportreser,feedback:report,rating:1}, // data sent with the post fo
   // handle a successful response
   success : function(json) {
-    alert('Sorry for the inconvenience... Please wait for an action to be taken you will be contacted');
+    alert('Sorry for the inconvenience...You will be assisted right away!');
+    reload_page();
+
     //IF ELSE LOOP IF NO TIME THEN DISPLAY ERROR AND CLICK CANCEL BUTTON
     //IF THERE ARE NO TIMES AVAILABLE THEN :
     //alert('Sorry, there are no other times you can change, other reservations occupied')

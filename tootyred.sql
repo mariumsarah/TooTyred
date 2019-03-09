@@ -1,112 +1,10 @@
--- MySQL dump 10.13  Distrib 8.0.13, for Win64 (x86_64)
---
--- Host: localhost    Database: tootyred
--- ------------------------------------------------------
--- Server version	8.0.13
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 DROP DATABASE tootyred;
 CREATE DATABASE tootyred;
 USE tootyred;
 SET NAMES utf8 ;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `acc_status`
---
---
--- Table structure for table `auth_group`
---
-
-DROP TABLE IF EXISTS `auth_group`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auth_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(80) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_group`
---
-
-LOCK TABLES `auth_group` WRITE;
-/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_group_permissions`
---
-
-DROP TABLE IF EXISTS `auth_group_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auth_group_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
-  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_group_permissions`
---
-
-LOCK TABLES `auth_group_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_permission`
---
-
-DROP TABLE IF EXISTS `auth_permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auth_permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `content_type_id` int(11) NOT NULL,
-  `codename` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
-  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_permission`
---
-
-LOCK TABLES `auth_permission` WRITE;
-/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add users',7,'add_users'),(26,'Can change users',7,'change_users'),(27,'Can delete users',7,'delete_users'),(28,'Can view users',7,'view_users'),(29,'Can add user profile',8,'add_userprofile'),(30,'Can change user profile',8,'change_userprofile'),(31,'Can delete user profile',8,'delete_userprofile'),(32,'Can view user profile',8,'view_userprofile'),(37,'Can add stationstable',10,'add_stationstable'),(38,'Can change stationstable',10,'change_stationstable'),(39,'Can delete stationstable',10,'delete_stationstable'),(40,'Can view stationstable',10,'view_stationstable'),(41,'Can add station',11,'add_station'),(42,'Can change station',11,'change_station'),(43,'Can delete station',11,'delete_station'),(44,'Can view station',11,'view_station'),(45,'Can add bike',12,'add_bike'),(46,'Can change bike',12,'change_bike'),(47,'Can delete bike',12,'delete_bike'),(48,'Can view bike',12,'view_bike'),(49,'Can add bike type',13,'add_biketype'),(50,'Can change bike type',13,'change_biketype'),(51,'Can delete bike type',13,'delete_biketype'),(52,'Can view bike type',13,'view_biketype'),(53,'Can add status of bike',14,'add_statusofbike'),(54,'Can change status of bike',14,'change_statusofbike'),(55,'Can delete status of bike',14,'delete_statusofbike'),(56,'Can view status of bike',14,'view_statusofbike'),(57,'Can add type of bike',15,'add_typeofbike'),(58,'Can change type of bike',15,'change_typeofbike'),(59,'Can delete type of bike',15,'delete_typeofbike'),(60,'Can view type of bike',15,'view_typeofbike'),(61,'Can add acc status',16,'add_accstatus'),(62,'Can change acc status',16,'change_accstatus'),(63,'Can delete acc status',16,'delete_accstatus'),(64,'Can view acc status',16,'view_accstatus'),(65,'Can add bike on reservation',17,'add_bikeonreservation'),(66,'Can change bike on reservation',17,'change_bikeonreservation'),(67,'Can delete bike on reservation',17,'delete_bikeonreservation'),(68,'Can view bike on reservation',17,'view_bikeonreservation'),(69,'Can add checkuplog',18,'add_checkuplog'),(70,'Can change checkuplog',18,'change_checkuplog'),(71,'Can delete checkuplog',18,'delete_checkuplog'),(72,'Can view checkuplog',18,'view_checkuplog'),(73,'Can add complaints',19,'add_complaints'),(74,'Can change complaints',19,'change_complaints'),(75,'Can delete complaints',19,'delete_complaints'),(76,'Can view complaints',19,'view_complaints'),(77,'Can add creditcardinfo',20,'add_creditcardinfo'),(78,'Can change creditcardinfo',20,'change_creditcardinfo'),(79,'Can delete creditcardinfo',20,'delete_creditcardinfo'),(80,'Can view creditcardinfo',20,'view_creditcardinfo'),(85,'Can add customer rating',22,'add_customerrating'),(86,'Can change customer rating',22,'change_customerrating'),(87,'Can delete customer rating',22,'delete_customerrating'),(88,'Can view customer rating',22,'view_customerrating'),(93,'Can add maintenancelog',24,'add_maintenancelog'),(94,'Can change maintenancelog',24,'change_maintenancelog'),(95,'Can delete maintenancelog',24,'delete_maintenancelog'),(96,'Can view maintenancelog',24,'view_maintenancelog'),(105,'Can add reservation',27,'add_reservation'),(106,'Can change reservation',27,'change_reservation'),(107,'Can delete reservation',27,'delete_reservation'),(108,'Can view reservation',27,'view_reservation'),(109,'Can add reservation type',28,'add_reservationtype'),(110,'Can change reservation type',28,'change_reservationtype'),(111,'Can delete reservation type',28,'delete_reservationtype'),(112,'Can view reservation type',28,'view_reservationtype'),(113,'Can add stationfootage',29,'add_stationfootage'),(114,'Can change stationfootage',29,'change_stationfootage'),(115,'Can delete stationfootage',29,'delete_stationfootage'),(116,'Can view stationfootage',29,'view_stationfootage'),(117,'Can add station on reservation',30,'add_stationonreservation'),(118,'Can change station on reservation',30,'change_stationonreservation'),(119,'Can delete station on reservation',30,'delete_stationonreservation'),(120,'Can view station on reservation',30,'view_stationonreservation'),(121,'Can add stationroutes',31,'add_stationroutes'),(122,'Can change stationroutes',31,'change_stationroutes'),(123,'Can delete stationroutes',31,'delete_stationroutes'),(124,'Can view stationroutes',31,'view_stationroutes');
-/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user`
---
 
 DROP TABLE IF EXISTS `auth_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -123,77 +21,147 @@ CREATE TABLE `auth_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user`
---
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$120000$kCJBCXnabLY4$xNxqQ6/JqmFgcz3hEmqJdVPwCtH9nsrCPv+CLi70sVA=','2019-01-24 10:01:46',1,'tootyredsuperuser','','','tootyredsuperuser@superuser.com',1,1,'2019-01-10 05:02:01'),(10,'pbkdf2_sha256$120000$0ATBH3RyTMRt$16qW0g5mm2t+POuN49OiT2PETodgoWnYtaMmrDpBUsU=','2019-01-24 10:02:34',0,'sarahm13654','sarah','marium','sarahm13654@gmail.com',0,1,'2019-01-12 13:26:14'),(11,'pbkdf2_sha256$120000$MGKoZ4xCC1US$JnofFiaDgQ1o6+z+4lYPzi4+JdAmHZFWTZoU7V0DrPs=','2019-01-24 10:01:58',0,'operatorjohn','','','',1,1,'2019-01-24 08:54:32');
+INSERT INTO `auth_user` VALUES
+/*MANAGER */
+(1,'pbkdf2_sha256$120000$kCJBCXnabLY4$xNxqQ6/JqmFgcz3hEmqJdVPwCtH9nsrCPv+CLi70sVA=','2019-02-19 20:52:09',1,'managerjaden','','','tootyredsuperuser@superuser.com',1,1,'2019-01-10 05:02:01'),
+/* USER */
+(10,'pbkdf2_sha256$120000$0ATBH3RyTMRt$16qW0g5mm2t+POuN49OiT2PETodgoWnYtaMmrDpBUsU=','2019-02-25 07:52:58',0,'sarahm13654','sarah','marium','sarahm13654@gmail.com',0,1,'2019-01-12 13:26:14'),
+/* EMPLOYEE */
+(11,'pbkdf2_sha256$120000$MGKoZ4xCC1US$JnofFiaDgQ1o6+z+4lYPzi4+JdAmHZFWTZoU7V0DrPs=','2019-02-25 07:54:58',0,'johnsmith','','','',1,1,'2019-01-24 08:54:32'),
+/* USER */
+(12,'pbkdf2_sha256$120000$hv9533J2StDP$rqGP9igBxdpxRzpet+TKNyftU1jMs0MNvMzEnqf+Tcs=','2018-12-11 21:28:59',0,'Priya','Priya','Bhaskaran','priya.bhaskar@hotmail.com',0,1,'2019-02-06 21:53:10'),
+(13,'pbkdf2_sha256$120000$iCE0rYQq1Srh$7Uf21pfofLxmr56ePL+vbAhappQehxjZTUPyQ2RM9Hs=','2019-02-21 08:04:41',0,'Alwankazi','Alwan','Kazi','alwankazi@hotmail.com',0,1,'2019-02-06 23:54:44'),
+(14,'pbkdf2_sha256$120000$TH4td9IER5FF$Rs3rkdthMpMq5LO0I9ayvC3CZ2vgdqwUjg66yrv6WRA=','2019-02-07 08:06:32',0,'ejmagno','Edgar Joel','Magno','name_wtf@yahoo.com',0,1,'2019-02-07 07:34:07'),
+(15,'pbkdf2_sha256$120000$DIs0ZM8ZO0hE$eQv3r/dftWrbRTSyw8zDSp62D/MtLFwRBUr0kexPbQA=','2018-12-20 08:21:35',0,'kazialwan','Kazi','Alwan','alwankazi99@gmail.com',0,1,'2018-12-11 23:19:15'),
+(16,'pbkdf2_sha256$120000$Duzte7cK7ZNM$rhz1u/MVGwX7ZdR9D1Ek5yDMkEdF1i2NiY/Lwp0M4+Q=','2019-02-21 06:43:09',0,'svetyms','svet','mir','sm48@hw.ac.uk',0,1,'2018-12-20 09:35:52'),
+(17,'pbkdf2_sha256$120000$ENDqbfPiQhag$JSSpUc3TyBfDIGPAW/bHYUbly+X6N4Q+ZfoM8/YT+E4=','2019-02-10 10:06:53',0,'Raptalion01','Victor','Okpako','raptalion@gmail.com',0,1,'2019-02-10 10:06:09');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_groups`
---
-
-DROP TABLE IF EXISTS `auth_user_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auth_user_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
-  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
-  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_groups`
---
-
-LOCK TABLES `auth_user_groups` WRITE;
-/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_user_permissions`
---
-
-DROP TABLE IF EXISTS `auth_user_user_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `auth_user_user_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
-  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_user_permissions`
---
-
-LOCK TABLES `auth_user_user_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
 -- Table structure for table `bike`
 --
+--
+-- Table structure for table `station`
+--
+
+DROP TABLE IF EXISTS `station`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `station` (
+  `station_id` int(11) NOT NULL AUTO_INCREMENT,
+  `address` varchar(100) NOT NULL,
+  `info` text NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `lon` decimal(30,16) NOT NULL,
+  `lat` decimal(30,15) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `image` varchar(30) NOT NULL,
+  PRIMARY KEY (`station_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `station`
+--
+LOCK TABLES `station` WRITE;
+/*!40000 ALTER TABLE `station` DISABLE KEYS */;
+INSERT INTO `station` VALUES
+(1,'1 Greenbank Cres, Edinburgh EH10 5TE, UK','It is located in South Edinburgh in the Morningside/Oxgangs area.It is located in South Edinburgh in the Morningside/Oxgangs area. ','Braidburn Valley Park',-3.2135800000000000,55.919100000000000,1,'BraidburnValleyPark.jpg'),
+(2,'Edinburgh EH3 5PA, UK','The pretty park near Washington Lake,Spread over 34 acres, it also has a delightful formal garden in classic style','Inverleith Park',-3.2143800000000000,55.966530000000000,1,'inverleithpark.jpg'),
+(3,'Princes St, Edinburgh EH2 2HG, UK','Princes Street Gardens are two adjacent public parks in the centre of Edinburgh','Princes Street Gardens',-3.1983900000000000,55.951752000000000,1,'princesstreetgardens.jpg'),
+(4,'Melville Dr, Edinburgh EH9 1ND, UK','The Meadows is a large public park in Edinburgh, Scotland, to the south of the city centre.','The Meadows',-3.1918600000000000,55.939940000000000,1,'themeadows.JPG'),
+(5,'Lochend Rd S, Edinburgh EH7 6BP, UK','The park meant for all kids in townIt is located in South Edinburgh in the Morningside/Oxgangs area.','Lochend Park',-3.1584700000000000,55.961310000000000,1,'lochendpark.jpg'),
+(6,'Links Gardens, Edinburgh EH6 7QR, UK','The link that connects to the metroSpread over 34 acres, it also has a delightful formal garden in classic style','Leith Links',-3.1621200000000000,55.971740000000000,1,'leithlinks.png'),
+(7,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK','The old Neils garden founded in the late 90s','Dr Neils Garden',-3.1463600000000000,55.941720000000000,1,'DrNeilGarden.jpg'),
+(8,'Stanedykehead, Alnwickhill EH16 6TN, UK','The largest park to visit is righ here.Spread over 34 acres, it also has a delightful formal garden in classic style','Seven Acre Park',-3.1683400000000000,55.905840000000000,1,'SevenAcrePark.jpg'),
+(9,'1 Greenbank Cres, Edinburgh EH10 5TE, UK','Spread over 34 acres, it also has a delightful formal garden in classic style ','Saughton Park And Gardens',-3.2485290000000000,55.934132000000000,1,'SaughtonParkAndGardens.jpg'),
+(10,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK','We are a 9 hole golf course situated within 1.5 miles f the centre of Edinburgh, ','Ravelston Golf Club',-3.2577200000000000,55.954350000000000,1,'ravelstongolfclub.jpg');
+/*!40000 ALTER TABLE `station` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `customer_rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `customer_rating` (
+  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rating_value` int(1) NOT NULL,
+  PRIMARY KEY (`rating_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_rating`
+--
+
+LOCK TABLES `customer_rating` WRITE;
+/*!40000 ALTER TABLE `customer_rating` DISABLE KEYS */;
+INSERT INTO `customer_rating` VALUES (1,1),(2,2),(3,3),(4,4),(5,5);
+/*!40000 ALTER TABLE `customer_rating` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `status_of_bike`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `status_of_bike` (
+  `bike_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bike_status_name` varchar(20) NOT NULL,
+  PRIMARY KEY (`bike_status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_of_bike`
+--
+
+LOCK TABLES `status_of_bike` WRITE;
+/*!40000 ALTER TABLE `status_of_bike` DISABLE KEYS */;
+INSERT INTO `status_of_bike` VALUES
+(1,'stationed'),
+(2,'OutOfservice'),
+(3,'active'),
+(4,'stored'),
+(5,'tracked');
+/*!40000 ALTER TABLE `status_of_bike` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `type_of_bike`
+--
+
+DROP TABLE IF EXISTS `type_of_bike`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `type_of_bike` (
+  `bike_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bike_info` text NOT NULL,
+  `bike_model` varchar(20) NOT NULL,
+  `bike_type` varchar(20) NOT NULL,
+  `bike_cost` decimal(11,2) NOT NULL,
+  `bike_image` varchar(30) NOT NULL,
+  PRIMARY KEY (`bike_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `type_of_bike`
+--
+
+LOCK TABLES `type_of_bike` WRITE;
+/*!40000 ALTER TABLE `type_of_bike` DISABLE KEYS */;
+INSERT INTO `type_of_bike` VALUES
+(1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling. Mountain bikes share similarities with other bicycles, but incorporate features designed to enhance durability and performance in rough terrain.','Shimano XT','Mountain Bike',2.00,'shimano.png'),
+(2,'The tandem bicycle or twin is a form of bicycle designed to be ridden by more than one person.','Fuji X','Tandem Bike',4.00,'tandem.png'),
+(3,'The road bike is used  for traveling at speed on paved roads. ','Fuji Crank T ','Road Bike',1.25,'road.png'),
+(4,'Wheelchair bikes has an advanced wheelchair design enabling easy and comfortable pedaling to ensure maximum maneuverability with minimum effort.','VeloPlus','Wheelchair Bike',3.50,'veloplus.png');
+/*!40000 ALTER TABLE `type_of_bike` ENABLE KEYS */;
+UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bike`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -220,10 +188,185 @@ CREATE TABLE `bike` (
 
 LOCK TABLES `bike` WRITE;
 /*!40000 ALTER TABLE `bike` DISABLE KEYS */;
-INSERT INTO `bike` VALUES (1,3,0.00,1,1),(2,3,0.00,1,1),(3,3,0.00,1,1),(4,1,0.00,1,1),(5,1,0.00,1,1),(6,2,0.00,1,1),(7,2,0.00,1,1),(8,4,0.00,1,1),(9,3,0.00,1,2),(10,3,0.00,1,2),(11,3,0.00,1,2),(12,1,0.00,1,2),(13,1,0.00,1,2),(14,2,0.00,1,2),(15,2,0.00,1,2),(16,4,0.00,1,2),(17,3,0.00,1,3),(18,3,0.00,1,3),(19,3,0.00,1,3),(20,1,0.00,1,3),(21,1,0.00,1,3),(22,2,0.00,1,3),(23,2,0.00,1,3),(24,4,0.00,1,3),(25,3,0.00,1,4),(26,3,0.00,1,4),(27,3,0.00,1,4),(28,1,0.00,1,4),(29,1,0.00,1,4),(30,2,0.00,1,4),(31,2,0.00,1,4),(32,4,0.00,1,4),(33,3,0.00,1,5),(34,3,0.00,1,5),(35,3,0.00,1,5),(36,1,0.00,1,5),(37,1,0.00,1,5),(38,2,0.00,1,5),(39,2,0.00,1,5),(40,4,0.00,1,5),(41,3,0.00,1,6),(42,3,0.00,1,6),(43,3,0.00,1,6),(44,1,0.00,1,6),(45,1,0.00,1,6),(46,2,0.00,1,6),(47,2,0.00,1,6),(48,4,0.00,1,6),(49,3,0.00,1,7),(50,3,0.00,1,7),(51,3,0.00,1,7),(52,1,0.00,1,7),(53,1,0.00,1,7),(54,2,0.00,1,7),(55,2,0.00,1,7),(56,4,0.00,1,7),(57,3,0.00,1,8),(58,3,0.00,1,8),(59,3,0.00,1,8),(60,1,0.00,1,8),(61,1,0.00,1,8),(62,2,0.00,1,8),(63,2,0.00,1,8),(64,4,0.00,1,8),(65,3,0.00,1,9),(66,3,0.00,1,9),(67,3,0.00,1,9),(68,1,0.00,1,9),(69,1,0.00,1,9),(70,2,0.00,1,9),(71,2,0.00,1,9),(72,4,0.00,1,9),(73,3,0.00,1,10),(74,3,0.00,1,10),(75,3,0.00,1,10),(76,1,0.00,1,10),(77,1,0.00,1,10),(78,2,0.00,1,10),(79,2,0.00,1,10),(80,4,0.00,1,10);
+INSERT INTO `bike` VALUES (1,3,0.00,1,4),(2,3,0.00,1,2),(3,3,0.00,1,6),(4,1,0.00,1,5),(5,1,0.00,1,5),(6,2,0.00,1,8),(7,2,0.00,1,5),(8,4,0.00,1,1),(9,3,0.00,1,6),(10,3,0.00,1,4),(11,3,0.00,1,2),(12,1,0.00,1,4),(13,1,0.00,1,1),(14,2,0.00,1,7),(15,2,0.00,1,2),(16,4,0.00,1,1),(17,3,0.00,1,2),(18,3,0.00,1,5),(19,3,0.00,1,5),(20,1,0.00,1,4),(21,1,0.00,1,6),(22,2,0.00,1,5),(23,2,0.00,1,10),(24,4,0.00,1,7),(25,3,0.00,1,4),(26,3,0.00,1,5),(27,3,0.00,1,1),(28,1,0.00,1,7),(29,1,0.00,1,7),(30,2,0.00,1,7),(31,2,0.00,1,9),(32,4,0.00,1,7),(33,3,0.00,1,1),(34,3,0.00,1,6),(35,3,0.00,1,6),(36,1,0.00,1,9),(37,1,0.00,1,5),(38,2,0.00,1,6),(39,2,0.00,1,5),(40,4,0.00,1,5),(41,3,0.00,1,8),(42,3,0.00,1,7),(43,3,0.00,1,3),(44,1,0.00,1,6),(45,1,0.00,1,7),(46,2,0.00,1,9),(47,2,0.00,1,1),(48,4,0.00,1,3),(49,3,0.00,1,8),(50,3,0.00,1,8),(51,3,0.00,1,2),(52,1,0.00,1,8),(53,1,0.00,1,1),(54,2,0.00,1,1),(55,2,0.00,1,2),(56,4,0.00,1,1),(57,3,0.00,1,2),(58,3,0.00,1,1),(59,3,0.00,1,8),(60,1,0.00,1,4),(61,1,0.00,1,7),(62,2,0.00,1,1),(63,2,0.00,1,8),(64,4,0.00,1,3),(65,3,0.00,1,1),(66,3,0.00,1,5),(67,3,0.00,1,7),(68,1,0.00,3,NULL),(69,1,0.00,1,5),(70,2,0.00,1,4),(71,2,0.00,1,2),(72,4,0.00,1,9),(73,3,0.00,1,2),(74,3,0.00,1,9),(75,3,0.00,1,1),(76,1,0.00,1,7),(77,1,0.00,1,9),(78,2,0.00,1,3),(79,2,0.00,1,3),(80,4,0.00,1,10);
 /*!40000 ALTER TABLE `bike` ENABLE KEYS */;
 UNLOCK TABLES;
 
+-- Table structure for table `reservation_type`
+--
+
+DROP TABLE IF EXISTS `reservation_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `reservation_type` (
+  `res_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `res_type_name` varchar(20) NOT NULL,
+  PRIMARY KEY (`res_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+--
+-- Dumping data for table `reservation_type`
+--
+
+LOCK TABLES `reservation_type` WRITE;
+/*!40000 ALTER TABLE `reservation_type` DISABLE KEYS */;
+INSERT INTO `reservation_type` VALUES (1,'past'),(2,'ongoing'),(3,'future');
+/*!40000 ALTER TABLE `reservation_type` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `reservation` (
+  `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `res_code` varchar(6) NOT NULL,
+  `res_type` int(11) NOT NULL,
+  `res_cost` decimal(11,2) NOT NULL,
+  `res_date` datetime NOT NULL,
+  `starttime` datetime NOT NULL,
+  `endtime` datetime NOT NULL,
+  `c_rating` int(11) DEFAULT NULL,
+  `feedback` text DEFAULT NULL,
+  `c_id` int(11) DEFAULT NULL,
+  `fine_cost` decimal(11,2) DEFAULT NULL,
+  `fine_desc` text,
+  `fined_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`reservation_id`),
+  KEY `fk_res_type` (`res_type`),
+  KEY `fk_c_rating` (`c_rating`),
+  KEY `fk_c_id` (`c_id`),
+  CONSTRAINT `fk_c_id` FOREIGN KEY (`c_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_c_rating` FOREIGN KEY (`c_rating`) REFERENCES `customer_rating` (`rating_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_res_type` FOREIGN KEY (`res_type`) REFERENCES `reservation_type` (`res_type_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `reservation` WRITE;
+/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
+INSERT INTO `reservation` VALUES
+(4,'331116',1,14.00,'2018-12-06 17:46:56','2019-02-07 08:30:00','2019-02-07 09:00:00',4,'It was ',10,NULL,NULL,NULL),
+(7,'938180',1,679.00,'2018-12-11 18:52:52','2016-11-05 12:15:00','2016-11-15 12:30:00',NULL,NULL,13,NULL,NULL,NULL),
+(8,'631130',1,114.00,'2018-12-11 20:36:19','2019-01-01 14:00:00','2019-01-01 16:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(9,'812941',1,147.00,'2018-12-11 20:37:21','2019-01-02 14:00:00','2019-01-02 17:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(10,'354188',1,122.50,'2018-12-11 20:38:35','2019-01-03 17:30:00','2019-01-03 20:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(11,'054651',1,176.00,'2018-12-11 20:40:22','2019-01-04 21:30:00','2019-01-05 01:30:00',NULL,NULL,13,NULL,NULL,NULL),
+(12,'793912',1,112.75,'2018-12-11 20:43:38','2019-01-05 21:00:00','2019-01-05 23:45:00',NULL,NULL,13,NULL,NULL,NULL),
+(13,'022517',1,88.00,'2018-12-11 20:45:20','2019-01-06 14:00:00','2019-01-06 16:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(14,'867163',1,672.00,'2018-12-11 20:46:18','2019-01-07 18:00:00','2019-01-08 18:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(15,'205675',1,54.00,'2018-12-11 20:47:02','2019-01-09 22:15:00','2019-01-09 23:45:00',NULL,NULL,13,NULL,NULL,NULL),
+(16,'589447',1,880.00,'2018-12-11 20:47:42','2019-01-10 22:00:00','2019-01-11 18:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(17,'904596',1,132.00,'2018-12-11 20:48:15','2019-01-12 17:00:00','2019-01-12 21:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(18,'992762',1,181.50,'2018-12-11 20:51:03','2019-01-13 17:15:00','2019-01-13 22:45:00',NULL,NULL,13,NULL,NULL,NULL),
+(19,'868549',1,341.00,'2018-12-11 20:51:45','2019-01-14 20:30:00','2019-01-15 02:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(20,'596891',1,50.00,'2018-12-11 20:53:02','2019-01-15 14:00:00','2019-01-15 16:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(21,'894753',1,665.00,'2018-12-11 20:53:33','2019-01-16 20:30:00','2019-01-17 06:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(22,'222409',1,41.00,'2018-12-11 20:54:17','2019-01-16 21:00:00','2019-01-16 22:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(23,'019860',1,460.00,'2018-12-11 20:55:01','2019-01-17 21:00:00','2019-01-18 07:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(24,'798363',1,105.00,'2018-12-11 20:55:43','2019-01-18 07:30:00','2019-01-18 11:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(25,'882727',1,656.00,'2018-12-11 20:56:33','2019-01-20 17:00:00','2019-01-21 09:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(26,'782120',1,90.00,'2018-12-11 20:58:40','2019-01-22 14:00:00','2019-01-22 16:30:00',NULL,NULL,13,NULL,NULL,NULL),
+(27,'392730',1,445.50,'2018-12-11 20:59:18','2019-01-22 18:00:00','2019-01-23 07:30:00',NULL,NULL,13,NULL,NULL,NULL),
+(28,'701386',1,246.00,'2018-12-11 21:00:24','2019-01-25 17:00:00','2019-01-25 23:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(29,'832111',1,144.00,'2018-12-11 21:17:32','2019-01-26 04:00:00','2019-01-26 08:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(30,'390959',1,792.00,'2018-12-11 21:18:10','2019-01-27 15:15:00','2019-01-28 15:15:00',NULL,NULL,13,NULL,NULL,NULL),
+(31,'538201',1,35.00,'2018-12-11 21:18:43','2019-01-28 22:30:00','2019-01-28 23:45:00',NULL,NULL,13,NULL,NULL,NULL),
+(32,'005181',1,105.00,'2018-12-11 21:19:52','2019-01-29 14:30:00','2019-01-29 18:15:00',NULL,NULL,13,NULL,NULL,NULL),
+(33,'133764',1,612.00,'2018-12-11 21:20:28','2019-02-01 09:00:00','2019-02-02 02:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(34,'602977',1,26.00,'2018-12-11 21:23:16','2019-02-02 21:30:00','2019-02-02 22:00:00',NULL,NULL,13,NULL,NULL,NULL),
+(35,'039242',1,60.00,'2018-12-11 21:30:45','2019-01-01 14:00:00','2019-01-01 16:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(36,'832819',1,543.25,'2018-12-11 21:32:15','2019-01-02 19:15:00','2019-01-03 08:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(37,'078090',1,76.00,'2018-12-11 21:32:54','2019-01-04 14:00:00','2019-01-04 16:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(38,'963597',1,18.75,'2018-12-11 21:39:36','2019-01-06 21:30:00','2019-01-06 22:15:00',NULL,NULL,12,NULL,NULL,NULL),
+(39,'818231',1,60.00,'2018-12-11 21:41:59','2019-01-06 21:00:00','2019-01-06 23:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(40,'696977',1,50.00,'2018-12-11 21:42:39','2019-01-07 16:00:00','2019-01-07 18:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(41,'644768',1,720.00,'2018-12-11 21:43:18','2019-01-08 07:45:00','2019-01-09 07:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(42,'774945',1,31.25,'2018-12-11 21:43:54','2019-01-09 22:30:00','2019-01-09 23:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(43,'002549',1,540.00,'2018-12-11 21:44:39','2019-01-09 15:00:00','2019-01-10 09:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(44,'618029',1,12.50,'2018-12-11 21:45:11','2019-01-11 14:00:00','2019-01-11 14:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(45,'069027',1,25.00,'2018-12-11 21:45:46','2019-01-11 20:45:00','2019-01-11 21:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(46,'142220',1,456.00,'2018-12-11 21:46:24','2019-01-12 22:00:00','2019-01-13 10:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(47,'340071',1,25.00,'2018-12-11 21:46:53','2019-01-14 21:30:00','2019-01-14 22:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(48,'632021',1,49.50,'2018-12-11 21:57:23','2019-01-15 21:30:00','2019-01-15 23:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(49,'642107',1,555.00,'2018-12-11 21:57:56','2019-01-17 07:30:00','2019-01-18 02:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(50,'686106',1,138.00,'2018-12-11 21:58:32','2019-01-18 14:00:00','2019-01-18 17:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(51,'593734',1,206.25,'2018-12-11 21:59:41','2019-01-19 13:30:00','2019-01-19 21:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(52,'083373',1,697.50,'2018-12-11 22:02:19','2019-01-20 04:15:00','2019-01-21 03:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(53,'632138',1,135.00,'2018-12-11 23:10:25','2019-01-21 17:45:00','2019-01-21 22:15:00',NULL,NULL,12,NULL,NULL,NULL),
+(54,'824384',1,712.50,'2018-12-11 23:11:26','2019-01-22 14:00:00','2019-01-23 13:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(55,'518325',1,299.25,'2018-12-11 23:12:28','2019-01-23 15:30:00','2019-01-23 20:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(56,'008884',1,420.00,'2018-12-11 23:13:14','2019-01-25 20:30:00','2019-01-26 10:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(57,'943763',1,190.00,'2018-12-11 23:13:58','2019-01-26 11:00:00','2019-01-26 16:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(58,'668370',1,645.00,'2018-12-11 23:14:39','2019-01-27 20:30:00','2019-01-28 18:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(59,'061200',1,12.50,'2018-12-11 23:15:23','2019-01-30 21:00:00','2019-01-30 21:30:00',NULL,NULL,12,NULL,NULL,NULL),
+(60,'600873',1,720.00,'2018-12-11 23:16:00','2019-01-31 08:45:00','2019-02-01 08:45:00',NULL,NULL,12,NULL,NULL,NULL),
+(61,'133208',1,56.00,'2018-12-11 23:16:52','2019-02-01 14:00:00','2019-02-01 16:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(62,'036003',1,962.00,'2018-12-11 23:17:19','2019-02-02 19:30:00','2019-02-03 14:00:00',NULL,NULL,12,NULL,NULL,NULL),
+(63,'775961',1,67.50,'2018-12-11 23:27:41','2019-01-14 20:45:00','2019-01-14 23:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(64,'478653',1,624.00,'2018-12-11 23:29:06','2019-01-12 20:15:00','2019-01-13 08:15:00',NULL,NULL,15,NULL,NULL,NULL),
+(65,'050734',1,323.00,'2018-12-11 23:30:24','2019-01-13 18:00:00','2019-01-13 22:45:00',NULL,NULL,15,NULL,NULL,NULL),
+(66,'014915',1,12.50,'2018-12-11 23:30:57','2019-01-11 21:30:00','2019-01-11 22:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(67,'170856',1,60.00,'2018-12-11 23:32:22','2019-01-11 14:00:00','2019-01-11 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(68,'531168',1,712.50,'2018-12-11 23:33:49','2019-01-09 20:30:00','2019-01-10 20:15:00',NULL,NULL,15,NULL,NULL,NULL),
+(69,'062578',1,128.25,'2018-12-11 23:36:51','2019-01-05 20:00:00','2019-01-05 22:15:00',NULL,NULL,15,NULL,NULL,NULL),
+(70,'115436',3,630.00,'2018-12-20 09:36:51','2019-02-12 01:45:00','2019-02-13 00:15:00',NULL,NULL,16,NULL,NULL,NULL),
+(71,'727284',1,535.50,'2018-12-20 10:55:42','2019-01-01 18:00:00','2019-01-02 09:45:00',NULL,NULL,15,NULL,NULL,NULL),
+(72,'208528',1,127.50,'2018-12-20 10:56:14','2019-01-02 20:00:00','2019-01-02 23:45:00',NULL,NULL,15,NULL,NULL,NULL),
+(73,'074293',1,988.00,'2018-12-20 10:56:46','2019-01-03 11:00:00','2019-01-04 06:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(74,'933524',1,88.00,'2018-12-20 10:57:33','2019-01-06 14:00:00','2019-01-06 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(75,'730674',1,104.00,'2018-12-20 10:58:25','2019-01-07 14:00:00','2019-01-07 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(76,'350037',1,68.00,'2018-12-20 10:59:00','2019-01-09 18:00:00','2019-01-09 19:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(77,'194494',1,741.00,'2018-12-20 11:01:15','2019-01-15 18:45:00','2019-01-16 09:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(78,'049652',1,104.00,'2018-12-20 11:01:44','2019-01-16 21:00:00','2019-01-16 23:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(79,'404854',1,82.00,'2018-12-20 11:02:17','2019-01-18 14:00:00','2019-01-18 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(80,'251922',1,100.00,'2018-12-20 11:55:21','2019-01-16 14:00:00','2019-01-16 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(81,'769516',1,435.00,'2018-12-20 11:56:38','2019-01-19 14:00:00','2019-01-20 04:30:00',NULL,NULL,15,NULL,NULL,NULL),
+(82,'842964',1,184.50,'2018-12-20 11:57:17','2019-01-21 15:00:00','2019-01-21 19:30:00',NULL,NULL,15,NULL,NULL,NULL),
+(83,'277275',1,306.25,'2018-12-20 12:32:29','2019-01-23 10:30:00','2019-01-23 22:45:00',NULL,NULL,15,NULL,NULL,NULL),
+(84,'324362',1,600.00,'2018-12-20 12:33:02','2019-01-24 07:00:00','2019-01-25 03:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(85,'912185',1,840.50,'2018-12-20 12:33:46','2019-01-25 06:30:00','2019-01-26 03:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(86,'344760',1,41.00,'2018-12-20 12:34:23','2019-01-27 14:30:00','2019-01-27 15:30:00',NULL,NULL,15,NULL,NULL,NULL),
+(87,'722672',1,980.50,'2018-12-20 12:35:19','2019-01-27 07:30:00','2019-01-28 02:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(88,'295557',1,50.00,'2018-12-20 12:35:58','2019-01-29 14:00:00','2019-01-29 16:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(89,'679343',1,164.00,'2018-12-20 12:37:37','2019-01-30 20:00:00','2019-01-31 00:00:00',NULL,NULL,15,NULL,NULL,NULL),
+(90,'928100',1,420.00,'2018-12-20 12:38:07','2019-01-31 21:30:00','2019-02-01 11:30:00',NULL,NULL,15,NULL,NULL,NULL),
+(91,'885261',1,255.00,'2018-12-20 12:45:27','2019-01-01 19:30:00','2019-01-02 03:00:00',3,'',10,NULL,NULL,NULL),
+(92,'539091',1,105.00,'2018-12-20 12:46:04','2019-01-03 14:30:00','2019-01-03 18:15:00',NULL,NULL,10,NULL,NULL,NULL),
+(93,'096910',1,102.00,'2018-12-20 12:46:54','2019-01-04 16:00:00','2019-01-04 19:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(94,'790169',1,198.00,'2018-12-20 12:47:48','2019-01-04 09:00:00','2019-01-04 15:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(95,'703132',1,816.00,'2018-12-20 12:53:22','2019-01-06 20:00:00','2019-01-07 20:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(96,'978499',1,553.00,'2018-12-20 12:54:22','2019-01-08 14:00:00','2019-01-09 09:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(97,'632544',1,84.00,'2018-12-20 12:54:53','2019-01-09 15:00:00','2019-01-09 18:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(98,'299732',1,144.00,'2018-12-20 12:58:37','2019-01-10 12:00:00','2019-01-10 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(99,'869175',1,784.00,'2018-12-20 12:59:11','2019-01-11 17:00:00','2019-01-12 09:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(100,'649848',1,60.00,'2018-12-20 12:59:41','2019-01-13 14:00:00','2019-01-13 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(101,'047103',1,912.00,'2018-12-20 13:00:14','2019-01-14 09:00:00','2019-01-15 09:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(102,'703382',1,503.75,'2018-12-20 13:01:10','2019-01-15 19:15:00','2019-01-16 03:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(103,'103934',1,98.00,'2018-12-20 13:01:48','2019-01-16 14:00:00','2019-01-16 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(104,'390114',1,136.00,'2018-12-20 13:02:18','2019-01-17 13:45:00','2019-01-17 17:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(105,'391309',1,142.50,'2018-12-20 13:03:11','2019-01-18 19:00:00','2019-01-18 23:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(106,'364971',1,72.00,'2018-12-20 13:28:32','2019-01-19 14:00:00','2019-01-19 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(107,'492240',1,63.00,'2018-12-20 13:29:05','2019-01-19 22:00:00','2019-01-19 23:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(108,'323304',1,99.00,'2018-12-20 13:39:30','2019-01-20 14:00:00','2019-01-20 16:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(109,'095250',1,195.00,'2018-12-20 13:41:24','2019-01-20 15:00:00','2019-01-20 18:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(110,'703086',1,76.50,'2018-12-20 13:42:23','2019-01-21 05:30:00','2019-01-21 07:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(111,'469942',1,78.00,'2018-12-20 13:42:48','2019-01-21 22:15:00','2019-01-21 23:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(112,'588560',1,1104.00,'2018-12-20 13:43:17','2019-01-23 19:30:00','2019-01-24 19:30:00',NULL,NULL,10,NULL,NULL,NULL),
+(113,'004304',1,758.50,'2018-12-20 13:43:54','2019-01-26 22:15:00','2019-01-27 16:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(114,'252946',1,552.00,'2018-12-20 13:44:59','2019-01-28 10:45:00','2019-01-28 22:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(115,'379716',1,922.50,'2018-12-20 13:46:03','2019-01-30 11:15:00','2019-01-31 09:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(116,'447260',1,60.00,'2018-12-20 13:46:38','2019-01-31 14:00:00','2019-01-31 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(117,'804889',1,70.00,'2018-12-20 13:47:23','2019-02-01 14:00:00','2019-02-01 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(118,'860305',1,82.00,'2018-12-20 13:47:52','2019-02-02 14:00:00','2019-02-02 16:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(119,'216665',1,869.25,'2018-12-20 13:48:24','2019-02-03 17:45:00','2019-02-04 09:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(120,'233148',1,7.00,'2019-02-10 06:38:40','2019-02-10 07:45:00','2019-02-10 08:00:00',NULL,NULL,10,NULL,NULL,NULL),
+(121,'667867',1,280.50,'2019-02-10 10:09:17','2019-02-10 16:30:00','2019-02-11 00:45:00',NULL,NULL,17,NULL,NULL,NULL),
+(122,'395223',1,280.50,'2019-02-10 10:09:19','2019-02-10 16:30:00','2019-02-11 00:45:00',NULL,NULL,17,NULL,NULL,NULL),
+(123,'464823',1,7.00,'2019-02-13 08:19:00','2019-02-13 09:00:00','2019-02-13 09:15:00',NULL,NULL,10,NULL,NULL,NULL),
+(131,'229931',1,9.75,'2019-02-17 11:30:00','2019-02-17 12:30:00','2019-02-17 12:45:00',NULL,NULL,10,NULL,NULL,NULL),
+(133,'826208',2,462.00,'2019-02-21 06:22:18','2019-02-21 07:30:00','2019-02-22 00:00:00',NULL,NULL,10,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
+UNLOCK TABLES;
 --
 -- Table structure for table `bike_on_reservation`
 --
@@ -241,108 +384,10 @@ CREATE TABLE `bike_on_reservation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `bike_on_reservation`
---
-
-
---
--- Table structure for table `checkuplog`
---
-
-DROP TABLE IF EXISTS `checkuplog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `checkuplog` (
-  `clog_id` int(11) NOT NULL AUTO_INCREMENT,
-  `clog_count` int(11) NOT NULL,
-  `checkup_date` date NOT NULL,
-  `checkup_desc` text NOT NULL,
-  `checkuplog_station_id` int(11) NOT NULL,
-  PRIMARY KEY (`clog_id`),
-  KEY `fk_checkuplog_station_id` (`checkuplog_station_id`),
-  CONSTRAINT `fk_checkuplog_station_id` FOREIGN KEY (`checkuplog_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `checkuplog`
---
-
-LOCK TABLES `checkuplog` WRITE;
-/*!40000 ALTER TABLE `checkuplog` DISABLE KEYS */;
-INSERT INTO `checkuplog` VALUES (1,1,'2019-01-02','slight outward damage on rack no. 12, all racks operating normally',1),(2,2,'2019-01-12','all racks operating normally',1),(3,3,'2019-01-18','all racks operating normally',1),(4,1,'2019-01-01','all racks operating normally',2),(5,2,'2019-01-18','all racks operating normally',2),(6,1,'2019-01-04','racks no. 04 to 08 needs to be cleaned, all racks operating normally',3),(7,1,'2019-01-02','all racks operating normally',4),(8,1,'2019-01-02','all racks operating normally',5);
-/*!40000 ALTER TABLE `checkuplog` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `complaints`
---
-
-DROP TABLE IF EXISTS `complaints`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `complaints` (
-  `complaint_id` int(5) NOT NULL AUTO_INCREMENT,
-  `complaint_type` varchar(20) NOT NULL,
-  `complaint_desc` text NOT NULL,
-  PRIMARY KEY (`complaint_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `complaints`
---
-
-LOCK TABLES `complaints` WRITE;
-/*!40000 ALTER TABLE `complaints` DISABLE KEYS */;
-INSERT INTO `complaints` VALUES (1,'defective equipment','the bike that was given me was defective');
-/*!40000 ALTER TABLE `complaints` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `creditcardinfo`
---
-
-DROP TABLE IF EXISTS `creditcardinfo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `creditcardinfo` (
-  `card_id` int(5) NOT NULL AUTO_INCREMENT,
-  `card_info` int(16) NOT NULL,
-  `card_exp_date` date NOT NULL,
-  PRIMARY KEY (`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `creditcardinfo`
---
-
-LOCK TABLES `creditcardinfo` WRITE;
-/*!40000 ALTER TABLE `creditcardinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `creditcardinfo` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-DROP TABLE IF EXISTS `customer_rating`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `customer_rating` (
-  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
-  `rating_value` int(1) NOT NULL,
-  PRIMARY KEY (`rating_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `customer_rating`
---
-
-LOCK TABLES `customer_rating` WRITE;
-/*!40000 ALTER TABLE `customer_rating` DISABLE KEYS */;
-INSERT INTO `customer_rating` VALUES (1,1),(2,2),(3,3),(4,4),(5,5);
-/*!40000 ALTER TABLE `customer_rating` ENABLE KEYS */;
+LOCK TABLES `bike_on_reservation` WRITE;
+/*!40000 ALTER TABLE `bike_on_reservation` DISABLE KEYS */;
+INSERT INTO `bike_on_reservation` VALUES (20,4),(21,7),(20,8),(25,8),(28,8),(30,8),(26,9),(29,9),(31,9),(65,10),(68,10),(70,10),(36,11),(38,11),(57,12),(62,12),(23,13),(36,13),(60,14),(38,15),(12,16),(14,16),(66,17),(69,17),(41,18),(44,18),(49,19),(50,19),(52,19),(53,19),(27,20),(1,21),(2,21),(6,21),(7,21),(58,22),(63,22),(6,23),(17,23),(18,23),(9,24),(10,24),(7,25),(19,25),(29,26),(52,26),(1,27),(29,27),(2,28),(63,28),(12,29),(20,29),(9,30),(21,30),(12,31),(76,32),(28,33),(29,33),(78,34),(79,34),(73,35),(74,35),(42,36),(46,36),(59,37),(61,37),(65,37),(73,38),(33,39),(34,39),(33,40),(34,41),(42,41),(75,42),(3,43),(26,43),(33,44),(33,45),(11,46),(13,46),(33,46),(11,47),(13,48),(33,48),(33,49),(67,49),(11,50),(51,50),(54,50),(10,51),(10,52),(17,52),(49,53),(50,53),(1,54),(10,54),(1,55),(14,55),(55,55),(2,56),(17,56),(49,57),(50,57),(52,57),(18,58),(27,58),(18,59),(10,60),(25,60),(12,61),(28,62),(29,62),(61,62),(76,62),(59,63),(65,63),(23,64),(30,64),(23,65),(30,65),(71,65),(34,66),(3,67),(35,67),(42,68),(57,68),(9,69),(14,69),(15,69),(13,70),(16,71),(56,72),(22,73),(46,73),(4,74),(22,74),(31,75),(46,75),(31,76),(46,76),(62,76),(23,77),(30,77),(31,78),(46,78),(58,79),(62,79),(24,80),(71,80),(58,81),(59,81),(23,82),(33,82),(33,83),(2,84),(17,84),(2,85),(23,85),(23,86),(58,86),(16,87),(56,87),(58,87),(59,88),(30,89),(42,89),(10,90),(25,90),(72,91),(5,92),(72,93),(59,94),(61,94),(32,95),(77,96),(36,97),(36,98),(77,98),(43,99),(45,99),(47,99),(3,100),(35,100),(3,101),(35,101),(44,101),(23,102),(30,102),(43,102),(45,102),(68,103),(70,103),(74,103),(64,104),(11,105),(51,105),(47,106),(54,107),(54,108),(7,109),(54,109),(32,110),(6,111),(70,111),(1,112),(14,112),(43,112),(57,113),(71,113),(1,114),(14,114),(43,114),(6,115),(41,115),(2,116),(17,116),(1,117),(10,117),(25,117),(6,118),(41,118),(14,119),(30,119),(42,119),(60,120),(48,121),(64,122),(60,123),(72,131),(74,131),(68,133);
+/*!40000 ALTER TABLE `bike_on_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -373,9 +418,10 @@ CREATE TABLE `django_admin_log` (
 -- Dumping data for table `django_admin_log`
 --
 
+
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2019-01-10 06:08:21','2','test',1,'[{\"added\": {}}]',4,1),(2,'2019-01-10 06:12:41','3','testing',1,'[{\"added\": {}}]',4,1),(3,'2019-01-10 06:12:52','1','UserProfile object (1)',3,'',8,1),(4,'2019-01-10 06:13:12','2','test',3,'',4,1),(5,'2019-01-10 06:13:12','3','testing',3,'',4,1),(6,'2019-01-10 08:09:38','4','test1',3,'',4,1),(7,'2019-01-10 08:09:38','5','test2',3,'',4,1),(8,'2019-01-10 08:32:58','6','test1',3,'',4,1),(9,'2019-01-11 14:33:38','7','sarahm@gmail.com',3,'',4,1),(10,'2019-01-12 13:25:40','8','sarahm13654',3,'',4,1),(11,'2019-01-12 13:25:41','9','sarahm1365429',3,'',4,1),(12,'2019-01-24 08:54:33','11','operatorjohn',1,'[{\"added\": {}}]',4,1),(13,'2019-01-24 09:42:49','11','operatorjohn',2,'[{\"changed\": {\"fields\": [\"is_staff\"]}}]',4,1);
+INSERT INTO `django_admin_log` VALUES (1,'2019-01-10 06:08:21','2','test',1,'[{\"added\": {}}]',4,1),(2,'2019-01-10 06:12:41','3','testing',1,'[{\"added\": {}}]',4,1),(3,'2019-01-10 06:12:52','1','UserProfile object (1)',3,'',8,1),(4,'2019-01-10 06:13:12','2','test',3,'',4,1),(5,'2019-01-10 06:13:12','3','testing',3,'',4,1),(6,'2019-01-10 08:09:38','4','test1',3,'',4,1),(7,'2019-01-10 08:09:38','5','test2',3,'',4,1),(8,'2019-01-10 08:32:58','6','test1',3,'',4,1),(9,'2019-01-11 14:33:38','7','sarahm@gmail.com',3,'',4,1),(10,'2019-01-12 13:25:40','8','sarahm13654',3,'',4,1),(11,'2019-01-12 13:25:41','9','sarahm1365429',3,'',4,1),(12,'2019-01-24 08:54:33','11','johnsmith',1,'[{\"added\": {}}]',4,1),(13,'2019-01-24 09:42:49','11','johnsmith',2,'[{\"changed\": {\"fields\": [\"is_staff\"]}}]',4,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,6 +444,7 @@ CREATE TABLE `django_content_type` (
 --
 -- Dumping data for table `django_content_type`
 --
+
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
@@ -453,226 +500,11 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('0hxedk42y5f7gcmxwkul9quhnk9a61ry','ZjE4ZWNiNjE5ZDY4NzcwOWMzODY0MDAyMzRjY2IyZTIyZjE2ODFkMjp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZTJiODNiNTJjZjMyMDk1NzhlZjM2YTk1Mzk4NzFlODYwYzVlODJkNyJ9','2019-02-14 18:52:54'),('0myxxuy9o203jt8tzc008f6pobn44lt7','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-01-28 05:37:55'),('14dlm19t0jjw3ka286ijox1333qduza2','MmU1NTc2YjAxODdiYmZkZTQ1NWQyMmFkZDQ3ZGFhM2M5NTRmZDdkYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2ZmRhMWM0MjgwOGI2NjBjYmI1MjJiODdjYjFkMmQ1MTAyMjljYmI1In0=','2019-01-24 18:43:10'),('gcnx29vwsd0ayfl4vw7r7hl4kgfnp8y1','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-02-07 10:02:34'),('lnmcidfh8r3hnsfcx98jkvz0827eh4x7','ZjE4ZWNiNjE5ZDY4NzcwOWMzODY0MDAyMzRjY2IyZTIyZjE2ODFkMjp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZTJiODNiNTJjZjMyMDk1NzhlZjM2YTk1Mzk4NzFlODYwYzVlODJkNyJ9','2019-01-27 02:49:23');
+INSERT INTO `django_session` VALUES ('0hxedk42y5f7gcmxwkul9quhnk9a61ry','ZjE4ZWNiNjE5ZDY4NzcwOWMzODY0MDAyMzRjY2IyZTIyZjE2ODFkMjp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZTJiODNiNTJjZjMyMDk1NzhlZjM2YTk1Mzk4NzFlODYwYzVlODJkNyJ9','2019-02-14 18:52:54'),('0myxxuy9o203jt8tzc008f6pobn44lt7','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-01-28 05:37:55'),('0njrnwa01p4jbkhyz13sko8l90s6z5pz','YTFjYzliYzIxNmRkN2ExZjRlYTc1YzZhYWViYjI0MzZjYmViN2QwMDp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfaGFzaCI6ImNhOGYzMDM5YjI4N2UwMzJmYjI1MWVjOGRiNjQyZTI4YWVlMjhjZjciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9','2019-02-23 18:45:36'),('14dlm19t0jjw3ka286ijox1333qduza2','MmU1NTc2YjAxODdiYmZkZTQ1NWQyMmFkZDQ3ZGFhM2M5NTRmZDdkYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2ZmRhMWM0MjgwOGI2NjBjYmI1MjJiODdjYjFkMmQ1MTAyMjljYmI1In0=','2019-01-24 18:43:10'),('1wnwc71i3hq0efjev9x4ic8v6eca7r67','ZDVlY2Q4M2NiZGM1OWZlYjA2OTk4YzZhODAyMTFkZTgyYTc4M2U2ZDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyIsIl9hdXRoX3VzZXJfaWQiOiIxMCJ9','2019-02-24 13:59:57'),('4f4l66d6fklyosr0vwi3czeq4fao76gf','YjVhNzQ4YjM5NzExMjAxZDFjNTNlYjA2MzM5MDZmMzU5ZWIwYTk0Nzp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2ZWNiZmZlODAzOWI0ODg3MDNlMDM2YjgyNmJhNDZjYTUyY2UxNmYiLCJfYXV0aF91c2VyX2lkIjoiMTMiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9','2019-02-22 11:37:46'),('658uyo2ex2bv04rvnvwgyijrlm5i3b9v','MDczMWI0ZTYwMzFjNjNiOTk3OGQxMzBmZWYzZGM5OTJlNjRjMDYxODp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiOGQxNGE5NzAwM2I0MjUyNDZmMTljYWM1ZTdhZTI1MmU0YTU3ZTBlNCIsIl9hdXRoX3VzZXJfaWQiOiIxMSJ9','2019-02-23 11:34:01'),('6rmamyim14kkml4pwn8tjq621kdqfzxh','NThkZmU2Y2QxZDcxY2Q3NGU5NTdkYTcyZWY0NDA2Y2E1MjE1ZTQ3NDp7Il9hdXRoX3VzZXJfaWQiOiIxMSIsIl9hdXRoX3VzZXJfaGFzaCI6IjhkMTRhOTcwMDNiNDI1MjQ2ZjE5Y2FjNWU3YWUyNTJlNGE1N2UwZTQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9','2019-03-01 19:51:09'),('9vkev3fy4mv1txtjj6mpguy80ncx33y7','ZDVlY2Q4M2NiZGM1OWZlYjA2OTk4YzZhODAyMTFkZTgyYTc4M2U2ZDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyIsIl9hdXRoX3VzZXJfaWQiOiIxMCJ9','2019-02-24 16:34:27'),('aoh953przl3evcsjt0eqg2jlupfdqf0s','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-02-27 20:14:04'),('b7k57bkafg9tksl3c1m71e0vtwhg7bbk','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-02-21 08:18:01'),('b9wyjpmgq9tfpttlnx112gb1l7gc8ke9','MWQzYzdjZjM2ZWVkMWFkYTdiZmU4ZTM0Njg4OWRiYjNkMDZiMmQwNjp7Il9hdXRoX3VzZXJfaWQiOiIxMyIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDZlY2JmZmU4MDM5YjQ4ODcwM2UwMzZiODI2YmE0NmNhNTJjZTE2ZiJ9','2019-02-22 19:54:48'),('brtvshmt7rkk799idoscrw6cn37mvmoq','MmU1NTc2YjAxODdiYmZkZTQ1NWQyMmFkZDQ3ZGFhM2M5NTRmZDdkYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2ZmRhMWM0MjgwOGI2NjBjYmI1MjJiODdjYjFkMmQ1MTAyMjljYmI1In0=','2019-02-21 14:21:07'),('bu0fs3s34bk3kx1oj9mc6yt13wtk836n','YTFjYzliYzIxNmRkN2ExZjRlYTc1YzZhYWViYjI0MzZjYmViN2QwMDp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfaGFzaCI6ImNhOGYzMDM5YjI4N2UwMzJmYjI1MWVjOGRiNjQyZTI4YWVlMjhjZjciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9','2019-03-08 09:20:54'),('bx0a2gcxuljx0sdtvdch5w3njhavn8us','MWQzYzdjZjM2ZWVkMWFkYTdiZmU4ZTM0Njg4OWRiYjNkMDZiMmQwNjp7Il9hdXRoX3VzZXJfaWQiOiIxMyIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDZlY2JmZmU4MDM5YjQ4ODcwM2UwMzZiODI2YmE0NmNhNTJjZTE2ZiJ9','2019-02-22 20:29:16'),('gar08a33b9mccz1xxhavzr3yyg8zwf2y','MDczMWI0ZTYwMzFjNjNiOTk3OGQxMzBmZWYzZGM5OTJlNjRjMDYxODp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiOGQxNGE5NzAwM2I0MjUyNDZmMTljYWM1ZTdhZTI1MmU0YTU3ZTBlNCIsIl9hdXRoX3VzZXJfaWQiOiIxMSJ9','2019-03-03 11:36:02'),('gcnx29vwsd0ayfl4vw7r7hl4kgfnp8y1','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-02-07 10:02:34'),('i79vlhwu6krwohzvvy5u02dsmn1ho2mu','MDczMWI0ZTYwMzFjNjNiOTk3OGQxMzBmZWYzZGM5OTJlNjRjMDYxODp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiOGQxNGE5NzAwM2I0MjUyNDZmMTljYWM1ZTdhZTI1MmU0YTU3ZTBlNCIsIl9hdXRoX3VzZXJfaWQiOiIxMSJ9','2019-03-11 07:54:58'),('l2g64jkxzx1f7sypkm94ax6wl4e2cpon','MWQzYzdjZjM2ZWVkMWFkYTdiZmU4ZTM0Njg4OWRiYjNkMDZiMmQwNjp7Il9hdXRoX3VzZXJfaWQiOiIxMyIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDZlY2JmZmU4MDM5YjQ4ODcwM2UwMzZiODI2YmE0NmNhNTJjZTE2ZiJ9','2019-02-22 20:31:20'),('lnmcidfh8r3hnsfcx98jkvz0827eh4x7','ZjE4ZWNiNjE5ZDY4NzcwOWMzODY0MDAyMzRjY2IyZTIyZjE2ODFkMjp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZTJiODNiNTJjZjMyMDk1NzhlZjM2YTk1Mzk4NzFlODYwYzVlODJkNyJ9','2019-01-27 02:49:23'),('luptrct3k2pgvkfzp9vje79dj4dsn2xt','YjA3NzhmMWUzMDMwYmYyNTk2MjBjYTM0ZWZiN2E0ZTc5MTc1ZmE2NTp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2ZWNiZmZlODAzOWI0ODg3MDNlMDM2YjgyNmJhNDZjYTUyY2UxNmYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxMyJ9','2019-02-24 14:16:49'),('m1nobez33qf9248al38uwq3g8c5jgfeh','ZDVlY2Q4M2NiZGM1OWZlYjA2OTk4YzZhODAyMTFkZTgyYTc4M2U2ZDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyIsIl9hdXRoX3VzZXJfaWQiOiIxMCJ9','2019-02-23 12:43:08'),('nxh3c915d5z0a6knisjbu7dn7p1v2or9','N2I4ZTk2MDA3YjA1NjE5NmMzYWUyNDIwZjMwMTJhNTU3ZDc4NzVmZDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNmZkYTFjNDI4MDhiNjYwY2JiNTIyYjg3Y2IxZDJkNTEwMjI5Y2JiNSIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=','2019-03-03 18:33:31'),('tp6m83sj3w5tvfet5syafvreiv7lfgli','MDczMWI0ZTYwMzFjNjNiOTk3OGQxMzBmZWYzZGM5OTJlNjRjMDYxODp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiOGQxNGE5NzAwM2I0MjUyNDZmMTljYWM1ZTdhZTI1MmU0YTU3ZTBlNCIsIl9hdXRoX3VzZXJfaWQiOiIxMSJ9','2019-02-23 11:34:01'),('woi7qlqef931suyd2sfuh3ibkkfpvdgc','NjkxMThjYWI4NTk5MzRkODE5ZTkyNDIxN2QxNmZjMWJjODg3NDMxNzp7Il9hdXRoX3VzZXJfaWQiOiIxMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiY2E4ZjMwMzliMjg3ZTAzMmZiMjUxZWM4ZGI2NDJlMjhhZWUyOGNmNyJ9','2019-02-21 02:18:23'),('zjok5mt2pis9qu91jpaf7lrtirgf6nw1','MDczMWI0ZTYwMzFjNjNiOTk3OGQxMzBmZWYzZGM5OTJlNjRjMDYxODp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiOGQxNGE5NzAwM2I0MjUyNDZmMTljYWM1ZTdhZTI1MmU0YTU3ZTBlNCIsIl9hdXRoX3VzZXJfaWQiOiIxMSJ9','2019-02-24 18:46:19');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
-
-DROP TABLE IF EXISTS `example`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `example` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `example`
---
-
-LOCK TABLES `example` WRITE;
-/*!40000 ALTER TABLE `example` DISABLE KEYS */;
-INSERT INTO `example` VALUES (1,'Sample data');
-/*!40000 ALTER TABLE `example` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `home_userprofile`
---
-
-DROP TABLE IF EXISTS `home_userprofile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `home_userprofile` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `phone_number` varchar(17) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `creditcardexpirationdate` date DEFAULT NULL,
-  `creditcardtype` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `home_userprofile_user_id_d1f7b466_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `home_userprofile`
---
-
-LOCK TABLES `home_userprofile` WRITE;
-/*!40000 ALTER TABLE `home_userprofile` DISABLE KEYS */;
-INSERT INTO `home_userprofile` VALUES (8,'',10,NULL,NULL),(9,'',11,NULL,NULL);
-/*!40000 ALTER TABLE `home_userprofile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `maintenancelog`
---
-
-DROP TABLE IF EXISTS `maintenancelog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `maintenancelog` (
-  `mlog_id` int(11) NOT NULL AUTO_INCREMENT,
-  `mlog_count` int(11) NOT NULL,
-  `maintenance_date` date NOT NULL,
-  `maintenance_desc` text NOT NULL,
-  `mechanic_name` varchar(50) NOT NULL,
-  `maintenance_bike_id` int(11) NOT NULL,
-  PRIMARY KEY (`mlog_id`),
-  KEY `fk_maintenance_bike_id` (`maintenance_bike_id`),
-  CONSTRAINT `fk_maintenance_bike_id` FOREIGN KEY (`maintenance_bike_id`) REFERENCES `bike` (`bike_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `maintenancelog`
---
-
-LOCK TABLES `maintenancelog` WRITE;
-/*!40000 ALTER TABLE `maintenancelog` DISABLE KEYS */;
-INSERT INTO `maintenancelog` VALUES (1,1,'2019-01-02','no problems with the bike','John Doe',1),(2,1,'2019-01-02','no problems with the bike','John Doe',2),(3,1,'2019-01-02','no problems with the bike','John Doe',3),(4,1,'2019-01-02','no problems with the bike','John Doe',4),(5,1,'2019-01-02','no problems with the bike','John Doe',5),(6,1,'2019-01-02','no problems with the bike','John Doe',6),(7,1,'2019-01-02','no problems with the bike','John Doe',7),(8,1,'2019-01-02','no problems with the bike','John Doe',8),(9,1,'2019-01-02','no problems with the bike','John Doe',9),(10,1,'2019-01-02','no problems with the bike','John Doe',10),(11,1,'2019-01-02','no problems with the bike','John Doe',11),(12,1,'2019-01-02','no problems with the bike','John Doe',12),(13,1,'2019-01-02','no problems with the bike','John Doe',13),(14,1,'2019-01-02','no problems with the bike','John Doe',14),(15,1,'2019-01-02','no problems with the bike','John Doe',15),(16,1,'2019-01-02','no problems with the bike','John Doe',16);
-/*!40000 ALTER TABLE `maintenancelog` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
--
-DROP TABLE IF EXISTS `reservation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `reservation` (
-  `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
-  `res_code` varchar(6) NOT NULL,
-  `res_type` int(11) NOT NULL,
-  `res_cost` decimal(11,2) NOT NULL,
-  `res_date` datetime NOT NULL,
-  `starttime` datetime NOT NULL,
-  `endtime` datetime NOT NULL,
-  `c_rating` int(11) DEFAULT NULL,
-  `feedback` text DEFAULT NULL,
-  `c_id` int(11) DEFAULT NULL,
-  `fine_cost` decimal(11,2) DEFAULT NULL,
-  `fine_desc` text,
-  `fined_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`reservation_id`),
-  KEY `fk_res_type` (`res_type`),
-  KEY `fk_c_rating` (`c_rating`),
-  KEY `fk_c_id` (`c_id`),
-  CONSTRAINT `fk_c_id` FOREIGN KEY (`c_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_c_rating` FOREIGN KEY (`c_rating`) REFERENCES `customer_rating` (`rating_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_res_type` FOREIGN KEY (`res_type`) REFERENCES `reservation_type` (`res_type_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Dumping data for table `reservation`
---
-
--- Table structure for table `reservation_type`
---
-
-DROP TABLE IF EXISTS `reservation_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `reservation_type` (
-  `res_type_id` int(11) NOT NULL AUTO_INCREMENT,
-  `res_type_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`res_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `reservation_type`
---
-
-LOCK TABLES `reservation_type` WRITE;
-/*!40000 ALTER TABLE `reservation_type` DISABLE KEYS */;
-INSERT INTO `reservation_type` VALUES (1,'past'),(2,'ongoing'),(3,'future');
-/*!40000 ALTER TABLE `reservation_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `station`
---
-
-DROP TABLE IF EXISTS `station`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `station` (
-  `station_id` int(11) NOT NULL AUTO_INCREMENT,
-  `address` varchar(100) NOT NULL,
-  `info` text NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `lon` decimal(30,16) NOT NULL,
-  `lat` decimal(30,15) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `image` varchar(30) NOT NULL,
-  PRIMARY KEY (`station_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `station`
---
-
-LOCK TABLES `station` WRITE;
-/*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'1 Greenbank Cres, Edinburgh EH10 5TE, UK','It is located in South Edinburgh in the Morningside/Oxgangs area.It is located in South Edinburgh in the Morningside/Oxgangs area. ' ,'Braidburn Valley Park',-3.2135800000000000,55.919100000000000,1,'BraidburnValleyPark.jpg'),(2,'Edinburgh EH3 5PA, UK','The pretty park near Washington Lake,Spread over 34 acres, it also has a delightful formal garden in classic style','Inverleith Park',-3.2143800000000000,55.966530000000000,1,'inverleithpark.jpg'),(3,'Princes St, Edinburgh EH2 2HG, UK','Princes Street Gardens are two adjacent public parks in the centre of Edinburgh','Princes Street Gardens',-3.1983900000000000,55.951752000000000,1,'princesstreetgardens.jpg'),(4,'Melville Dr, Edinburgh EH9 1ND, UK','The Meadows is a large public park in Edinburgh, Scotland, to the south of the city centre.','The Meadows',-3.1918600000000000,55.939940000000000,1,'themeadows.JPG'),(5,'Lochend Rd S, Edinburgh EH7 6BP, UK','The park meant for all kids in townIt is located in South Edinburgh in the Morningside/Oxgangs area.','Lochend Park',-3.1584700000000000,55.961310000000000,1,'lochendpark.jpg'),(6,'Links Gardens, Edinburgh EH6 7QR, UK','The link that connects to the metroSpread over 34 acres, it also has a delightful formal garden in classic style','Leith Links',-3.1621200000000000,55.971740000000000,1,'leithlinks.png'),(7,'Old Church Ln, Duddingston Village, Edinburgh EH15 3PX, UK','The old Neils garden founded in the late 90s','Dr Neils Garden',-3.1463600000000000,55.941720000000000,1,'DrNeilGarden.jpg'),(8,'Stanedykehead, Alnwickhill EH16 6TN, UK','The largest park to visit is righ here.Spread over 34 acres, it also has a delightful formal garden in classic style','Seven Acre Park',-3.1683400000000000,55.905840000000000,1,'SevenAcrePark.jpg'),(9,'1 Greenbank Cres, Edinburgh EH10 5TE, UK','Spread over 34 acres, it also has a delightful formal garden in classic style ','Saughton Park And Gardens',-3.2485290000000000,55.934132000000000,1,'SaughtonParkAndGardens.jpg'),(10,'24 Ravelston Dykes Rd, Edinburgh EH4 3NZ, UK','We are a 9 hole golf course situated within 1.5 miles f the centre of Edinburgh, ','Ravelston Golf Club',-3.2577200000000000,55.954350000000000,1,'ravelstongolfclub.jpg');
-/*!40000 ALTER TABLE `station` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `station_on_reservation`
---
-
-DROP TABLE IF EXISTS `station_on_reservation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `station_on_reservation` (
-  `sor_route_id` int(11) NOT NULL,
-  `sor_reservation_id` int(11) NOT NULL,
-  PRIMARY KEY (`sor_route_id`,`sor_reservation_id`),
-  KEY `fk_sor_reservation_id` (`sor_reservation_id`),
-  CONSTRAINT `fk_sor_reservation_id` FOREIGN KEY (`sor_reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_sor_route_id` FOREIGN KEY (`sor_route_id`) REFERENCES `stationroutes` (`route_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `station_on_reservation`
---
-
-
---
--- Table structure for table `stationfootage`
---
-
-DROP TABLE IF EXISTS `stationfootage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `stationfootage` (
-  `footage_id` int(5) NOT NULL AUTO_INCREMENT,
-  `footage_date` varchar(20) NOT NULL,
-  `footage_link` varchar(20) NOT NULL,
-  `footage_station_id` int(11) NOT NULL,
-  PRIMARY KEY (`footage_id`),
-  KEY `fk_footage_station_id` (`footage_station_id`),
-  CONSTRAINT `fk_footage_station_id` FOREIGN KEY (`footage_station_id`) REFERENCES `station` (`station_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stationfootage`
---
-
-LOCK TABLES `stationfootage` WRITE;
-/*!40000 ALTER TABLE `stationfootage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stationfootage` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `stationroutes`
 --
 
 DROP TABLE IF EXISTS `stationroutes`;
@@ -699,89 +531,40 @@ LOCK TABLES `stationroutes` WRITE;
 INSERT INTO `stationroutes` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,2,1),(12,2,2),(13,2,3),(14,2,4),(15,2,5),(16,2,6),(17,2,7),(18,2,8),(19,2,9),(20,2,10),(21,3,1),(22,3,2),(23,3,3),(24,3,4),(25,3,5),(26,3,6),(27,3,7),(28,3,8),(29,3,9),(30,3,10),(31,4,1),(32,4,2),(33,4,3),(34,4,4),(35,4,5),(36,4,6),(37,4,7),(38,4,8),(39,4,9),(40,4,10),(41,5,1),(42,5,2),(43,5,3),(44,5,4),(45,5,5),(46,5,6),(47,5,7),(48,5,8),(49,5,9),(50,5,10),(51,6,1),(52,6,2),(53,6,3),(54,6,4),(55,6,5),(56,6,6),(57,6,7),(58,6,8),(59,6,9),(60,6,10),(61,7,1),(62,7,2),(63,7,3),(64,7,4),(65,7,5),(66,7,6),(67,7,7),(68,7,8),(69,7,9),(70,7,10),(71,8,1),(72,8,2),(73,8,3),(74,8,4),(75,8,5),(76,8,6),(77,8,7),(78,8,8),(79,8,9),(80,8,10),(81,9,1),(82,9,2),(83,9,3),(84,9,4),(85,9,5),(86,9,6),(87,9,7),(88,9,8),(89,9,9),(90,9,10),(91,10,1),(92,10,2),(93,10,3),(94,10,4),(95,10,5),(96,10,6),(97,10,7),(98,10,8),(99,10,9),(100,10,10);
 /*!40000 ALTER TABLE `stationroutes` ENABLE KEYS */;
 UNLOCK TABLES;
+--
+-- Table structure for table `station_on_reservation`
+--
 
+DROP TABLE IF EXISTS `station_on_reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `station_on_reservation` (
+  `sor_route_id` int(11) NOT NULL,
+  `sor_reservation_id` int(11) NOT NULL,
+  PRIMARY KEY (`sor_route_id`,`sor_reservation_id`),
+  KEY `fk_sor_reservation_id` (`sor_reservation_id`),
+  CONSTRAINT `fk_sor_reservation_id` FOREIGN KEY (`sor_reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_sor_route_id` FOREIGN KEY (`sor_route_id`) REFERENCES `stationroutes` (`route_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `station_on_reservation` WRITE;
+/*!40000 ALTER TABLE `station_on_reservation` DISABLE KEYS */;
+INSERT INTO `station_on_reservation` VALUES (24,4),(24,7),(37,8),(31,9),(88,10),(43,11),(80,12),(27,13),(72,14),(26,15),(17,16),(85,17),(54,18),(61,19),(40,20),(3,21),(73,22),(30,23),(14,24),(25,25),(3,26),(27,27),(28,28),(63,29),(36,30),(29,31),(93,32),(63,33),(93,34),(98,35),(53,36),(73,37),(72,38),(43,39),(21,40),(30,41),(91,42),(5,43),(8,44),(72,45),(13,46),(27,47),(29,48),(87,49),(68,50),(40,51),(93,52),(3,53),(27,54),(62,55),(28,56),(28,57),(91,58),(5,59),(62,60),(84,61),(27,62),(21,63),(69,64),(83,65),(96,66),(42,67),(97,68),(12,69),(81,70),(13,71),(63,72),(21,73),(5,74),(10,75),(93,76),(27,77),(29,78),(21,79),(27,80),(3,81),(63,82),(21,83),(23,84),(23,85),(30,86),(21,87),(28,88),(63,89),(63,90),(83,91),(5,92),(30,93),(73,94),(33,95),(93,96),(63,97),(29,98),(53,99),(14,100),(36,101),(27,102),(80,103),(76,104),(72,105),(21,106),(73,107),(29,108),(21,109),(27,110),(94,111),(69,112),(62,113),(83,114),(33,115),(72,116),(24,117),(28,118),(27,119),(13,120),(53,121),(53,122),(24,123),(99,131),(99,133);
+/*!40000 ALTER TABLE `station_on_reservation` ENABLE KEYS */;
+UNLOCK TABLES;
 --
 -- Table structure for table `status_of_bike`
 --
 
-DROP TABLE IF EXISTS `status_of_bike`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `status_of_bike` (
-  `bike_status_id` int(11) NOT NULL AUTO_INCREMENT,
-  `bike_status_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`bike_status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status_of_bike`
---
-
-LOCK TABLES `status_of_bike` WRITE;
-/*!40000 ALTER TABLE `status_of_bike` DISABLE KEYS */;
-INSERT INTO `status_of_bike` VALUES (1,'stationed'),(2,'OutOfservice'),(3,'active'),(4,'stored'),(5,'tracked');
-/*!40000 ALTER TABLE `status_of_bike` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `type_of_bike`
---
-
-DROP TABLE IF EXISTS `type_of_bike`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `type_of_bike` (
-  `bike_type_id` int(11) NOT NULL AUTO_INCREMENT,
-  `bike_info` text NOT NULL,
-  `bike_model` varchar(20) NOT NULL,
-  `bike_type` varchar(20) NOT NULL,
-  `bike_cost` decimal(11,2) NOT NULL,
-  `bike_image` varchar(30) NOT NULL,
-  PRIMARY KEY (`bike_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `type_of_bike`
---
-
-LOCK TABLES `type_of_bike` WRITE;
-/*!40000 ALTER TABLE `type_of_bike` DISABLE KEYS */;
-INSERT INTO `type_of_bike` VALUES (1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling.','Shimano XT','Mountain Bike',2.00,'shimano.png'),(2,'The tandem bicycle or twin is a form of bicycle designed to be ridden by more than one person.','Fuji X','Tandem Bike',4.00,'tandem.png'),(3,'The road bike is used  for traveling at speed on paved roads. ','Fuji Crank T ','Road Bike',1.25,'road.png'),(4,' Wheelchair bikes has an advanced wheelchair design enabling easy and comfortable pedaling to ensure maximum maneuverability with minimum effort.','VeloPlus','Wheelchair Bike',3.50,'veloplus.png');
-/*!40000 ALTER TABLE `type_of_bike` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1),(2),(3),(4),(5),(6),(9),(10),(12),(13);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
 -- Dump completed on 2019-01-24 14:05:11
+DROP TABLE IF EXISTS `contactUs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `contactUs` (
+  `mail_id` int(11) NOT NULL AUTO_INCREMENT,
+  `fn` varchar(30) NOT NULL,
+  `ln` varchar(40) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`mail_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;

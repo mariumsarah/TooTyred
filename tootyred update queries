@@ -111,7 +111,7 @@ SET ins_c_count = 0;
 WHILE ins_c_count < ins_t_count DO
 
 	SET ins_c_type = (select bike_type_id FROM type_of_bike LIMIT ins_c_count,1);
-	IF (Select count(*) FROM bike WHERE bike_status = 4 AND bike_type = ins_c_type) < 15 THEN
+	IF (Select count(*) FROM bike WHERE bike_status = 4 AND bike_type = ins_c_type) < 20 THEN
 
 	INSERT INTO `bike` (bike_type,travel_count,bike_status,bike_stationedat) VALUES
 	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL),

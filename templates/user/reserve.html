@@ -637,6 +637,7 @@
       document.getElementById("home-tab").style.display="none";
       document.getElementById("right-panel").style.display="none";
   document.getElementById("cross").style.display="none";
+
       var x = 0;
       var startlocationid;
       var endlocationid;
@@ -979,6 +980,7 @@ var onChangeHandler = function() {
 //--------------------------------------------------------------------
     function send()
     {
+      document.getElementById("exampleModal1").style.display="none";
       document.getElementById("inputstartstation").value=($('#startloc').text());
       document.getElementById("inputendstation").value=($('#endloc').text());
                           {% for bike in bike_type %}

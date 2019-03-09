@@ -3,96 +3,116 @@
 {% block head %}
   <title>Statistics</title>
   <link rel="stylesheet" href= "{% static 'css/manager/statistics.css' %}" type="text/css">
+  <style >
+body{
+background-color: #C0C0C0;
+ font-family: 'Poppins', sans-serif;
+}
+</style>
+
 {% endblock %}
 {% block body %}
+
+
+
   <div id="container">
 
-          <div  id="row">
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="analyc" >
+<div class="row">
+
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <i class="fa fa-table"></i> Bar Chart
+                    <i class="fa fa-table"></i> Replaced Bikes
                   </div>
                   <div class="card-body">
                     <canvas id="barChart"></canvas>
                   </div>
+
                 </div><!-- end card-->
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="analyc" >
+
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <i class="fa fa-table"></i> Combo Bar Line Chart
+                    <i class="fa fa-table"></i> Daily Sales
                   </div>
+
                   <div class="card-body">
                     <canvas id="comboBarLineChart"></canvas>
                   </div>
                 </div><!-- end card-->
               </div>
+
           </div>
 
+
           <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
+
+              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <i class="fa fa-table"></i> Pie Chart
+                    <i class="fa fa-table"></i> Total Bikes
                   </div>
+
                   <div class="card-body">
                     <canvas id="pieChart"></canvas>
                   </div>
+
                 </div><!-- end card-->
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
+
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <i class="fa fa-table"></i> Doughnut Chart
+                    <i class="fa fa-table"></i> Monthly Sales
                   </div>
+
                   <div class="card-body">
-                    <canvas id="doughnutChart"></canvas>
+                    <canvas id="comboBarLineChart1"></canvas>
                   </div>
                 </div><!-- end card-->
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc">
+
+
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="card mb-3">
                   <div class="card-header">
-                    <i class="fa fa-table"></i> Radar Chart
+                    <i class="fa fa-table"></i> Sales In Current Week
                   </div>
+
                   <div class="card-body">
-                    <canvas id="radarChart"></canvas>
+                    <canvas id="comboBarLineChart2"></canvas>
                   </div>
                 </div><!-- end card-->
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3"  id="analyc" >
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <i class="fa fa-table"></i> Polar Area Chart
-                  </div>
-                  <div class="card-body">
-                    <canvas id="polarAreaChart"></canvas>
-                  </div>
-                </div><!-- end card-->
-              </div>
+
+
           </div>
           <!-- end row -->
-            </div>
-      <!-- END container-fluid -->
-    </div>
-    <!-- END content -->
-</div>
-<!-- END main -->
+
+
+
+
+              </div>
+
+
 
 
 <!-- BEGIN Java Script for this page -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
   <script>
   // barChart
+var Biketr = {{Biketr|safe}};
+var Bikenamett = {{Bikenamett|safe}};
   var ctx1 = document.getElementById("barChart").getContext('2d');
   var barChart = new Chart(ctx1, {
     type: 'bar',
     data: {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      labels: Bikenamett,
       datasets: [{
-        label: 'Amount received',
-        data: [12, 19, 3, 5, 10, 5, 13, 17, 11, 8, 11, 9],
+        label: 'Bikes replaced',
+        data: Biketr,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -136,30 +156,27 @@
   });
 
   // comboBarLineChart
+var totalPROFITreservperDAY = {{totalPROFITreservperDAY|safe}};
+var totalPROFITreservperLASTMONTH = {{totalPROFITreservperLASTMONTH|safe}};
   var ctx2 = document.getElementById("comboBarLineChart").getContext('2d');
   var comboBarLineChart = new Chart(ctx2, {
     type: 'bar',
     data: {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      labels:["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24","25", "26", "27", "28", "29", "30", "31"],
       datasets: [{
           type: 'line',
-          label: 'Dataset 1',
-          borderColor: '#484c4f',
-          borderWidth: 3,
+          label: 'Current Month Sales',
+          borderColor: 'Black',
+          borderWidth: 4,
           fill: false,
-          data: [12, 19, 3, 5, 2, 3, 13, 17, 11, 8, 11, 9],
+          data: totalPROFITreservperDAY,
         }, {
           type: 'bar',
-          label: 'Dataset 2',
-          backgroundColor: '#FF6B8A',
-          data: [10, 11, 7, 5, 9, 13, 10, 16, 7, 8, 12, 5],
+          label: 'Past Month Sales',
+          backgroundColor: 'RED',
+          data: totalPROFITreservperLASTMONTH,
           borderColor: 'white',
           borderWidth: 0
-        }, {
-          type: 'bar',
-          label: 'Dataset 3',
-          backgroundColor: '#059BFF',
-          data: [10, 11, 7, 5, 9, 13, 10, 16, 7, 8, 12, 5],
         }],
         borderWidth: 1
     },
@@ -175,12 +192,14 @@
   });
 
   // pieChart
+var Bikemax = {{Bikemax|safe}};
+var Bikenamelt = {{Bikenamelt|safe}};
   var ctx3 = document.getElementById("pieChart").getContext('2d');
   var pieChart = new Chart(ctx3, {
     type: 'pie',
     data: {
         datasets: [{
-          data: [12, 19, 3, 5, 2, 3],
+          data: Bikemax,
           backgroundColor: [
             'rgba(255,99,132,1)',
             'rgba(54, 162, 235, 1)',
@@ -191,13 +210,7 @@
           ],
           label: 'Dataset 1'
         }],
-        labels: [
-          "Red",
-          "Orange",
-          "Yellow",
-          "Green",
-          "Blue"
-        ]
+        labels: Bikenamelt
       },
       options: {
         responsive: true
@@ -205,78 +218,70 @@
 
   });
 
-  // doughnutChart
-  var ctx4 = document.getElementById("doughnutChart").getContext('2d');
-  var doughnutChart = new Chart(ctx4, {
-    type: 'doughnut',
+var totalPROFITreservpermonth = {{totalPROFITreservpermonth|safe}};
+var Ptotalreservpastyear = {{Ptotalreservpastyear|safe}};
+var ctx4 = document.getElementById("comboBarLineChart1").getContext('2d');
+  var comboBarLineChart = new Chart(ctx4, {
+    type: 'bar',
     data: {
-        datasets: [{
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          label: 'Dataset 1'
-        }],
-        labels: [
-          "Red",
-          "Orange",
-          "Yellow",
-          "Green",
-          "Blue"
-        ]
-      },
-      options: {
-        responsive: true
-      }
-
-  });
-
-  // radarChart
-  var ctx5 = document.getElementById("radarChart").getContext('2d');
-  var doughnutChart = new Chart(ctx5, {
-    type: 'radar',
-    data: {
-        labels: [["Eating", "Dinner"], ["Drinking", "Water"], "Sleeping", ["Designing", "Graphics"], "Coding", "Running"],
-        datasets: [{
-          label: "My First dataset",
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          pointBackgroundColor: 'red',
-          data: [12, 19, 13, 11, 19, 17]
-        }, {
-          label: "My Second dataset",
-          backgroundColor: 'rgba(250, 80, 112, 0.3)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          pointBackgroundColor: 'blue',
-          data: [15, 12, 14, 15, 9, 11]
-        },]
-      },
-      options: {
-        responsive: true
-      }
-
-  });
-
-  // polarAreaChart
-  var ctx6 = document.getElementById("polarAreaChart").getContext('2d');
-  var doughnutChart = new Chart(ctx6, {
-    type: 'polarArea',
-    data: {
-      labels: ["Red","Green","Yellow","Grey","Blue"],
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [{
-        label: "My First Dataset",
-        data: [11,16,7,3,14],
-        backgroundColor: ["rgb(255, 99, 132)","rgb(75, 192, 192)","rgb(255, 205, 86)","rgb(201, 203, 207)","rgb(54, 162, 235)"]
+          type: 'line',
+          label: 'Previous Years Sales',
+          borderColor: 'BLACK',
+          borderWidth: 3,
+          fill: false,
+          data: Ptotalreservpastyear,
+        }, {
+          type: 'bar',
+          label: 'Monthly Sales',
+          backgroundColor: 'BLUE',
+          data: totalPROFITreservpermonth,
+          borderColor: 'white',
+          borderWidth: 0
+        }],
+        borderWidth: 1
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
         }]
+      }
     }
-
   });
-  </script>
+
+var TPtotalreservperDOW = {{TPtotalreservperDOW|safe}};
+  var ctx6 = document.getElementById("comboBarLineChart2").getContext('2d');
+  var comboBarLineChart = new Chart(ctx6, {
+    type: 'bar',
+    data: {
+      labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      datasets: [{
+          type: 'line',
+          label: 'Current Week',
+          backgroundColor: 'BLACK',
+          data: TPtotalreservperDOW,
+fill: false,
+          borderColor: 'BLACK',
+          borderWidth: 0
+        }],
+        borderWidth: 1
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
+    }
+  });
+
+</script>
 <!-- END Java Script for this page -->
 
 {% endblock %}

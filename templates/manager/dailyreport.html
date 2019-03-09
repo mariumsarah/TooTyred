@@ -5,6 +5,100 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <link rel="stylesheet" href= "{% static 'css/manager/usagereports.css' %}" type="text/css">
+
+  <style>
+body{
+background-color: #C0C0C0;
+ font-family: 'Poppins', sans-serif;
+}
+.button {
+	color:black;
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: black;
+  background-color:#3dcacd ;
+  width:50%;
+  border: none;
+  border-radius: 15px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+}
+
+.button:hover {
+	background-color: #a9cce3 ;cursor: pointer;
+
+ visibility: visible;
+ opacity: 0.7; }
+ .button {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.refresh{
+	background: white;
+}
+
+
+.modal-content{
+	border-radius: 20px;
+	background-color: #F6F5F5;
+	text-align: center;
+font-family: 'Poppins', sans-serif;
+}
+
+.modal-body{
+		border-radius: 20px;
+	background-color: #F6F5F5;
+	font-family: 'Poppins', sans-serif;
+
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #3dcacd;
+  border-radius: 15px;
+}
+.container {
+  position: relative;
+  width: 100%;
+}
+.container:hover .overlay {
+  opacity: 1;
+}
+
+.text {
+  color: black;
+  font-size: 20px;
+  position: absolute;
+  height:70%;
+  width:50%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  	font-family: 'Poppins', sans-serif;
+}
+
+.flip-box-front{
+	 background-color: #3dcacd;
+}
+
+</style>
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -12,19 +106,26 @@
   <h3>Heatmap of the most accesed station of the day - </h3>
   <h4 id="date"></h4
   	>
+  	<br>
+  	    <p>Press refresh to toogle heatmap</p>
+
+  <button class="refresh" onclick="toggleHeatmap()">Refresh</button>
+
 </div>
+
+ <br>
   <div id="map"></div>
 <br>
 
-    <p>Press refresh to toogle heatmap</p>
-  <button class="refresh" onclick="toggleHeatmap()">Refresh</button>
+
 
 	<div id="gap"></div>
-  <table id="t1" align="center" >
+	<center>
+        <div class="container">
 
-      <tr>
-        <td style=" background: #99CED3;">
           <a href="#custom-modal2"  data-target="#customModal1" data-toggle="modal" style="color: black">
+            <button class="button">
+
               <div class="card-box" style=" border:1px solid black;">
                   <i class="fa fa-user-o float-right text-white"></i>
                   <h6 class="text-white text-uppercase m-b-20" style="text-align: center;">Active Reservation</h6>
@@ -32,16 +133,22 @@
        {{count}}
         {% endif %}</h1>
               </div>
+
+               <div class="overlay">
+    <div class="text">Displays details of current resrvation </div>
+  </div>
+
+                </div>
+          </button>
           </a>
-        </td>
-
-      </tr>
-
-  </table>
+        </div>
+      </center>
+      <br>
     <br>
-    </br>
+    <br>
 
 
+<div id="gap"></div>
 
    <div class="content-page" >
          <div id="container">
@@ -58,10 +165,10 @@
                     </div><!-- end card-->
                   </div>
                </div>
- <div id="gap"></div>
 
 
-  <div class="flip-box" style="position: absolute; margin-top: 575px; margin-left: 10% ; animation-delay: 10;" >
+
+  <div class="flip-box" style="position: absolute; margin-top: 70%; margin-left: 20% ; animation-delay: 10;" >
           <div class="flip-box-inner">
             <div class="flip-box-front" style="border:3px solid black;">
               <h2>Active Stations Today</h2>
@@ -86,7 +193,7 @@
         </div>
 
 
-<div class="flip-box" style="position: absolute; margin-top: 575px; margin-left: 50%;animation-delay: 10;" >
+<div class="flip-box" style="position: absolute; margin-top: 70%; margin-left: 60%;animation-delay: 10;" >
           <div class="flip-box-inner">
             <div class="flip-box-front" style="border:3px solid black;">
               <h2>Bike Maintance Cost</h2>
@@ -129,10 +236,11 @@
                         </button>
                       </div>
                       <div class="modal-body" style="z-index: 80;">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" id="t2">
-                          <div class="card-body">
+
+
                             <div >
                               Toggle columns (click to show / hide columns):
+                              <br>
                               <a href="#" class="toggle-vis" data-column="0"><b>Bike ID</b></a> |
                               <a href="#" class="toggle-vis" data-column="0"><b>User ID</b></a> |
                               <a href="#" class="toggle-vis" data-column="1"><b>Bike Type</b></a> |
@@ -178,12 +286,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+
                   </div>
                 </div>
 
