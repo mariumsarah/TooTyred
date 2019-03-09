@@ -3,12 +3,14 @@ from django.urls import resolve
 from django.http import HttpResponse
 import json
 from django.urls import resolve
-from home.models import User,Station,Reservation,BikeOnReservation,Bike,StatusOfBike,ReservationType,Stationroutes,StationOnReservation
+from home.models import User,Station,Reservation,contactUs,BikeOnReservation,Bike,StatusOfBike,ReservationType,Stationroutes,StationOnReservation,TypeOfBike
 from django.contrib import messages
 from datetime import datetime, timedelta,timezone
 from django.http import HttpResponse
+from django.core.mail import EmailMessage
 import json
 import pytz
+from decimal import Decimal
 utc=pytz.UTC
 def stations(request):
     stationnumber = int(request.get_full_path().strip('/')[-1:])+1
@@ -48,6 +50,10 @@ def stations(request):
                     for bike in bikes:
                         bike.bike_status=status
                         bike.bike_stationedat=station
+                        #bike.travel_count=StationRoutes.objects.get(route_id=(StationOnReservation.objects.get(sor_reservation_id=reservation.reservation_id).sor_route_id)).min_miles_travelled
+                        for m in Stationroutes.objects.raw("SELECT * from stationroutes where route_id=(SELECT sor_route_id FROM station_on_reservation where sor_reservation_id=%s)",[reservation.reservation_id]):
+                            bike.travel_count=m.min_miles_travelled
+                            break
                         bike.save()
                         displaymessage+=bike.bike_type.bike_type+' \n'
                     reservation.save()
@@ -268,9 +274,91 @@ def bikes(request):
             response_date[1]=request.POST.get('bikeid','')
             return HttpResponse(json.dumps(response_date),
                 content_type="application/json")
+        elif request.POST.get('formtype','') == 'fine':
+            reservationnumber = request.POST.get('reservationnumber','')
+            reservation = Reservation.objects.get(reservation_id=reservationnumber)
+            messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \n You have recieved a fine of €'+request.POST.get('finecost','')+' for your reservation of code '+reservation.res_code+'! \n'
+            messagew+='\n Here is the message from the operator about your reservation fine: \n\t'+request.POST.get('finedesc','')
+            messagew+='\n Please pay your fine on the website as soon as possible or you will be blocked from using the website!'
+            email = EmailMessage('Your TooTyred Reservation Fine', messagew, to=[User.objects.get(id=reservation.c_id).email])
+            email.send()
+            if(reservation.fine_cost==None):
+                reservation.fine_cost = request.POST.get('finecost','')
+            else:
+                reservation.fine_cost = reservation.fine_cost + Decimal(request.POST.get('finecost',''))
+            reservation.fine_desc = request.POST.get('finedesc','')
+            reservation.save()
+            response_date={}
+            response_date[0]=1
+            return HttpResponse(json.dumps(response_date),
+                content_type="application/json")
+        elif request.POST.get('formtype','') == 'cancel':
+            reservationnumber = request.POST.get('reservationnumber','')
+            reservation = Reservation.objects.get(reservation_id=reservationnumber)
+            messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nYour reservation of code '+reservation.res_code+' was unfortunately cancelled! \n'
+            messagew+='\n Here is the message from the operator about your reservation cancellation: \n\t'+request.POST.get('reservationmessage','')
+            messagew+='\n Have a great day ahead!'
+            email = EmailMessage('Your TooTyred Reservation Cancelled', messagew, to=[User.objects.get(id=reservation.c_id).email])
+            email.send()
+            #remove all bikes on that reservation
+            bikes = BikeOnReservation.objects.filter(bor_reservation_id=reservation.reservation_id)
+
+            oldbikes = {}
+            for i in range(len(TypeOfBike.objects.all())):
+                getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                oldbikes[i] = getoldbiketypecount[0].count1
+                print('getoldbiketypecount: ', getoldbiketypecount[0].count1)
+
+            bikestodelete = set()
+            for i in range(len(TypeOfBike.objects.all())):
+                getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                for oldbike in getoldbikespertype:
+                    bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [reservation.starttime, oldbike.bike_id])
+                    if bike_check_resquery:
+                        newstationedatquery = Stationroutes.objects.raw('SELECT route_id, start_station_id AS s_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = %s', [bike_check_resquery[0].reservation_id])
+                        bikestodelete.add(oldbike.bike_id)
+                        oldbike.bike_stationedat = Station.objects.get(station_id = newstationedatquery[0].s_id)
+                        oldbike.save()
+                    else:
+                        bikestodelete.add(oldbike.bike_id)
+
+            bikes.delete()
+            #remove all station on that reservation
+            StationOnReservation.objects.filter(sor_reservation_id=reservation.reservation_id).delete()
+            #remove the reservations
+            reservation.delete()
+            response_date={}
+            response_date[0]=1
+            return HttpResponse(json.dumps(response_date),
+                content_type="application/json")
+        elif request.POST.get('formtype','') == 'refund':
+            #send an email that their refund is going to be processRef
+            reservationnumber = request.POST.get('reservationnumber','')
+            reservation = Reservation.objects.get(reservation_id=reservationnumber)
+            messagew= 'Hi there '+request.user.first_name+' '+request.user.last_name+',      \nThe cost for your reservation of code '+reservation.res_code+' for '+str(reservation.starttime)+' to '+str(reservation.endtime)+' has been refunded! \n'
+            messagew+='\n Here is the message from the operator about your reservation refund: \n\t'+request.POST.get('refundmessage','')
+            messagew+='\n Your total cost that will be refunded is €'+str(reservation.res_cost)+'\n Send us an email specifying your account number and account name and further updates will be made. \n'
+            messagew+='\n Have a great day ahead! And keep reserving!'
+            email = EmailMessage('Your TooTyred Reservation Refunded', messagew, to=[User.objects.get(id=reservation.c_id).email])
+            email.send()
+            reservation.res_cost=0
+            reservation.save()
+            #set the cost of reservation to 0
+            response_date={}
+            response_date[0]=1
+            return HttpResponse(json.dumps(response_date),
+                content_type="application/json")
     else:
         return render(request, 'operator/inspectbikes.html',{'allbikes':Bike.objects.all(),'station':Station.objects.all()})
 
-#Customer service
-#def customerService(request):
-#    return render(request, 'operator/customerservice.html')
+def contactus(request):
+    if(request.method == "POST"):
+        messagew=request.POST.get('message','')
+        email = EmailMessage('TooTyred: Contact Us Reply', messagew, to=[request.POST.get('email','')])
+        email.send()
+        response_date={}
+        response_date[0]=1
+        return HttpResponse(json.dumps(response_date),
+            content_type="application/json")
+    else:
+        return render(request,'operator/contactus.html',{'contactus':contactUs.objects.all()})

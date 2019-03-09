@@ -137,15 +137,39 @@ def reservations(request):
                 #if the reservation is ongoing
                 if(reservation.res_type==ReservationType.objects.get(res_type_id=2)):
                     print('its an issue ')
-                    #EDGARRR
-                    #So over here what happens is that the user has just reported some problem with their biken
-                    # and they are on an ongoing reservationt
-                    # what we do here is
-                    #send the bikes on this reservation to storage
-                    # we then do the same thing as in canel for the bikes on the reservation if there are future reservation on the bike id find a replacement or get another bike like this from storage
-                    # make the reservation past
-                    # set the cost of  the reservation to 0 and if there fines
-                    # set fine_desc to null and set fine cost to null if any
+
+                    #set the travel count to 0 showing that the bikes were replaced
+                    # and then transfer the bikes to their location as needed for future reservations
+                    oldbikes = {}
+                    for i in range(len(TypeOfBike.objects.all())):
+                        getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                        oldbikes[i] = getoldbiketypecount[0].count1
+                        print('getoldbiketypecount: ', getoldbiketypecount[0].count1)
+
+                    bikestodelete = set()
+                    for i in range(len(TypeOfBike.objects.all())):
+                        getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                        for oldbike in getoldbikespertype:
+                            bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [reservation.starttime, oldbike.bike_id])
+                            if bike_check_resquery:
+                                newstationedatquery = Stationroutes.objects.raw('SELECT route_id, start_station_id AS s_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = %s', [bike_check_resquery[0].reservation_id])
+                                bikestodelete.add(oldbike.bike_id)
+                                #bike is replaced
+                                oldbike.travel_count=0
+                                oldbike.bike_stationedat = Station.objects.get(station_id = newstationedatquery[0].s_id)
+                                oldbike.bike_status=StatusOfBike.objects.get(bike_status_id=1)
+                                oldbike.save()
+                            else:
+                                oldbike.bike_stationedat = None
+                                oldbike.bike_status= StatusOfBike.objects.get(bike_status_id=4)
+                                oldbike.travel_count=0
+                                bikestodelete.add(oldbike.bike_id)
+                                oldbike.save()
+                    reservation.res_type=ReservationType.objects.get(res_type_id=1)
+                    reservation.res_cost=0
+                    reservation.fine_cost=None
+                    reservation.fine_desc=None
+                    reservation.fined_at=None
                     reservation.c_rating=None
                     reservation.feedback="REPORT: "+request.POST.get('feedback','')
                 else:
@@ -187,11 +211,30 @@ def reservations(request):
                 email.send()
                 #remove all bikes on that reservation
                 bikes = BikeOnReservation.objects.filter(bor_reservation_id=reservation.reservation_id)
-                # EDGARRR
-                # bikes contains all the bikes on the reservation that need to be deleted
-                # this part of the code will consider future reservations these bikes are on
-                # and then assign new bikes for those future reservations
-                # after that the bikes are deleted from the reservation in the next line
+                #
+                #
+                #
+                oldbikes = {}
+                for i in range(len(TypeOfBike.objects.all())):
+                    getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                    oldbikes[i] = getoldbiketypecount[0].count1
+                    print('getoldbiketypecount: ', getoldbiketypecount[0].count1)
+
+                bikestodelete = set()
+                for i in range(len(TypeOfBike.objects.all())):
+                    getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                    for oldbike in getoldbikespertype:
+                        bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [reservation.starttime, oldbike.bike_id])
+                        if bike_check_resquery:
+                            newstationedatquery = Stationroutes.objects.raw('SELECT route_id, start_station_id AS s_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = %s', [bike_check_resquery[0].reservation_id])
+                            bikestodelete.add(oldbike.bike_id)
+                            oldbike.bike_stationedat = Station.objects.get(station_id = newstationedatquery[0].s_id)
+                            oldbike.save()
+                        else:
+                            bikestodelete.add(oldbike.bike_id)
+                #
+                #
+                #
                 bikes.delete()
                 #remove all station on that reservation
                 StationOnReservation.objects.filter(sor_reservation_id=reservation.reservation_id).delete()

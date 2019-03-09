@@ -95,7 +95,7 @@ class Stationroutes(models.Model):
     route_id = models.AutoField(primary_key=True)
     start_station = models.ForeignKey(Station, models.DO_NOTHING, related_name='start_station_id', blank=True, null=True)
     end_station = models.ForeignKey(Station, models.DO_NOTHING, related_name='end_station_id', blank=True, null=True)
-
+    min_miles_travelled = models.DecimalField(max_digits=11, decimal_places=2)
     class Meta:
         managed = False
         db_table = 'stationroutes'

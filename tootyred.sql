@@ -156,7 +156,7 @@ CREATE TABLE `type_of_bike` (
 LOCK TABLES `type_of_bike` WRITE;
 /*!40000 ALTER TABLE `type_of_bike` DISABLE KEYS */;
 INSERT INTO `type_of_bike` VALUES
-(1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling. Mountain bikes share similarities with other bicycles, but incorporate features designed to enhance durability and performance in rough terrain.','Shimano XT','Mountain Bike',2.00,'shimano.png'),
+(1,'A mountain bike or mountain bicycle (abbreviated Mtn Bike or MTB[1]) is a bicycle designed for off-road cycling. ','Shimano XT','Mountain Bike',2.00,'shimano.png'),
 (2,'The tandem bicycle or twin is a form of bicycle designed to be ridden by more than one person.','Fuji X','Tandem Bike',4.00,'tandem.png'),
 (3,'The road bike is used  for traveling at speed on paved roads. ','Fuji Crank T ','Road Bike',1.25,'road.png'),
 (4,'Wheelchair bikes has an advanced wheelchair design enabling easy and comfortable pedaling to ensure maximum maneuverability with minimum effort.','VeloPlus','Wheelchair Bike',3.50,'veloplus.png');
@@ -514,6 +514,7 @@ CREATE TABLE `stationroutes` (
   `route_id` int(11) NOT NULL AUTO_INCREMENT,
   `start_station_id` int(11) DEFAULT NULL,
   `end_station_id` int(11) DEFAULT NULL,
+  `min_miles_travelled` decimal(11,2) DEFAULT NULL,
   PRIMARY KEY (`route_id`),
   KEY `fk_start_station_id` (`start_station_id`),
   KEY `fk_end_station_id` (`end_station_id`),
@@ -528,7 +529,7 @@ CREATE TABLE `stationroutes` (
 
 LOCK TABLES `stationroutes` WRITE;
 /*!40000 ALTER TABLE `stationroutes` DISABLE KEYS */;
-INSERT INTO `stationroutes` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,2,1),(12,2,2),(13,2,3),(14,2,4),(15,2,5),(16,2,6),(17,2,7),(18,2,8),(19,2,9),(20,2,10),(21,3,1),(22,3,2),(23,3,3),(24,3,4),(25,3,5),(26,3,6),(27,3,7),(28,3,8),(29,3,9),(30,3,10),(31,4,1),(32,4,2),(33,4,3),(34,4,4),(35,4,5),(36,4,6),(37,4,7),(38,4,8),(39,4,9),(40,4,10),(41,5,1),(42,5,2),(43,5,3),(44,5,4),(45,5,5),(46,5,6),(47,5,7),(48,5,8),(49,5,9),(50,5,10),(51,6,1),(52,6,2),(53,6,3),(54,6,4),(55,6,5),(56,6,6),(57,6,7),(58,6,8),(59,6,9),(60,6,10),(61,7,1),(62,7,2),(63,7,3),(64,7,4),(65,7,5),(66,7,6),(67,7,7),(68,7,8),(69,7,9),(70,7,10),(71,8,1),(72,8,2),(73,8,3),(74,8,4),(75,8,5),(76,8,6),(77,8,7),(78,8,8),(79,8,9),(80,8,10),(81,9,1),(82,9,2),(83,9,3),(84,9,4),(85,9,5),(86,9,6),(87,9,7),(88,9,8),(89,9,9),(90,9,10),(91,10,1),(92,10,2),(93,10,3),(94,10,4),(95,10,5),(96,10,6),(97,10,7),(98,10,8),(99,10,9),(100,10,10);
+INSERT INTO `stationroutes` VALUES (1,1,1,1),(2,1,2,3.7),(3,1,3,2.7),(4,1,4,2),(5,1,5,4.7),(6,1,6,4.9),(7,1,7,4.2),(8,1,8,2.6),(9,1,9,2.8),(10,1,10,4.3),(11,2,1,3.7),(12,2,2,1),(13,2,3,1.4),(14,2,4,2.4),(15,2,5,2.9),(16,2,6,2.8),(17,2,7,4.4),(18,2,8,5.5),(19,2,9,4.1),(20,2,10,2.3),(21,3,1,2.7),(22,3,2,1.4),(23,3,3,1),(24,3,4,1.1),(25,3,5,2.1),(26,3,6,2.2),(27,3,7,2.8),(28,3,8,4.0),(29,3,9,2.9),(30,3,10,2.7),(31,4,1,2),(32,4,2,2.4),(33,4,3,1.1),(34,4,4,1),(35,4,5,2.6),(36,4,6,3.0),(37,4,7,2.2),(38,4,8,3.1),(39,4,9,2.8),(40,4,10,3.4),(41,5,1,4.7),(42,5,2,2.9),(43,5,3,2.1),(44,5,4,2.6),(45,5,5,1),(46,5,6,1),(47,5,7,2.0),(48,5,8,5.4),(49,5,9,5.0),(50,5,10,5.5),(51,6,1,4.9),(52,6,2,2.8),(53,6,3,2.2),(54,6,4,3),(55,6,5,1),(56,6,6,1),(57,6,7,2.7),(58,6,8,5.5),(59,6,9,6.8),(60,6,10,5.0),(61,7,1,4.2),(62,7,2,4.4),(63,7,3,2.8),(64,7,4,2.2),(65,7,5,2.0),(66,7,6,2.7),(67,7,7,1),(68,7,8,3.6),(69,7,9,4.9),(70,7,10,7.4),(71,8,1,2.6),(72,8,2,5.5),(73,8,3,4.0),(74,8,4,3.1),(75,8,5,5.4),(76,8,6,5.5),(77,8,7,3.6),(78,8,8,1),(79,8,9,5.8),(80,8,10,6.3),(81,9,1,2.8),(82,9,2,4.1),(83,9,3,2.9),(84,9,4,2.8),(85,9,5,5.0),(86,9,6,6.8),(87,9,7,4.9),(88,9,8,5.8),(89,9,9,1),(90,9,10,1.8),(91,10,1,4.3),(92,10,2,2.3),(93,10,3,2.7),(94,10,4,3.4),(95,10,5,5.5),(96,10,6,5.0),(97,10,7,7.4),(98,10,8,6.3),(99,10,9,1.8),(100,10,10,1);
 /*!40000 ALTER TABLE `stationroutes` ENABLE KEYS */;
 UNLOCK TABLES;
 --

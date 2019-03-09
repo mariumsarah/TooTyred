@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block head %}
+<head>
+  <title>User messages</title>
+  <style>
+    .modal-header{
+      background-color:#3dcacd;
+      font-size:30px;
+    }
+    .modal-content{
+      background-color:#3d3a3a;
+      color:white;
+      font-size:20px;
+      height:55%; !important
+    }
+    .modal-dialog{
+      height:90%; !important
+    }
+  </style>
+{% endblock %}
+{% block body %}
+      <div class="container">
+        <table class="table table-condensed">
+          <thead>
+            <tr style='font-size:30px;'>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for usermessage in contactus %}
+              <tr style='font-size:25px;'>
+                <td>{{ usermessage.fn }}</td>
+                <td>{{ usermessage.ln }}</td>
+                <td>{{ usermessage.email }}</td>
+                <td>{{ usermessage.message }}</td>
+                <td><button name='{{ usermessage.email }}' class='clicked btn btn-success' data-toggle="modal" data-target="#myModal9">Send Email</button></td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+        <div class="modal fade" id="myModal9" style='background:color:black;'>
+          <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style='color:black;'>Send Email</h4>
+              </div>
+              <div class="modal-body">
+                  <textarea name="comment" id='emailmessage' style='color:black;border-radius:5px;width:100%;height:200px;' placeholder='Send email'></textarea><br>
+                  <button style='font-size:20px;color:black;' id='cl' class='btn btn-success'>Send</button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <script>
+        //---------------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------------
+        $(function() {
+
+
+        // This function gets cookie with a given name
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        /*
+        The functions below will create a header with csrftoken
+        */
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        function sameOrigin(url) {
+            // test that a given url is a same-origin URL
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    // Send the token to same-origin, relative URLs only.
+                    // Send the token only if the method warrants CSRF protection
+                    // Using the CSRFToken value acquired earlier
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+      });
+        //---------------------------------------------------------------------------------------------------------
+
+        //---------------------------------------------------------------------------------------------------------
+
+        var email;
+        $('.clicked').click(function(){
+            email=this.name;
+        });
+        $('#cl').click(function(){
+          alert("sdfs");
+          event.preventDefault();
+          $.ajax({
+            url : "/operator/usermessages/", // the endpoint
+            type : "POST", // http method
+            data : { email:email, message:document.getElementById('emailmessage').value}, // data sent with the post fo
+            // handle a successful response
+            success : function(json) {
+                  alert('Email sent!'); // remove t // remove the value from the input
+                  reload_page();},
+              // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                    }
+          });
+        });
+        function reload_page()
+        {
+          window.location.reload(true);
+        }
+      </script>
+{% endblock %}

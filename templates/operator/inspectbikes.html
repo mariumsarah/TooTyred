@@ -76,7 +76,7 @@
         color:black;
         right:15%;
         top:11%;
-        z-index:12;
+        z-index:2;
       }
       #reservationSearch {
         position:fixed;
@@ -127,14 +127,15 @@
       }
       .viewreservations{
         position:absolute;
-        left:40%;
+        left:39%;
         z-index:4;
         color:black;
       }
       .viewbikes{
         position:absolute;
-        left:3%;
-        top:5%;
+        float:right;
+        right:15%;
+        top:11%;
         z-index:4;
         color:black;
       }
@@ -300,11 +301,81 @@
         </div>
     </div>
    <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
+   <button style='color:black;' id='fined' type="button" data-toggle="modal" data-target="#myModal8">FINED</button>
 
+   <div class="modal fade" id="myModal8" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+           <h4 class="modal-title">Add Fine</h4>
+         </div>
+         <div class="modal-body">
+             Would you like to confirm adding fine?<br>
+              <textarea name="comment" id='finedesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter fine description'></textarea><br>
+              <input type="number"id='finecost' style='color:black;border-radius:5px;width:50%;' placeholder='Enter Fine Cost' min="0.00" max="10000.00" step="0.01" /><br><br>
+               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
+         </div>
+
+       </div>
+
+     </div>
+   </div>
+
+   <button style='color:black;' id='refunded' type="button" data-toggle="modal" data-target="#myModal10">CONFIRMED</button>
+
+   <div class="modal fade" id="myModal10" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+           <h4 class="modal-title">Confirm Refund</h4>
+         </div>
+         <div class="modal-body">
+           <p ></p>
+             Would you like to confirm refund of the reservation cost?<br><br>
+             <textarea name="comment" id='refunddesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for refund'></textarea><br>
+               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
+         </div>
+
+       </div>
+
+     </div>
+   </div>
+
+   <button style='color:black;' id='cancelled' type="button" data-toggle="modal" data-target="#myModal9">CANCELLED</button>
+
+   <div class="modal fade" id="myModal9" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+           <h4 class="modal-title">Cancel Reservation</h4>
+         </div>
+         <div class="modal-body">
+           <p ></p>
+             Would you like to confirm cancellation of this reservation?<br><br>
+             <textarea name="comment" id='canceldesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for cancelation'></textarea><br>
+               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
+         </div>
+
+       </div>
+
+     </div>
+   </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg&libraries=geometry&sensor=false">
     </script>
     <script type="text/javascript">
       document.getElementById('bikeoptions').style.visibility='hidden';
+      document.getElementById('fined').style.display='none';
+      document.getElementById('cancelled').style.display='none';
+      document.getElementById('refunded').style.display='none';
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
         // Declare variables
@@ -566,18 +637,26 @@ function viewReservations(json) {
           var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bikes_on_reservation'][x]['bike_image']);
             str+='<button class="bikeButton" name="'+json[i]['bikes_on_reservation'][x]['bike_id']+'" disabled><img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 white);filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);" src="'+url_mask+'">'+json[i]['bikes_on_reservation'][x]['bike_id']+'</button>';
               }
+              //CANCEL AND PROCESS REFUND ONLY WHEN FUTURE RESERVATION
+            var d='';
+              if(json[i]['res_type'].toUpperCase()=='FUTURE')
+                d='<button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
+                  +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
+                    +json[i]['reservation_id']+'\')">Process Refund</button>';
+            //ADD FINE ONLY WHEN PAST RESERVATION
+            var y='';
+            if(json[i]['res_type'].toUpperCase()=='PAST')
+              y='<button type="button" style="color:black" class="fine btn btn-danger" onclick="addFineModal(\''
+                +json[i]['reservation_id']+'\')">Add fine</button>';
         $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
             '</h4>Reserved on: '+json[i]['res_date']+'&nbsp; &nbsp; &nbsp; &nbsp;  Paid: '+json[i]['res_cost']+'</td>'
             +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
             +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
               json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
-              +'<td style="color:white;display: block;">'+'<div style="border:1px solid black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span><button class="btn btn-danger" onclick="blockModal(\''
-                +json[i]['c_id'].split(' ')[0]+'\')">Block</button></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+              +'<td style="color:white;display: block;">'+'<div style="border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
             '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
             '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
-            +'<td style="display: block;width:100%;"><button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
-              +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
-              +json[i]['reservation_id']+'\')">Process Refund</button>'+'</td></tr>');
+            +'<td style="display: block;width:100%;">'+d+y+'</td></tr>');
       }
     }
 
@@ -617,22 +696,24 @@ function viewbik(name){
   });
 }
 //--------------------------------------------------------------------------------------------------
-
+var nam;
+var type='';
 function cancelModal(name){
-  alert(name);
+nam=name;
+type="cancel";
+    document.getElementById('cancelled').click();
 }
 //--------------------------------------------------------------------------------------------------
 function addFineModal(name){
-  alert(name);
+  nam=name;
+  type="fine";
+    document.getElementById('fined').click();
 }
 //--------------------------------------------------------------------------------------------------
 function processRefund(name){
-  alert(name);
-}
-//--------------------------------------------------------------------------------------------------
-function blockModal(name){
-
-  alert(name);
+  nam=name;
+  type="refund";
+    document.getElementById('refunded').click();
 }
 //--------------------------------------------------------------------------------------------------
 function transferModal(){
@@ -681,6 +762,74 @@ function transferModal(){
 function reload_page()
 {
   window.location.reload(true);
+}
+//--------------------------------------------------------------------------------------------------
+function send(){
+  if(type=="fine")
+  {
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: type, reservationnumber:nam,finecost:document.getElementById('finecost').value,finedesc:document.getElementById('finedesc').value}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The Fine cannot be placed'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The fine was successfully added'); // remove t // remove the value from the input
+           reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
+  }
+  else if(type=="cancel")
+  {
+    event.preventDefault();
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: type, reservationnumber:nam,reservationmessage:document.getElementById('canceldesc').value}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The reservation could not be cancelled!'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The reservation was sucessfully cancelled!'); // remove t // remove the value from the input
+           reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
+  }
+  else {
+      event.preventDefault();
+      $.ajax({
+        url : "/operator/log/", // the endpoint
+        type : "POST", // http method
+        data : { formtype: type, reservationnumber:nam,refundmessage: document.getElementById('refunddesc').value}, // data sent with the post fo
+        // handle a successful response
+        success : function(json) {
+          if(json[0]==0){
+              alert('The reservation was not refunded'); // remove t // remove the value from the input
+              reload_page();}
+          else
+          {  alert('The reservation was refunded!'); // remove t // remove the value from the input
+             reload_page();}
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+                }
+      });
+    }
 }
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){

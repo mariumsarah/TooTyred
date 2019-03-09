@@ -174,7 +174,7 @@ LOGIN_EXEMPT_USER_URL = (
     r'^operator/log/$',
     #r'^operator/bikes/$',
     r'^operator/station[0-9]/$',
-    #r'^operator/customerservice/$',
+    r'^operator/usermessages/$',
     #managers pages come here
 )
 
