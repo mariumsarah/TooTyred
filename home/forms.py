@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
+from home.models import contactUs
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from django.forms import ValidationError
 from django.core.exceptions import ValidationError
@@ -75,7 +76,33 @@ class RegistrationForm(UserCreationForm):
             field.required = True
 
 class enquiryForm(forms.Form):
-    firstname = forms.CharField();
-    lastname = forms.CharField();
+    firstname = forms.CharField()
+    lastname = forms.CharField()
     email = forms.EmailField(validators=[validate_email])
     message = forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = contactUs
+        fields = [
+        'mail_id',
+        'firstname',
+        'lastname',
+        'email',
+        'message'
+        ]
+
+    def save(self, commit=True):
+        user=contactUs(fn=self.cleaned_data['firstname'],ln=self.cleaned_data['lastname'],email=self.cleaned_data['email'],message=self.cleaned_data['message'])
+        if commit:
+            user.save()
+        return user
+
+    def clean(self):
+        cleaned_data=super(enquiryForm, self).clean()
+        return cleaned_data
+
+#This code is used to make all fields as required
+#https://django.cowhite.com/blog/django-form-validation-and-customization-adding-your-own-validation-rules/
+    def __init__(self, *args, **kwargs):
+        super(enquiryForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.required = True

@@ -75,24 +75,6 @@ class Bike(models.Model):
         managed = False
         db_table = 'bike'
 
-class Creditcardinfo(models.Model):
-    card_id = models.AutoField(primary_key=True)
-    card_info = models.IntegerField()
-    card_exp_date = models.DateField()
-
-    class Meta:
-        managed = False
-        db_table = 'creditcardinfo'
-
-class Complaints(models.Model):
-    complaint_id = models.AutoField(primary_key=True)
-    complaint_type = models.CharField(max_length=20)
-    complaint_desc = models.TextField()
-
-    class Meta:
-        managed = False
-        db_table = 'complaints'
-
 class ReservationType(models.Model):
     res_type_id = models.AutoField(primary_key=True)
     res_type_name = models.CharField(max_length=20)
@@ -108,39 +90,6 @@ class CustomerRating(models.Model):
     class Meta:
         managed = False
         db_table = 'customer_rating'
-
-class Checkuplog(models.Model):
-    clog_id = models.AutoField(primary_key=True)
-    clog_count = models.IntegerField()
-    checkup_date = models.DateField()
-    checkup_desc = models.TextField()
-    checkuplog_station = models.ForeignKey('Station', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'checkuplog'
-
-class Stationfootage(models.Model):
-    footage_id = models.AutoField(primary_key=True)
-    footage_date = models.CharField(max_length=20)
-    footage_link = models.CharField(max_length=20)
-    footage_station = models.ForeignKey(Station, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'stationfootage'
-
-class Maintenancelog(models.Model):
-    mlog_id = models.AutoField(primary_key=True)
-    mlog_count = models.IntegerField()
-    maintenance_date = models.DateField()
-    maintenance_desc = models.TextField()
-    mechanic_name = models.CharField(max_length=50)
-    maintenance_bike = models.ForeignKey(Bike, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'maintenancelog'
 
 class Stationroutes(models.Model):
     route_id = models.AutoField(primary_key=True)
@@ -170,10 +119,6 @@ class Reservation(models.Model):
         managed = False
         db_table = 'reservation'
 
-
-
-
-
 class BikeOnReservation(models.Model):
     bor_bike = models.ForeignKey('Bike', models.DO_NOTHING)
     bor_reservation = models.ForeignKey(Reservation, models.DO_NOTHING)
@@ -182,10 +127,6 @@ class BikeOnReservation(models.Model):
         managed = False
         db_table = 'bike_on_reservation'
         unique_together = (('bor_bike', 'bor_reservation'),)
-
-
-
-
 
 class StationOnReservation(models.Model):
     sor_route = models.ForeignKey('Stationroutes', models.DO_NOTHING)
@@ -199,10 +140,11 @@ class StationOnReservation(models.Model):
 # QR code for reservations
 
 class contactUs(models.Model):
-    mail_id = models.AutoField(primary_key=True)
-    fn = models.CharField(max_length=30)
-    ln = models.CharField(max_length=40)
-
+    mail_id = models.AutoField(primary_key=True,null=False)
+    fn = models.CharField(max_length=30,null=False)
+    ln = models.CharField(max_length=40,null=False)
+    message=models.CharField(max_length=200,null=False)
+    email=models.EmailField(null=False)
     class Meta:
-
-        db_table = '#'
+        db_table = 'contactUs'
+        managed = False

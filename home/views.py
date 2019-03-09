@@ -18,18 +18,16 @@ utc=pytz.UTC
 def home(request):
     bikeDescription =  TypeOfBike.objects.all();
     if request.method == 'POST':
-            home =  enquiryForm(request.POST)
-            if form.is_valid():
-                text = form.cleaned_data['message']
-                fn = form.cleaned_data['fn']
-                ln = form.cleaned_data['ln']
-                email = form.cleaned_data['email']
-                form.save()
-                messages.success(request,'Thank you for reaching out to us! We will reply to you ASAP')
-
+        form =  enquiryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form=enquiryForm()
+            return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form,'station':Station.objects.all(),'sent':True})
+        else:
+            return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form,'station':Station.objects.all(),'sent':False})
     else:
         form = enquiryForm()
-        return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form,'station':Station.objects.all()})
+        return render(request, 'user/home.html',{'bikeDesc': bikeDescription,'form': form,'station':Station.objects.all(),'sent':False})
 
 def register(request):
     if request.method == 'POST':

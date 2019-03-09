@@ -523,9 +523,8 @@ $(document).ready(function(){
   </div>
   <div id="contact"  style="background-color: #e9e9e8; height: 100%" class="container-fluid">
     <h1 style="color: black; font-size: 55px; margin-left: 2%; ">Contact</h1>
-    <center>
-    <div>
-      <div style="width:100%; float:right;  margin-bottom: 2%; ">
+    <div style='padding-left:22px;'>
+      <div style="width:100%; margin-bottom: 2%; ">
         <form   method="post" style="width:90%;color:black;">
           {% csrf_token %}
      <!-- {{ form.as_p }}-->
@@ -550,10 +549,13 @@ $(document).ready(function(){
       </div>-->
           <button type="submit" class="btn btn-success" Style="width:100%;">Submit</button>
         </form>
-  </div></div></center>
+  </div></div>
   </div>
 </div>
 <script>
+  {% if sent %}
+  alert('Thank you for reaching out to us! We will reply to you ASAP');
+  {% endif %}
   var infoWindow;
   function initMap() {
       // The map, centered at Edinburgh

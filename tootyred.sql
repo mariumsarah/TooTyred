@@ -565,6 +565,7 @@ CREATE TABLE `contactUs` (
   `mail_id` int(11) NOT NULL AUTO_INCREMENT,
   `fn` varchar(30) NOT NULL,
   `ln` varchar(40) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `message` varchar(200) NOT NULL,
   PRIMARY KEY (`mail_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
