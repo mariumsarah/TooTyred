@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.core.mail import EmailMessage
 import json
 import pytz
+from django.db import connection
 from decimal import Decimal
 utc=pytz.UTC
 def stations(request):
@@ -259,16 +260,33 @@ def bikes(request):
         elif request.POST.get('formtype','') == 'replaceBike':
             response_date={}
             #stores value whether the blocking was successfull or not
-            bikes = Bike.objects.raw('SELECT * FROM bike WHERE bike_id=%s AND (bike_status=1 OR bike_status=3 OR bike_status=4 OR bike_status=2)',(request.POST.get('bikeid',''),))
+            bikes = Bike.objects.raw('SELECT * FROM bike WHERE bike_id=%s AND (bike_status=1 OR bike_status=2)',(request.POST.get('bikeid',''),))
             if not bikes:
                 response_date[0]=0
                 return HttpResponse(json.dumps(response_date),
                     content_type="application/json")
             for bike in bikes:
+                    print('here')
+                    replacewith = Bike.objects.filter(bike_status=StatusOfBike.objects.get(bike_status_id=4),bike_type=bike.bike_type)
+
+                    for n in replacewith:
+                        replacewith=n
+                        break
+                    replacewith.bike_stationedat=bike.bike_stationedat
+                    replacewith.bike_status=StatusOfBike.objects.get(bike_status_id=1)
+                    print(replacewith.bike_id)
+                    bike.bike_status=StatusOfBike.objects.get(bike_status_id=4)
+                    bike.bike_stationedat=None
+                    #print(bike.bike_id)
+                    reservations = Reservation.objects.raw('SELECT * FROM reservation as r,bike_on_reservation as b WHERE b.bor_reservation_id=r.reservation_id AND b.bor_bike_id=%s AND r.res_type=3',(bike.bike_id,))
+                    #print(bike.bike_id)
+                    for x in reservations:
+                        with connection.cursor() as c:
+                            c.execute('UPDATE tootyred.bike_on_reservation SET bor_bike_id = %s WHERE bor_bike_id = %s AND bor_reservation_id=%s', [replacewith.bike_id,bike.bike_id,x.reservation_id])
                     response_date[0]=1
-                    #if the bike is stored
-                    bike.travel_count=0
+                    response_date[1]=replacewith.bike_id;
                     bike.save()
+                    replacewith.save()
                     return HttpResponse(json.dumps(response_date),
                         content_type="application/json")
             response_date[1]=request.POST.get('bikeid','')

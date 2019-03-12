@@ -982,10 +982,10 @@ function replaceModal(){
         //alert('Sorry, there are no other times you can change, other reservations occupied')
         //document.getElementById('pleaseclose').click();
            if(json[0]==0){
-             alert('The bike was not replaced because its active or being tracked'); // remove t // remove the value from the input
+             alert('The bike was not replaced becaause it is not stationed, or there were no available bikes in storage'); // remove t // remove the value from the input
                reload_page();}
            else
-           {  alert('The bike was successfully replaced'); // remove t // remove the value from the input
+           {  alert('The bike was successfully replaced by the bike of id'+json[1]); // remove t // remove the value from the input
              reload_page();}
       },
 
