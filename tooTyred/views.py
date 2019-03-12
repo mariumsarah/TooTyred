@@ -7,6 +7,6 @@ def login_success(request):
     if request.user.is_staff and not request.user.is_superuser:
         return redirect('/operator/log/')
     elif request.user.is_staff and request.user.is_superuser:
-        return redirect('/manager/log/')
+        return redirect('/manager/dailyreports/')
     else:
         return redirect('/home/reserve/')

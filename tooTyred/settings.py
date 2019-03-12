@@ -179,7 +179,6 @@ LOGIN_EXEMPT_USER_URL = (
 )
 
 LOGIN_EXEMPT_MANAGER_URL = (
-    r'^manager/log/$',
     r'^manager/usagereports/$',
     r'^manager/statistics/$',
     r'^manager/dailyreports/$',

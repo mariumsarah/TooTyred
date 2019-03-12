@@ -301,6 +301,7 @@
         </div>
     </div>
    <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
+
    <button style='color:black;' id='fined' type="button" data-toggle="modal" data-target="#myModal8">FINED</button>
 
    <div class="modal fade" id="myModal8" >
@@ -313,16 +314,28 @@
            <h4 class="modal-title">Add Fine</h4>
          </div>
          <div class="modal-body">
+
+
+
+
              Would you like to confirm adding fine?<br>
-              <textarea name="comment" id='finedesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter fine description'></textarea><br>
-              <input type="number"id='finecost' style='color:black;border-radius:5px;width:50%;' placeholder='Enter Fine Cost' min="0.00" max="10000.00" step="0.01" /><br><br>
-               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
+              <textarea name="comment" id='finedesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter fine description' required></textarea><br>
+              <p id="desc"></p>
+              <br>
+              <input type="number" id='finecost'   style='color:black;border-radius:5px;width:50%;' placeholder='Enter Fine Cost' min="0.00" max="10000.00" step="0.01" required /><br>
+              <p id="cost"></p>
+              <br><br>
+               <input style='border-radius:5px;color:black' type='submit' id="start_button" value='Confirm' onclick='send()'/>
+
+
          </div>
 
        </div>
 
      </div>
    </div>
+
+
 
    <button style='color:black;' id='refunded' type="button" data-toggle="modal" data-target="#myModal10">CONFIRMED</button>
 
@@ -336,10 +349,18 @@
            <h4 class="modal-title">Confirm Refund</h4>
          </div>
          <div class="modal-body">
-           <p ></p>
+
+
+
+
              Would you like to confirm refund of the reservation cost?<br><br>
-             <textarea name="comment" id='refunddesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for refund'></textarea><br>
-               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
+              <textarea name="comment" id='refunddesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter reason for refund' onkeyup="stoppedTyping()" required></textarea><br>
+              <p id="reason"></p>
+              <br>
+
+               <input style='border-radius:5px;color:black' type='submit' value='Confirm' id="start_button" onclick='send()'/>
+
+
          </div>
 
        </div>
@@ -347,7 +368,8 @@
      </div>
    </div>
 
-   <button style='color:black;' id='cancelled' type="button" data-toggle="modal" data-target="#myModal9">CANCELLED</button>
+
+   <button style='color:black;' id='cancelled' type="button" data-toggle="modal" data-target="#myModal9"> CANCELLED </button>
 
    <div class="modal fade" id="myModal9" >
      <div class="modal-dialog">
@@ -359,9 +381,11 @@
            <h4 class="modal-title">Cancel Reservation</h4>
          </div>
          <div class="modal-body">
-           <p ></p>
+
              Would you like to confirm cancellation of this reservation?<br><br>
-             <textarea name="comment" id='canceldesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for cancelation'></textarea><br>
+             <textarea name="comment" id='canceldesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for cancelation' required></textarea><br>
+              <p id="canldesc"></p>
+              <br>
                <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
          </div>
 
@@ -376,6 +400,7 @@
       document.getElementById('fined').style.display='none';
       document.getElementById('cancelled').style.display='none';
       document.getElementById('refunded').style.display='none';
+
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
         // Declare variables
@@ -701,18 +726,26 @@ var type='';
 function cancelModal(name){
 nam=name;
 type="cancel";
+document.getElementById('canldesc').innerHTML = "";
+    document.getElementById('canceldesc').value = "";
     document.getElementById('cancelled').click();
 }
 //--------------------------------------------------------------------------------------------------
 function addFineModal(name){
   nam=name;
   type="fine";
+  document.getElementById('desc').innerHTML = "";
+  document.getElementById('cost').innerHTML = "";
+  document.getElementById('finedesc').value = "";
+  document.getElementById('finecost').value = "";
     document.getElementById('fined').click();
 }
 //--------------------------------------------------------------------------------------------------
 function processRefund(name){
   nam=name;
   type="refund";
+    document.getElementById('reason').innerHTML = "";
+    document.getElementById('refunddesc').value = "";
     document.getElementById('refunded').click();
 }
 //--------------------------------------------------------------------------------------------------
@@ -764,10 +797,36 @@ function reload_page()
   window.location.reload(true);
 }
 //--------------------------------------------------------------------------------------------------
+
+
+
 function send(){
   if(type=="fine")
   {
+    var validdesc;
+    var validcost;
     event.preventDefault();
+    var inpObj = document.getElementById("finedesc");
+    var inpObj1 = document.getElementById("finecost");
+       if (!inpObj.checkValidity() ) {
+         document.getElementById("desc").style.color = "#FFA07A";
+         document.getElementById("desc").innerHTML = inpObj.validationMessage;
+
+  } else {
+    document.getElementById("desc").style.color = "#00FF00";
+    document.getElementById("desc").innerHTML = "Fine description is valid!";
+    validdesc=true;
+  }
+  if ( !inpObj1.checkValidity()) {
+    document.getElementById("cost").style.color = "#FFA07A";
+   document.getElementById("cost").innerHTML = inpObj1.validationMessage;
+  } else {
+    document.getElementById("cost").style.color = "#00FF00";
+    document.getElementById("cost").innerHTML = "Fine cost is valid!";
+    validcost=true;
+  }
+  if(!validdesc || !validcost)
+    return;
     $.ajax({
       url : "/operator/log/", // the endpoint
       type : "POST", // http method
@@ -790,6 +849,17 @@ function send(){
   else if(type=="cancel")
   {
     event.preventDefault();
+     var inpObj2 = document.getElementById("canceldesc");
+  if (!inpObj2.checkValidity() ) {
+    document.getElementById("canldesc").style.color = "#FFA07A";
+    document.getElementById("canldesc").innerHTML = inpObj2.validationMessage;
+    return;
+  } else {
+    document.getElementById("canldesc").style.color = "#00FF00";
+    document.getElementById("canldesc").innerHTML = "Cancel description accepted";
+
+  }
+
     $.ajax({
       url : "/operator/log/", // the endpoint
       type : "POST", // http method
@@ -811,6 +881,17 @@ function send(){
   }
   else {
       event.preventDefault();
+   var inpObj3 = document.getElementById("refunddesc");
+  if (!inpObj3.checkValidity() ) {
+    document.getElementById("reason").style.color = "#FFA07A";
+    document.getElementById("reason").innerHTML = inpObj3.validationMessage;
+    return;
+  } else {
+    document.getElementById("reason").style.color = "#00FF00";
+    document.getElementById("reason").innerHTML = "Refund description is valid";
+
+  }
+
       $.ajax({
         url : "/operator/log/", // the endpoint
         type : "POST", // http method
@@ -831,6 +912,9 @@ function send(){
       });
     }
 }
+
+
+
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
@@ -1042,7 +1126,7 @@ document.getElementById('addmarker').style.display="none";
                if(str[0]=='1'){
                 icon = {
                    url: "{% static 'icons/bike.png' %}", // url
-                   scaledSize: new google.maps.Size(30, 30), // scaled size
+                   scaledSize: new google.maps.Size(50, 50), // scaled size
                  };
                marker = new google.maps.Marker({
                    position: {lat:parseFloat(str[1]),lng:parseFloat(str[2])},
@@ -1178,5 +1262,8 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+
     </script>
 {% endblock %}

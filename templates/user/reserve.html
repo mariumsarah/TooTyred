@@ -586,7 +586,7 @@
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal fade" id="exampleModal1" data-backdrop="static" data-keyboard="false"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content cont">
           <div class="modal-header">
@@ -636,8 +636,7 @@
       document.getElementById("confirm2").style.display="none";
       document.getElementById("home-tab").style.display="none";
       document.getElementById("right-panel").style.display="none";
-  document.getElementById("cross").style.display="none";
-
+      document.getElementById("cross").style.display="none";
       var x = 0;
       var startlocationid;
       var endlocationid;
@@ -893,7 +892,7 @@ var onChangeHandler = function() {
 
        };
 
- window.addEventListener('click', onChangeHandler);
+       window.addEventListener('click', onChangeHandler);
         document.getElementById('optn').addEventListener('change', onChangeHandler);
 
       }

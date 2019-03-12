@@ -488,9 +488,7 @@ $(document).ready(function(){
   <thead style="background-color:#009688; color:white; font-size: 22px;">
     <tr>
       <th scope="col">Bike Type</th>
-      <th scope="col">Cost Per Hour</th>
-      <th scope="col">Currently Available</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Cost Per Fifteen minutes</th>
     </tr>
   </thead>
   <tbody style="color:black;font-size: 20px;">
@@ -498,13 +496,14 @@ $(document).ready(function(){
     {% for bike in bikeDesc %}
     <tr class="hoverable"data-toggle="popover" title="{{bike.bike_type}}" data-html="true" data-content="<center><img style='width:50%; height:50%;' src='{% static 'bikes/'|add:bike.bike_image %}'></center><br></img>{{bike.bike_info}}" >
       <th scope="row"  >{{bike.bike_type}}</th>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>€{{ bike.bike_cost }}</td>
     </tr>
    {% endfor %}
   </tbody>
 </table>
+<h2><center style="color:black;">
+  Heads up if you reserve our bike! Make sure you lock and unlock the bike on time...you will be fined with €5.0 If you dont do so!
+  </center></h2>
 </div>
 </center>
   </div>

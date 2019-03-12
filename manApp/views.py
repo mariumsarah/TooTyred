@@ -7,19 +7,15 @@ import pytz
 utc=pytz.UTC
 import json
 
-# Create your views here.
-def manager(request):
-    return render(request, 'manager/home.html')
-
 def manUsagereports(request):
 
 	#Retriving Stations with max usage
 	 getStation=Station.objects.raw('SELECT station_id, name FROM station')
 	 stationByStartTime=[]
 	 for testobj in getStation:
-	 	print('testobject %s',[testobj.station_id])
+	 	#print('testobject %s',[testobj.station_id])
 	 	looptest1=Station.objects.raw('SELECT station_id,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes WHERE sor_route_id=route_id AND station_id=start_station_id  AND station_id=%s',[testobj.station_id])
-	 	print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
+	 	#print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
 	 	stationByStartTime.append(looptest1[0].countnum)
 	 	sbt = json.dumps(stationByStartTime)
 
@@ -27,29 +23,29 @@ def manUsagereports(request):
 	 getStationname = Station.objects.raw('SELECT station_id,name FROM station')
 	 Stationname=[]
 	 for testobj in getStationname:
-	 	print ('testobject %s', [testobj.name])
+	 	#print ('testobject %s', [testobj.name])
 	 	Stationname.append([testobj.name])
-	 	print(Stationname)
+	 	#print(Stationname)
 	 stname=json.dumps(Stationname)
 
 	 #Retriving Max Bike usage
 	 getBikelist = TypeOfBike.objects.raw('SELECT bike_type_id FROM type_of_bike')
 	 bikesUsedCount = []
 	 for testobj in getBikelist:
-	 		print ('testobject %s', [testobj.bike_type_id])
+	 		#print ('testobject %s', [testobj.bike_type_id])
 	 		looptest1 =  TypeOfBike.objects.raw('SELECT bike_type_id, count(bike_type_id) AS typecount FROM type_of_bike, bike_on_reservation, bike WHERE bike.bike_type = bike_type_id AND bike_id = bor_bike_id AND bike_type_id = %s', [testobj.bike_type_id])
-	 		print ('asdasdasd', looptest1[0].typecount, [testobj.bike_type_id])
+	 		#print ('asdasdasd', looptest1[0].typecount, [testobj.bike_type_id])
 	 		bikesUsedCount.append(looptest1[0].typecount)
-	 		print('st count values', bikesUsedCount)
+	 		#print('st count values', bikesUsedCount)
 	 bikemax=json.dumps(bikesUsedCount)
 
 	 #Retriving Max Bike Name List
 	 getBikeNamelist = TypeOfBike.objects.raw('SELECT bike_type_id,bike_type FROM type_of_bike')
 	 bikename=[]
 	 for testobj in getBikeNamelist:
-	 	print ('testobject %s', [testobj.bike_type])
+	 	#print ('testobject %s', [testobj.bike_type])
 	 	bikename.append([testobj.bike_type])
-	 print(bikename)
+	 #print(bikename)
 	 bikenamelt=json.dumps(bikename)
 
 	 #Total reservations in this year
@@ -60,7 +56,7 @@ def manUsagereports(request):
 	 	count += 1
 	 	totalreservpermonthquery = Reservation.objects.raw('SELECT reservation_id, count(*) AS tmcount FROM reservation WHERE YEAR(res_date) = YEAR(NOW()) AND MONTH(res_date) = %s', [count])
 	 	totalreservpermonth.append(totalreservpermonthquery[0].tmcount)
-	 print(totalreservpermonth)
+	 #print(totalreservpermonth)
 	 tresTD = json.dumps(totalreservpermonth)
 
 ##Total reservations in past year
@@ -71,14 +67,14 @@ def manUsagereports(request):
 	 	count += 1
 	 	totalreservpastyearquery = Reservation.objects.raw('SELECT reservation_id, count(*) AS tmcount FROM reservation    WHERE YEAR(res_date) = YEAR(NOW()- INTERVAL 1 YEAR) AND MONTH(res_date) = %s', [count])
 	 	totalreservpastyear.append(totalreservpastyearquery[0].tmcount)
-	 print(totalreservpastyear)
+	 #print(totalreservpastyear)
 	 tresPY = json.dumps(totalreservpastyear)
 
 	 #Retriving Stations with max usage Heatmap
 	 getStationHMAP=Station.objects.raw('SELECT station_id, name FROM station')
 	 stationlonlat=[]
 	 for testobj in getStationHMAP:
-	 	print('testobject2 %s',[testobj.station_id])
+	 	#print('testobject2 %s',[testobj.station_id])
 	 	looptest1=Station.objects.raw('SELECT station_id, lon, lat ,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes WHERE sor_route_id=route_id AND station_id=start_station_id  AND station_id=%s',[testobj.station_id])
 	 	lat=looptest1[0].lat
 	 	lon=looptest1[0].lon
@@ -87,7 +83,7 @@ def manUsagereports(request):
 	 	if lon is not None:
 	 		lon = float(lon)
 	 		stationlonlat.append((lat,lon))
-	 print(stationlonlat)
+	 #print(stationlonlat)
 
 	 count=Bike.objects.all().count()
 	 Bikes=Bike.objects.all()
@@ -103,9 +99,9 @@ def manStatistics(request):
 	 getStation=Station.objects.raw('SELECT station_id, name FROM station')
 	 stationByStartTime=[]
 	 for testobj in getStation:
-	 	print('testobject %s',[testobj.station_id])
+	 	#print('testobject %s',[testobj.station_id])
 	 	looptest1=Station.objects.raw('SELECT station_id,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes WHERE sor_route_id=route_id AND station_id=start_station_id  AND station_id=%s',[testobj.station_id])
-	 	print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
+	 	#print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
 	 	stationByStartTime.append(looptest1[0].countnum)
 	 	sbt = json.dumps(stationByStartTime)
 
@@ -113,20 +109,20 @@ def manStatistics(request):
 	 getStationname = Station.objects.raw('SELECT station_id,name FROM station')
 	 Stationname=[]
 	 for testobj in getStationname:
-	 	print ('testobject %s', [testobj.name])
+	 	#print ('testobject %s', [testobj.name])
 	 	Stationname.append([testobj.name])
-	 	print(Stationname)
+	 	#print(Stationname)
 	 stname=json.dumps(Stationname)
 
 	 #Retriving Max Bike usage
 	 getBikelist = TypeOfBike.objects.raw('SELECT bike_type_id FROM type_of_bike')
 	 bikesUsedCount = []
 	 for testobj in getBikelist:
-	 		print ('testobject %s', [testobj.bike_type_id])
+	 		#print ('testobject %s', [testobj.bike_type_id])
 	 		looptest1 =  TypeOfBike.objects.raw('SELECT bike_type_id, count(bike_type_id) AS typecount FROM type_of_bike,  bike WHERE bike.bike_type = bike_type_id AND  bike_type_id = %s', [testobj.bike_type_id])
-	 		print ('asdasdasd', looptest1[0].typecount, [testobj.bike_type_id])
+	 		#print ('asdasdasd', looptest1[0].typecount, [testobj.bike_type_id])
 	 		bikesUsedCount.append(looptest1[0].typecount)
-	 		print('st count values', bikesUsedCount)
+	 		#print('st count values', bikesUsedCount)
 	 bikemax=json.dumps(bikesUsedCount)
 
 
@@ -134,20 +130,20 @@ def manStatistics(request):
 	 getBikeNamelist = TypeOfBike.objects.raw('SELECT bike_type_id,bike_type FROM type_of_bike')
 	 bikename=[]
 	 for testobj in getBikeNamelist:
-	 	print ('testobject %s', [testobj.bike_type])
+	 	#print ('testobject %s', [testobj.bike_type])
 	 	bikename.append([testobj.bike_type])
-	 print(bikename)
+	 #print(bikename)
 	 bikenamelt=json.dumps(bikename)
 
 	 #Retriving Max Bike usage
 	 getBikelist = TypeOfBike.objects.raw('SELECT bike_type_id FROM type_of_bike')
 	 bikesUsedCount = []
 	 for testobj in getBikelist:
-	 		print ('testobject %s', [testobj.bike_type_id])
+	 		#print ('testobject %s', [testobj.bike_type_id])
 	 		looptest1 =  TypeOfBike.objects.raw('SELECT  bike_type_id, count(bike_type_id) AS replacecount FROM type_of_bike, bike WHERE bike.bike_type = bike_type_id AND travel_count=0  AND  bike_type_id = %s', [testobj.bike_type_id])
-	 		print ('asdasdasd', looptest1[0].replacecount, [testobj.bike_type_id])
+	 		#print ('asdasdasd', looptest1[0].replacecount, [testobj.bike_type_id])
 	 		bikesUsedCount.append(looptest1[0].replacecount)
-	 		print('st count values', bikesUsedCount)
+	 		#print('st count values', bikesUsedCount)
 	 biketr=json.dumps(bikesUsedCount)
 
 
@@ -155,9 +151,9 @@ def manStatistics(request):
 	 getBikeNamelist = TypeOfBike.objects.raw('SELECT bike_type_id,bike_type FROM type_of_bike')
 	 bikename=[]
 	 for testobj in getBikeNamelist:
-	 	print ('testobject %s', [testobj.bike_type])
+	 	#print ('testobject %s', [testobj.bike_type])
 	 	bikename.append([testobj.bike_type])
-	 print(bikename)
+	 #print(bikename)
 	 bikenamett=json.dumps(bikename)
 
 
@@ -182,7 +178,7 @@ def manStatistics(request):
 	 	if TProfit is not None:
 	 		TProfit = float(TProfit)
 	 	totalPROFITreservpermonth.append(TProfit)
-	 print(totalPROFITreservpermonth)
+	 #print(totalPROFITreservpermonth)
 	 totalPROFITreservpermonth = json.dumps(totalPROFITreservpermonth)
 
     #Total profit on each day
@@ -196,7 +192,7 @@ def manStatistics(request):
 	 	if TProfitDAY is not None:
 	 		TProfitDAY = float(TProfitDAY)
 	 	totalPROFITreservperDAY.append(TProfitDAY)
-	 print(totalPROFITreservperDAY)
+	 #print(totalPROFITreservperDAY)
 	 totalPROFITreservperDAY = json.dumps(totalPROFITreservperDAY)
 
 	 #Total profit on each day
@@ -210,7 +206,7 @@ def manStatistics(request):
 	 	if TProfitLASTMONTH is not None:
 	 		TProfitLASTMONTH = float(TProfitLASTMONTH)
 	 	totalPROFITreservperLASTMONTH.append(TProfitLASTMONTH)
-	 print(totalPROFITreservperLASTMONTH)
+	 #print(totalPROFITreservperLASTMONTH)
 	 totalPROFITreservperLASTMONTH = json.dumps(totalPROFITreservperLASTMONTH)
 
     #Total profit in past year
@@ -224,7 +220,7 @@ def manStatistics(request):
 	 	if TProfitYEAR is not None:
 	 		TProfitYEAR = float(TProfitYEAR)
 	 		Ptotalreservpastyear.append(TProfitYEAR)
-	 print(Ptotalreservpastyear)
+	 #print(Ptotalreservpastyear)
 	 Ptotalreservpastyear = json.dumps(Ptotalreservpastyear)
 
 	  #Total Profit in this week
@@ -238,7 +234,7 @@ def manStatistics(request):
 	 	if TProfitWEEK is not None:
 	 		TProfitWEEK = float(TProfitWEEK)
 	 	TPtotalreservperDOW.append(TProfitWEEK)
-	 print(TPtotalreservperDOW)
+	 #print(TPtotalreservperDOW)
 	 TPtotalreservperDOW = json.dumps(TPtotalreservperDOW)
 
 
@@ -249,18 +245,18 @@ def manDailyreport(request):
 	 getStation=Station.objects.raw('SELECT station_id, name FROM station')
 	 stationByStartTimeTD=[]
 	 for testobj in getStation:
-	 	print('testobject %s',[testobj.station_id])
+	 	#print('testobject %s',[testobj.station_id])
 	 	looptest1=Station.objects.raw('SELECT station_id,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes, reservation WHERE sor_route_id = route_id AND station_id = start_station_id AND sor_reservation_id = reservation_id AND DATE(starttime) = CURDATE() AND station_id=%s',[testobj.station_id])
-	 	print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
+	 	#print('asdasdasd',looptest1[0].countnum,[testobj.station_id])
 	 	stationByStartTimeTD.append(looptest1[0].countnum)
 	 	sbtTD = json.dumps(stationByStartTimeTD)
 	#Retriving Stations Name List
 	 getStationname=Station.objects.raw('SELECT station_id, name FROM station')
 	 StationnameTD=[]
 	 for testobj in getStationname:
-		 print ('testobject %s', [testobj.name])
+		 #print ('testobject %s', [testobj.name])
 		 StationnameTD.append([testobj.name])
-		 print(StationnameTD)
+		 #print(StationnameTD)
 		 stnameTD=json.dumps(StationnameTD)
 
 	 #Total Reservations in this week
@@ -271,14 +267,14 @@ def manDailyreport(request):
 	 	count += 1
 	 	totalreservperDOWquery = Reservation.objects.raw('SELECT reservation_id, count(*) AS twcount FROM reservation WHERE YEARWEEK(starttime) = YEARWEEK(NOW()) AND DAYOFWEEK(starttime) = %s', [count])
 	 	totalreservperDOW.append(totalreservperDOWquery[0].twcount)
-	 	print(totalreservperDOW)
+	 	#print(totalreservperDOW)
 	 	tresWTD = json.dumps(totalreservperDOW)
 
 	 #Retriving Stations with max usage Heatmap
 	 getStationHMAPTD=Station.objects.raw('SELECT station_id, name FROM station')
 	 stationlonlatTD=[]
 	 for testobj in getStationHMAPTD:
-	 	print('testobject2 %s',[testobj.station_id])
+	 	#print('testobject2 %s',[testobj.station_id])
 	 	looptest1=Station.objects.raw('SELECT station_id, lon, lat,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes, reservation WHERE sor_route_id = route_id AND station_id = start_station_id AND sor_reservation_id = reservation_id AND DATE(starttime) = CURDATE() AND station_id=%s',[testobj.station_id])
 	 	lat=looptest1[0].lat
 	 	lon=looptest1[0].lon
@@ -287,7 +283,7 @@ def manDailyreport(request):
 	 	if lon is not None:
 	 		lon = float(lon)
 	 		stationlonlatTD.append((lat,lon))
-	 print(stationlonlatTD)
+	 #print(stationlonlatTD)
 
 	 how_many_days = 1
 	 reservations=Reservation.objects.filter(endtime__gte=datetime.now()-timedelta(days=how_many_days))

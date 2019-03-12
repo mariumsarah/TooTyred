@@ -804,7 +804,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   </button>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal fade" id="exampleModal1" data-backdrop="static" data-keyboard="false"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content cont contented">
         <div class="modal-header">
@@ -1026,8 +1026,9 @@ function minutesToString(i)
   }
   function send()
   {
+    document.getElementById("exampleModal1").style.display="none";
     document.getElementById("inputstartstation").value=($('#startloc').text());
-      document.getElementById("reservationt").value=reservationnumber;
+    document.getElementById("reservationt").value=reservationnumber;
     document.getElementById("inputendstation").value=($('#endloc').text());
                         {% for bike in bike_type %}
     document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[Number({{ bike.bike_type_id }})-1]);
