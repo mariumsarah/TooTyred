@@ -14,7 +14,7 @@ from django.core.mail import EmailMessage
 from django.utils.crypto import get_random_string
 import pytz
 utc=pytz.UTC
-
+import time
 def home(request):
     bikeDescription =  TypeOfBike.objects.all();
     if request.method == 'POST':

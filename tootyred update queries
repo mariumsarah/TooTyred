@@ -1,3 +1,4 @@
+
 #sets global scheduler to enable mysql events, events allow us to have a function that would run in a specific time specified by user
 SET GLOBAL event_scheduler = ON;
 
@@ -9,7 +10,7 @@ DROP EVENT IF EXISTS autoupdate$$
 
 CREATE EVENT autoupdate
 ON SCHEDULE EVERY 15 MINUTE
-STARTS '2019-02-23 00:00:00'
+STARTS '2019-03-13 00:30:00'
 DO
 BEGIN
 
@@ -30,10 +31,10 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 
 #changes reservations that did not unlock on time to past reservation and giving fine if the user did not unlock after 15 minutes of their starting reservation time
-UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time', fined_at = now() WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
+UPDATE reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time', fined_at = now() WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
 
 #changes reservations that did not lock on time to past reservation and giving fine if the user did not lock after 15 minutes of their ending reservation time
-UPDATE tootyred.reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time', fined_at = now() WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
+UPDATE reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time', fined_at = now() WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
 
 
 
@@ -62,20 +63,18 @@ Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
 
 		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id) AND bike_type = bi_id_type  AND bike_status = 1 LIMIT 1);
 
-
-
 		ELSEIF (SELECT count(*) FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status = 1) > 0 THEN
 
 		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status = 1 LIMIT 1);
 
-		UPDATE tootyred.bike SET bike_stationedat = res_id_station WHERE bike_id = new_bi_id;
+		UPDATE bike SET bike_stationedat = res_id_station WHERE bike_id = new_bi_id;
 
 
 		ELSE
 
 		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_status = 4 AND bike_type = bi_id_type LIMIT 1);
 
-		UPDATE tootyred.bike SET bike_stationedat = res_id_station, bike_status = 1 WHERE bike_id = new_bi_id;
+		UPDATE bike SET bike_stationedat = res_id_station, bike_status = 1 WHERE bike_id = new_bi_id;
 
 		END IF;
 
@@ -84,21 +83,11 @@ Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
 	SELECT concat('Current New Bike ID being changed: ', new_bi_id);
 
 
-	UPDATE tootyred.bike_on_reservation, tootyred.reservation SET bor_bike_id = new_bi_id WHERE reservation_id = bor_reservation_id AND starttime >= (SELECT endtime FROM reservation WHERE reservation_id = res_id) AND bor_bike_id = bi_id;
+	UPDATE bike_on_reservation, reservation SET bor_bike_id = new_bi_id WHERE reservation_id = bor_reservation_id AND starttime >= (SELECT endtime FROM reservation WHERE reservation_id = res_id) AND bor_bike_id = bi_id;
 
-
-
-
-
-	UPDATE tootyred.bike SET bike_status = 5 WHERE bike_id = bi_id;
-
-
-
-
+	UPDATE bike SET bike_status = 5 WHERE bike_id = bi_id;
 
 	Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
-
-
 
 	END LOOP read_loop;
 	CLOSE bikes_in_res;
@@ -115,8 +104,7 @@ Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
 
     	IF (SELECT count(*) FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > res_id_starttime AND bor_bike_id = bi_id ORDER BY starttime LIMIT 1) > 0 THEN
 
-
-		UPDATE tootyred.bike SET bike_stationedat = res_id_station WHERE bike_id = bi_id;
+ 	UPDATE bike SET bike_stationedat = res_id_station WHERE bike_id = bi_id;
 		END IF;
 
 	END LOOP read_loop;

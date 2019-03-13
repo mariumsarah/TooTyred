@@ -1,7 +1,7 @@
 
-DROP DATABASE tootyred;
-CREATE DATABASE tootyred;
-USE tootyred;
+DROP DATABASE toootyred$tootyred;
+CREATE DATABASE toootyred$tootyred;
+USE toootyred$tootyred;
 SET NAMES utf8 ;
 
 DROP TABLE IF EXISTS `auth_user`;
