@@ -4,25 +4,25 @@
 {% block head %}
   <title>Account</title>
      {% bootstrap_javascript %}
-  
+
      <style>form{text-shadow:-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;}</style>
      <script src="{% static 'scripts/user/account.js' %}"></script>
 {% endblock %}
 {% block body %}
   <div class="container">
-    <div class="row">
+    <div style='background-color:white;color:grey;border-radius:5px;' class="row">
         <div class="col-sm-offset-3 col-sm-6">
           <h1>Account Information</h1>
           <ul>
-            <h3>Username: {{ user.username }}</h3>
-            Email Address: {{ user.email }}<br>
-            First Name:    {{ user.first_name }}<br>
-            Last Name:     {{ user.last_name }}<br>
+            <h3><span style='color:#3dcacd;'>Username:</span> {{ user.username }}</h3>
+            <span style='color:#3dcacd;'>Email Address: </span>{{ user.email }}<br>
+             <span style='color:#3dcacd;'>First Name:   </span> {{ user.first_name }}<br>
+             <span style='color:#3dcacd;'>Last Name:   </span>  {{ user.last_name }}<br>
             <!--<li>Last Name:     {{ user.userprofile.phone_number }}</li>-->
           </ul>
-          <button type="submit" onclick="editprof()" class="btn btn-success btn-block">Edit Profile</button>
-          <button type="submit" onclick="changepass()" class="btn btn-success btn-block">Change Password</button>
-          <button type="submit" onclick="deleteaccount()" class="btn btn-success btn-block">Delete Account</button>
+          <a href="#editprofile"><button type="submit" onclick="editprof()" class="btn btn-warning btn-block">Edit Profile</button></a><br>
+           <a href="#changepassword"><button type="submit" onclick="changepass()" class="btn btn-warning btn-block">Change Password</button></a><br>
+           <a href="#deleteacc"><button type="submit" onclick="deleteaccount()" class="btn btn-danger btn-block">Delete Account</button></a><br>
         </div>
       </div>
   </div>

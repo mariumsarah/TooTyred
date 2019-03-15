@@ -1,0 +1,17 @@
+UNLOCK AND LOCK BIKE
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES
+(136542,3,9.00,'2019-03-14 11:00:00','2019-03-14 14:45:00','2019-03-14 15:00:00',17);
+insert into station_on_reservation VALUES (13,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1)),(55,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+
+
+REPORT ISSUE
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES
+(129783,3,9.00,'2019-03-14 11:00:00','2019-03-14 15:30:00','2019-03-14 15:45:00',20);
+insert into station_on_reservation VALUES (46,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (4,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1)),(5,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1)),(40,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES
+(134512,3,9.00,'2019-03-14 11:00:00','2019-03-19 12:00:00','2019-03-19 12:15:00',14);
+insert into station_on_reservation VALUES (52,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (40,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));

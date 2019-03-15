@@ -374,6 +374,8 @@ def contactus(request):
         messagew=request.POST.get('message','')
         email = EmailMessage('TooTyred: Contact Us Reply', messagew, to=[request.POST.get('email','')])
         email.send()
+        contact = contactUs.objects.get(email=request.POST.get('email',''))
+        contact.delete()
         response_date={}
         response_date[0]=1
         return HttpResponse(json.dumps(response_date),

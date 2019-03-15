@@ -452,13 +452,6 @@ transition:0.3s;
 
 
 
-.warning {
-    border: 10px ridge #3dcacd;
-    background-color: #3d3a3a;
-    padding: .5rem;
-    display: flex;
-    flex-direction: column;
-}
 
 .warning p {
     font: small-caps bold 1.2rem sans-serif;
@@ -492,71 +485,145 @@ transition:0.3s;
 
 {% endblock %}
 {% block body %}
+<div class="container" >
+
+    <h2>Hey there! </h2>
+    <h4>Below you can find all the information about you future and past reservations. </h4>
+
+
 <body onload="toggle_visibility('left');">
   {% if ongoing %}
-<div class="warning">
 
-<div class="toggle_btn clicked_btn">
-<center>  <h3>Ongoing</h3></center>
+<div class=" centered_item toggle_btn clicked_btn" >
+<center>  <h3 style="color:white;">Ongoing</h3></center>
 
 </div>
-
-<!-- The table starts -->
-<!-- <div class='centered_item table-responsive'>
-     <div id="left" class="table_style"> -->
-
-  <table class="table table-hover">
-    <tbody>
+<!---new version -->
 
 
-          {% for record in ongoing %}
-       <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
+<div class='centered_item table-responsive'>
+
+  <table style="">
+{% for record in ongoing %}
+       <tr style="border-top:5px solid #3d3a3a;">
+        <td style=" background-color:#3d3a3a;color:white;" colspan="2">
+         <h4>RESERVATION: {{ record.res_code }}</h4>
+        </td>
+       </tr>
        <tr>
-                <td  style="font-size:15px;border:3px ;border-radius:2px;">
-                 <!--  {% for bike in bikesonreservations %} -->
-        {% if bike.bor_reservation_id == record.reservation_id %}
-      <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
-drop-shadow(-1px -1px 0 white);
-filter: drop-shadow(1px 1px 0 white)
-drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}"><span style="color:black;">{{ bike.bike_type.bike_type }}</span>
-        {% endif %}
-         <!--  {% endfor %} --> </td>
-            <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span style="color:black;" id='st{{ record.reservation_id }}'>Unlocked from : <h4>{{ record.startname }}</h4></span> <span style="color:black;" id='stt{{ record.reservation_id }}'>on {{ record.starttime }}</span></td>
-            <!-- <button id="modalButton" name='{{ record.reservation_id }}' type="button" class="btn btn-warning modals" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit</button> -->
+         <td style="font-size:15px;border-radius:2px;" colspan='2'>
+
+            Start Station:
+            <span style="color: #009688;" id='st{{ record.reservation_id }}'>
+              {{ record.startname }}
+            </span>
+             at
+             <span style="color: #009688;" id='stt{{ record.reservation_id }}'>
+                {{ record.starttime }}
+            </span>
+
+
+            </td>
 <!--------------
               <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
                 <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
               </form>
       <!---------------->
         </tr>
-      <tr >
+         <tr class="table-light" >
+               <td style="font-size:15px;" colspan='2'>
+                End Station:
+                 <span style="color: #009688;"id='en{{ record.reservation_id }}'>
+                    {{ record.endname }}
+                  </span>
+                  until
+                  <span style="color: #009688;"id='ent{{ record.reservation_id }}'>
+                    {{ record.endtime }}
+                  </span>
 
-        <td style="font-size:15px;border:3px ;border-radius:2px;"></td>
-               <td style="font-size:15px;border:3px solid red; "><span style="color:black;" id='en{{ record.reservation_id }}'>Lock your bike at <h4>{{ record.endname }}</h4></span>  <span style="color:black;" id='ent{{ record.reservation_id }}'>on {{ record.endtime }}</span></td>
-
-
-
-              <!--  <td> {% if now.date < record.starttime.date %} <button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:100%;">Cancel</button>{% endif %}</td> -->
+                 <br>
+              </td>
       </tr>
-      <tr> <td style="color:black;">
-        <h5>TIME LEFT <br>
-        You exceded your time limit,
-        Your FINE is </h5>
+      <tr>
+         <td colspan='2'>
+          <table style="width: 100%;" class="table table-hover">
+            <tr>
+              <th  style="width:80%;">
+               <h5 style="font-size:15px;"> Type </h5>
+              </th>
+              <th  style="width:20%;">
+               <h5  style="font-size:15px;"> Count </h5>
+              </th>
+            </tr>
+            <!-- original code
+              {% for bike in bikesonreservations %}
+              {% if bike.bor_reservation_id == record.reservation_id %}
+              <tr>
+              <td>
+              <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 white);
+                  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+                  </td>
+                  <td >
+                    1 piece
+                  </td>
+            </tr>
+              {% endif %}
+
+              {% endfor %}
+             end of orginal code -->
+              {% for bike in countbiketypereservation %}
+              {% if bike.bor_reservation_id == record.reservation_id %}
+              <tr>
+              <td  style="width:80%;">
+              <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 white);
+                  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+                  </td>
+                  <td  style="width:20%; font-size:20px;">
+                    {% if bike.count == 1%}
+                    {{bike.count}}
+                    {% else %}
+                    {{bike.count}}
+
+                    {% endif %}
+                  </td>
+            </tr>
+              {% endif %}
+
+              {% endfor %}
+            </table>
       </td>
-      <td><button  type="button" class="btn btn-danger modals myBtnReport" name='{{ record.res_code }}' style="width:100%;">Report Issue</button> </td>
+       </tr>
+        <tr>
+           <td colspan='2'>
+
+            RESERVED ON:<span style="color: #009688;"> {{ record.res_date }}</span>
+            <br>
+            PAID: <span style="color: #009688;"id="cos{{ record.reservation_id }}" >{{ record.res_cost }}</span>
+          </td>
+
+         </tr>
+         <tr style="margin-top: 2%;">
+          <td style="color:black;width: 50%;">
+      </td>
+     <td><button  type="button" class="btn btn-danger modals myBtnReport" name='{{ record.res_code }}' style="width:80%;">Report Issue</button> </td>
        </tr>
 
-          {% endfor %}
-    </tbody>
-</table>
+         <!--    {% if now.date < record.starttime.date %}
+                     <button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:20%;">Cancel</button>
+              {% endif %}-->
+
+{% endfor %}
+
+    </table>
+</div>
+
+
 <!--
 </div> -->
 
-</div>
+
   {% endif %}
-  <div class="container">
-    <h2>Hey there! </h2>
-    <h4>Below you can find all the information about you future and past reservations. </h4>
+  <br>
 
 <!-- toggle buttons -->
 <div class='centered_item'>
@@ -570,33 +637,97 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
 </div>
 </div>
 <!-- The table starts -->
-<div class='centered_item table-responsive'>
+ <div class='centered_item table-responsive'>
      <div id="left" class="table_style">
 
   <table class="table table-hover">
     <tbody>
          {% for record in pastreservations %}
-         <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
-         <tr>
-           <td  style="width:100%;">{% if record.c_rating == None %} <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button>{% endif %}</td>
-           <td  style="width:100%;">{% if record.fine_desc != None %}<button type="button" style="width:100%;" name="{{ record.fine_cost }} {{ record.reservation_id }} {{ record.fine_desc }}" class="btn btn-danger myBtnFine">PAY {{ record.fine_cost }} FINE NOW!</button>{% endif %} </td>
-          </tr>
-         <tr>
-                  <td style="font-size:15px;border:3px solid green;border-radius:2px;">{{ record.startname }}<br>{{ record.starttime }}</td>
-                  <td style="font-size:15px;border:3px solid red;">{{ record.endname }}<br>{{ record.endtime }}</td>
+         <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td>
+         </tr>
+          <tr>
+         <td style="font-size:15px;border-radius:2px;" colspan='2'>
+
+            Start Station:
+            <span style="color: #009688;" id='st{{ record.reservation_id }}'>
+              {{ record.startname }}
+            </span>
+             at
+             <span style="color: #009688;" id='stt{{ record.reservation_id }}'>
+                {{ record.starttime }}
+            </span>
+
+
+            </td>
+<!--------------
+              <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
+                <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
+              </form>
+      <!---------------->
         </tr>
-        <tr> <td>
-          {% for bike in bikesonreservations %}
+         <tr class="table-light" >
+               <td style="font-size:15px;" colspan='2'>
+                End Station:
+                 <span style="color: #009688;"id='en{{ record.reservation_id }}'>
+                    {{ record.endname }}
+                  </span>
+                  until
+                  <span style="color: #009688;"id='ent{{ record.reservation_id }}'>
+                    {{ record.endtime }}
+                  </span>
+
+                 <br>
+              </td>
+      </tr>
+        <tr > <td colspan="2">
+       <!--   {% for bike in bikesonreservations %}
           {% if bike.bor_reservation_id == record.reservation_id %}
         <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
               drop-shadow(-1px -1px 0 white);
               filter: drop-shadow(1px 1px 0 white)
               drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}<br>
           {% endif %}
-            {% endfor %}
-        </td>
+            {% endfor %}--><table style="width: 100%;" class="table table-hover">
+            <tr>
+              <th  style="width:80%;">
+               <h5 style="font-size:15px;"> Type </h5>
+              </th>
+              <th  style="width:20%;" >
+               <h5  style="font-size:15px;"> Count </h5>
+              </th>
+            </tr>
+            {% for bike in countbiketypereservation %}
+              {% if bike.bor_reservation_id == record.reservation_id %}
+              <tr>
+              <td  style="width:80%;">
+              <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 white);
+                  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+                  </td>
+                  <td  style="width:20%;font-size:20px;">
+                    {% if bike.count == 1%}
+                    {{bike.count}}
+                    {% else %}
+                    {{bike.count}}
+
+                    {% endif %}
+                  </td>
+            </tr>
+              {% endif %}
+
+              {% endfor %}
+            </table>
+
+        </td></tr>
+        <tr>
+
            <td>RESERVED ON: {{ record.res_date }}<br>PAID: {{ record.res_cost }}</td>
+          <td  style="width:100%;">{% if record.c_rating == None %} <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button>{% endif %}</td>
          </tr>
+
+         <tr>
+
+           <td colspan="2"  style="width:100%;">{% if record.fine_desc != None %}<button type="button" style="width:100%;" name="{{ record.fine_cost }} {{ record.reservation_id }} {{ record.fine_desc }}" class="btn btn-danger myBtnFine">PAY {{ record.fine_cost }} FINE NOW!</button>{% endif %} </td>
+          </tr>
             {% endfor %}
     </tbody>
 </table>
@@ -607,39 +738,109 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       <table class="table table-hover">
 
   <tbody>
-       {% for record in futurereservations %}
-       <tr style="border-top:5px solid #3d3a3a;"><td style=" background-color:#3d3a3a;color:white;"><h4>RESERVATION: {{ record.res_code }}</h4></td><td style="color:white; background-color:#3d3a3a;"></td></tr>
+          {% for record in futurereservations %}
+<tr><td ><table style="width: 100%;">
+       <tr style="border-top:5px solid #3d3a3a;">
+        <td style=" background-color:#3d3a3a;color:white;" colspan="2">
+         <h4>RESERVATION: {{ record.res_code }}</h4>
+        </td>
+       </tr>
        <tr>
-                <td style="font-size:15px;border:3px solid green;border-radius:2px;"><span id='st{{ record.reservation_id }}'>{{ record.startname }}</span> <span id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span> </td>
-                <td>
-                  <button name='{{ record.reservation_id }}' type="button" class="btn btn-success edits modalss" style="width:100%;"data-toggle="modal" data-target="#exampleModal">Edit Reservation</button>
-                </td>
+         <td style="font-size:15px;border-radius:2px;" colspan='2'>
+
+            Start Station:<span style="color: #009688;" id='st{{ record.reservation_id }}'>{{ record.startname }}</span>
+             at
+             <span style="color: #009688;" id='stt{{ record.reservation_id }}'>{{ record.starttime }}</span>
+
+
+            </td>
 <!--------------
               <form action="/home/reservations/" method="POST" name="time-edit" class="timeedit">
                 <button id='myBtnEdit' type="submit" name='{{ record.reservation_id }}' class="btn btn btn-warning myBtnEdit" style="width:100%;">Edit Time</button></td>
               </form>
       <!---------------->
         </tr>
-      <tr >
-               <td style="font-size:15px;border:3px solid red;"><span id='en{{ record.reservation_id }}'>{{ record.endname }}</span>  <span id='ent{{ record.reservation_id }}'>{{ record.endtime }}</span></td>
-               <td><button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:100%;">Cancel</button></td>
+         <tr class="table-light" >
+               <td style="font-size:15px;" colspan='2'>
+                End Station:
+                 <span style="color: #009688;"id='en{{ record.reservation_id }}'>{{ record.endname }}</span>
+                  until
+                  <span style="color: #009688;"id='ent{{ record.reservation_id }}'>{{ record.endtime }}</span>
+
+                 <br>
+              </td>
       </tr>
-      <tr> <td colspan='2'>
-        {% for bike in bikesonreservations %}
-            {% if bike.bor_reservation_id == record.reservation_id %}
-          <img name='{{ bike.bike_type.bike_type_id }}' class='bikesreserved{{ record.reservation_id }}' style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)
-    drop-shadow(-1px -1px 0 white);
-    filter: drop-shadow(1px 1px 0 white)
-    drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
-            {% endif %}
-          {% endfor %}
+      <tr>
+         <td colspan='2'>
+          <table style="width: 100%;" class="table table-hover">
+            <tr>
+              <th style="width:80%;">
+               <h5 style="font-size:15px;"> Type </h5>
+              </th>
+              <th style="width:20%;">
+               <h5  style="font-size:15px;"> Count </h5>
+              </th>
+            </tr>
+            <!-- original code
+              {% for bike in bikesonreservations %}
+              {% if bike.bor_reservation_id == record.reservation_id %}
+              <tr>
+              <td>
+              <img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 white);
+                  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+                  </td>
+                  <td >
+                    1 piece
+                  </td>
+            </tr>
+              {% endif %}
+
+              {% endfor %}
+             end of orginal code -->
+              {% for bike in countbiketypereservation %}
+              {% if bike.bor_reservation_id == record.reservation_id %}
+              <tr>
+              <td style="width:80%;">
+              <img name="{{ bike.bike_type.bike_type_id }}/{{bike.count}}" class="bikesreserved{{ record.reservation_id }}"style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 white);
+                  filter: drop-shadow(1px 1px 0 white) drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">{{ bike.bike_type.bike_type }}
+                  </td>
+                  <td style="width:20%;font-size:20px">
+                    {% if bike.count == 1%}
+                    {{bike.count}}
+                    {% else %}
+                    {{bike.count}}
+
+                    {% endif %}
+                  </td>
+            </tr>
+              {% endif %}
+
+              {% endfor %}
+            </table>
       </td>
        </tr>
         <tr>
-           <td>RESERVED ON: {{ record.res_date }}</td>
-           <td>PAID:<span id="cos{{ record.reservation_id }}" >{{ record.res_cost }}</span></td>
+           <td colspan='2'>
+
+            RESERVED ON:<span style="color: #009688;"> {{ record.res_date }}</span>
+            <br>
+            PAID: <span style="color: #009688;"id="cos{{ record.reservation_id }}" >{{ record.res_cost }}</span>
+          </td>
 
          </tr>
+         <tr style="margin-top: 2%;">
+          <td style="text-align: center;">
+             <button name='{{ record.reservation_id }}' type="button" class="btn btn-warning edits modalss" style="width:85%; display: inline-block;"data-toggle="modal" data-target="#exampleModal">Edit Reservation</button></td><td style="text-align: center;">
+             <button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:80%; display: inline-block;">Cancel</button>
+           </td>
+         <!--    {% if now.date < record.starttime.date %}
+                     <button type="button" name='{{ record.reservation_id }}' class="btn btn-danger myBtnCancel"  style="width:20%;">Cancel</button>
+              {% endif %}-->
+          </td>
+         </tr>
+    </table>
+  </td>
+    </tr>
           {% endfor %}
   </tbody>
 </table>
@@ -804,7 +1005,7 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
   </button>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal1" data-backdrop="static" data-keyboard="false"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content cont contented">
         <div class="modal-header">
@@ -843,22 +1044,38 @@ drop-shadow(-1px -1px 0 black);" src="{% static 'bikes/'|add:bike.bike_type.bike
       </div>
     </div>
   </div>
+
+   <script type="text/javascript">
+
+    function closemodal(){
+
+/* Single line Reset function executes on click of Reset Button */
+
+
+document.getElementById('HiddenButtonID').click();
+
+}
+  </script>
   <!-- The Modal -->
-  <div class="modal" id="myFeedbackModal">
+  <div class="modal" id="myFeedbackModal" >
     <div class="modal-dialog">
-      <div class="modal-content" >
+      <div class="modal-content"style="background-color: lightgrey;" >
         <div class="modal-header" style="border-bottom: 0px; margin-bottom: 0px; padding-bottom: 0px;">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" class="close" onclick="closemodal()" id="closefeedback" >&times;</button>
         </div>
         <div class="centered_item" style=" margin-bottom: 2%;" >
           <div class="modal-body "  style="height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
-            <h2 style="color: rgba(0, 179, 179, 1); font-weight: bold;"> Feedback Form</h2>
-            <h3 style="color:white; "> Thank you for taking your time to comment on our service! Your feedback is very important to us!</h3>
-            <h4 style="color: rgba(0, 179, 179, 1);"> You are about to send feedback about the trip with reservation code <span id='whichtrip'></span>.</h4>
+            <h2 style="color:  #3d3a3a; font-weight: bold;"> Feedback Form</h2>
+            <h3 style="color: #3d3a3a; "> Thank you for taking your time to comment on our service! Your feedback is very important to us!</h3>
+            <h4 style="color:  #3d3a3a;"> You are about to send feedback about the trip with reservation code <span id='whichtrip' style="
+           color:rgba(0, 179, 179, 1);"></span>.</h4>
             <div class="input-group " style="width:100%; margin-top:5%;">
                 <form>
-                  <input max="5" min="1" type="number" class="form-control" id="customerrating" placeholder="Rating of your reservation" required/><br><br><br>
-                  <textarea class="form-control" id="customerfeedback" aria-label="With textarea" placeholder="Feedback or report a bike" style=" margin-bottom: 1%;" required></textarea>
+                  <input style="visibility: hidden; display: none;" type="button" id="HiddenButtonID" onClick="this.form.reset()" data-dismiss="modal" >
+
+
+                  <input max="5" min="1"  type="number" class="form-control" id="customerrating" placeholder="Rating of your reservation" required/><br><br><br>
+                  <textarea class="form-control"  id="customerfeedback" aria-label="With textarea" placeholder="Feedback or report a bike" style=" margin-bottom: 1%;" required></textarea>
                   <button type="submit"  id="myBtnSubmitFeedback" data-dismiss="modal" class="btn btn-success" onclick="sendFeedback(this);" style="width: 100%;">Submit</button>
                 </form>
             </div>
@@ -946,9 +1163,10 @@ function minutesToString(i)
     {
       bikesres[f]=0;
     }
+
   for(var i = 0; i < slides.length; i++)
   {
-     bikesres[Number(slides[i].name)-1]++;
+     bikesres[Number(slides[i].name.split('/')[0])-1]=Number(slides[i].name.split('/')[1]);
   }
   });
    $('#exampleModal').on('show.bs.modal', function (event) {
@@ -1026,9 +1244,8 @@ function minutesToString(i)
   }
   function send()
   {
-    document.getElementById("exampleModal1").style.display="none";
     document.getElementById("inputstartstation").value=($('#startloc').text());
-    document.getElementById("reservationt").value=reservationnumber;
+      document.getElementById("reservationt").value=reservationnumber;
     document.getElementById("inputendstation").value=($('#endloc').text());
                         {% for bike in bike_type %}
     document.getElementById("inputbike{{ bike.bike_type_id }}").value=(bike[Number({{ bike.bike_type_id }})-1]);
@@ -1138,8 +1355,8 @@ function minutesToString(i)
     $('#select_start_time').change();
       getOption(document.getElementById("select_end_time"),endTime1);
     $('#select_end_time').change();
-     $("#totalcost").text($("#totalcost").text()-(Number($("#cost").text())));
-       $("#cost").text("0");
+    $('#totalcost').text($('#cos'+reservationnumber).text());
+    $('#cost').text(Number($('#totalcost').text())-Number($('#cyclecost').text()));
        document.getElementById("confirm").style.display="block";
   }
 
@@ -1151,6 +1368,7 @@ function minutesToString(i)
       document.getElementById("home-tab").style.display="none";
     }
     else {
+      document.getElementById("home-tab").style.display="none";
       populateDate('#select_start_date','Select Start date',14,new Date); // use selector for your select
       disable("select_end_date");
       disable("select_end_time");
@@ -1318,7 +1536,7 @@ timesselected=true;
   endDate=document.getElementById("select_end_date").options[document.getElementById("select_end_date").selectedIndex].value;
 
   $('#startinfo').text('Start: '+ startDate+' '+minutesToString(startTime));
-  $('#endinfo').text('End: '+ endDate+' '+minuteToString(endTime));
+  $('#endinfo').text('End: '+ endDate+' '+minutesToString(endTime));
   timesselected=true;
     if(bikesselected==true && timesselected==true)
     {
@@ -1716,16 +1934,16 @@ $.ajax({
     </div>
   </div>
  <!-- The Cancelation Modal -->
-   <div class="modal" id="myCancelationModal">
+   <div class="modal" id="myCancelationModal" >
     <div class="modal-dialog">
-      <div class="modal-content contented" >
+      <div class="modal-content contented" style=" background-color: lightgrey; ">
         <div class="modal-header"  style="border-bottom: 0px; padding-bottom: 0px;">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body" >
-            <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to cancel your reservation? </h4>
-            <button type="button" id="cancelReservation" data-dismiss="modal" style="width: 100%;" class="btn btn-success centered_item" onclick="cancelReservation(this);" >Yes</button>
-            <button type="button" data-dismiss="modal" style="width: 100%;" class="btn btn-danger centered_item">No</button>
+            <h4 class="centered_item"  style="color:#3d3a3a; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to cancel your reservation? </h4>
+            <button type="button" id="cancelReservation" data-dismiss="modal" style="width: 100%; color:white;" class="btn btn-success centered_item" onclick="cancelReservation(this);" >Yes</button>
+            <button type="button" data-dismiss="modal" style="width: 100%;color:white;" class="btn btn-danger centered_item">No</button>
         </div>
       </div>
     </div>
@@ -1750,17 +1968,18 @@ $.ajax({
    <div class="modal" id="myReportModal">
      <div class="modal-dialog">
        <div class="modal-content" >
-         <div class="modal-header" style="border-bottom: 0px; margin-bottom: 0px; padding-bottom: 0px;">
+         <div class="modal-header" style="background-color:lightgrey; border-bottom: 0px; margin-bottom: 0px; padding-bottom: 0px;">
            <button type="button" class="close" data-dismiss="modal">&times;</button>
          </div>
-         <div class="centered_item" style=" margin-bottom: 2%;" >
-           <div class="modal-body "  style="height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
-             <h2 style="color: rgba(0, 179, 179, 1); font-weight: bold;">Are you having an issue on this reservation?</h2>
-             <h3 style="color:white; "> Sorry for the inconvenience! Report your issue here, be specific about what has happened so an action can be taken!</h3>
-            <div class="input-group " style="width:100%; margin-top:5%;">
+         <div class="centered_item" style=" margin-bottom: 2%;background-color:lightgrey;" >
+           <div class="modal-body "  style="background-color:lightgrey;height: 50%; min-height: 100px;  width: 90%; margin-top: 0px;">
+             <h2 style="color: #3d3a3a; font-size: 29px;">Are you having an issue on this reservation? <br><span style="color: #3dcacd">Sorry for the inconvenience!</span></h2>
+             <h4 style="color: #3d3a3a; ">  Report your issue here, be specific about what has happened so an action can be taken!</h3>
+            <div class="input-group " style="width:100%; margin-top:5%;margin-bottom: 3%;">
                  <form>
                   <textarea class="form-control" id="customerreport" aria-label="With textarea" placeholder="Report an issue" style=" margin-bottom: 1%;" required></textarea>
                    <button type="submit"  id="myBtnSubmitReport" data-dismiss="modal" class="btn btn-success" onclick="sendReport(this);" style="width: 100%;">Submit</button>
+
                  </form>
              </div>
              <div>

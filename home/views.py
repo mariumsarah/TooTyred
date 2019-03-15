@@ -423,10 +423,12 @@ def reservations(request):
             each.endtime=each.endtime.strftime('%b. %d, %Y, %I:%M %p')
             each.res_date=each.res_date.strftime('%b. %d, %Y, %I:%M %p')
         bikesonreservations =  Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
+        countbiketypereservation = Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id, count(*) as count from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id group by bike_type, bor_reservation_id;");
+
         cost=20
         reservationdays = 14
         nows =  utc.localize(datetime.now()) + timedelta(days=1)
-        return render(request,"user/reservations.html",{'now': nows,'pastreservations':pastreservations,'station':Station.objects.all(),'futurereservations': futurereservations,'ongoing': ongoing,'bikesonreservations':bikesonreservations,'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
+        return render(request,"user/reservations.html",{'countbiketypereservation': countbiketypereservation,'now': nows,'pastreservations':pastreservations,'station':Station.objects.all(),'futurereservations': futurereservations,'ongoing': ongoing,'bikesonreservations':bikesonreservations,'bike_type':TypeOfBike.objects.all(),'reservationdays':reservationdays,'costperhour':cost})
 
 #This function is used in reserve() and reservations() to get all the avaialable bike ids using the start time end time start station and end station
 def getBikes(startdatetime,enddatetime,startstationid,endstationid,typeindicator): #typeindicator indicates whos calling this function and determines what to return ()

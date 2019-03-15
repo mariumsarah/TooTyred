@@ -1,21 +1,16 @@
+---------------------INSTALLATIONS------------------------------------------
 py -m pip install mysql
 py -m pip install django-bootstrap3
-
--------------------MESSAGES TO GROUP MATES---------------------------------
-IF YOU MAKE CHANGES TO THE SQL DATABASE MAKE SURE TO MIGRATE THEM
-py manage.py makemigrations
-py manage.py migrate
 ----------------------------------------------------------------------------
-IF YOU MADE A SQL DATABASE AND YOU WANT TO MAKE THE MODEL FOR IT FOR MODELS.py
-py manage.py inspectdb
+Guide to run on localhost
 ----------------------------------------------------------------------------
-IF THERE IS A PROBLEM WITH THE CSS file
-try the following
-1. Update cache on google chrome
-2. py manage.py collectstatic
-----------------------------------------------------------------------------
-HERE IS HOW TO INITIALIZE DB AT DEPLOYMENT STAGE
-COPY PASTE ALL FROM TOOTYRED.SQL
-CHANGE DATETIME OF TOOTYRED UPDATE QUERIES TO NEXT 15 min INTERVAL
-copy paste queries to MySQL
-WAIT FOR 15 minutes
+1. Initialize database by importing tootyred.sql to phpAdmin
+   or by copy pasting the content of tootyred.sql to the mySql Command line
+2. Change the date after 'STARTS' in the file "tootyred update queries" to a
+    time and date that is at 15,30,45 minute so if it is 13:04 am right now
+     the time should be set to 13:15:00
+3. Copy paste the content of "tootyred update queries" to the mySql Command line
+4. In tooTyred->settings.py on line 45 change the password your root mySql
+  localhost password
+4. Use "py manage.py runserver" to run the django web application on localhost
+5. The website will be fully functional at the time mentioned in 2
