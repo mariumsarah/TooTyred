@@ -98,7 +98,9 @@
      $("#myFineModal").modal();
      payfinereser=this.name.split(' ')[1];
      $('#finecost').text(this.name.split(' ')[0]);
-     $('#finereason').text(this.name.split(' ').slice(1).join(' '));
+     //<!------------HERE I CHANGED -->
+     $('#finereason').text(this.name.split(' ').slice(2).join(' '));
+     //<!------------HERE I CHANGED -->
   });
 });
 </script>
@@ -162,6 +164,8 @@ $("#whichtrip").text(feedbackreservation);
              //var btn = $(e).find("button");
              //$(btn).prop("disabled", true);
              //$(btn).html("Feedback sent");
+
+
              report=document.getElementById("customerreport").value;
              event.preventDefault();
              report_reser();
@@ -705,8 +709,10 @@ transition:0.3s;
         <tr>
 
            <td>RESERVED ON: {{ record.res_date }}<br>PAID: {{ record.res_cost }}</td>
-          <td  style="width:100%;">{% if record.c_rating == None %} <button type="button" name='{{ record.res_code }}' style="width:100%;" class="btn btn-info myBtnFeedback">Send Feedback</button>{% endif %}</td>
-         </tr>
+           <!------------HERE I CHANGED -->
+           <td  style="width:100%;">{% if record.c_rating == None %} <button type="button" name='{{ record.res_code }}' style="width:100%;color:black;" class="btn btn-info myBtnFeedback">Send Feedback</button>{% endif %}</td>
+           <!------------HERE I CHANGED -->
+          </tr>
 
          <tr>
 
@@ -1031,7 +1037,7 @@ transition:0.3s;
   </button>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal fade" id="exampleModal1" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content modal-contents cont" style="color:#3d3a3a;">
 
@@ -1087,7 +1093,7 @@ transition:0.3s;
             {% csrf_token %}
             <input type="hidden" name="inputendstation" id="inputendstation" value=""/>
             <input type="hidden" name="inputstartstation" id="inputstartstation" value=""/>
-            <input type="hidden" name="reservation" id="reservationt" value=""/>         
+            <input type="hidden" name="reservation" id="reservationt" value=""/>
             <input type="hidden" name="inputstarttime" id="inputstarttime" value=""/>
             <input type="hidden" name="inputendtime" id="inputendtime" value=""/>
             <input type="hidden" name="inputenddate" id="inputenddate" value=""/>
@@ -1134,7 +1140,7 @@ transition:0.3s;
 
                     <input max="5" min="1"  type="number" class="form-control" id="customerrating" placeholder="Rating of your reservation" required/><br><br><br>
                     <textarea class="form-control"  id="customerfeedback" aria-label="With textarea" placeholder="Feedback or report a bike" style=" margin-bottom: 1%;" required></textarea>
-                    <button type="submit"  id="myBtnSubmitFeedback" data-dismiss="modal" class="btn btn-success" onclick="sendFeedback(this);" style="width: 100%;">Submit</button>
+                    <input style='width: 100%;' type='submit' class="btn btn-success" id="myBtnSubmitFeedback" value='Submit' onclick='sendFeedback(this);'/>
                   </form>
               </div>
               <div>
@@ -1303,6 +1309,8 @@ function minutesToString(i)
   }
   function send()
   {
+    document.getElementById("exampleModal1").style.display="none";
+
     document.getElementById("inputstartstation").value=($('#startloc').text());
       document.getElementById("reservationt").value=reservationnumber;
     document.getElementById("inputendstation").value=($('#endloc').text());
@@ -1957,6 +1965,8 @@ $.ajax({
 };
 
 function report_reser() {
+
+
 $.ajax({
   url : "/home/reservations/", // the endpoint
   type : "POST", // http method
@@ -2015,21 +2025,21 @@ $.ajax({
     </div>
    </div>
    <!-- The Fine Modal -->
-     <div class="modal" id="myFineModal">
-      <div class="modal-dialog" >
-        <div class="modal-content contented" >
-          <div class="modal-header" style="border-bottom: 0px; padding-bottom: 0px;">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-              <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to pay a fine of &nbsp; <span id='finecost'></span></h4>
-              <h4 class="centered_item"  style="color: white; margin-top: 2%; margin-bottom: 5%; width:100%;">Fine description: &nbsp; <span id='finereason'></span></h4>
-              <button type="button" id="payReservation" data-dismiss="modal" style="width: 100%;" class="btn btn-success centered_item" onclick="payReservation(this);" >Yes</button>
-              <button type="button" data-dismiss="modal" style="width: 100%;" class="btn btn-danger centered_item">No</button>
-          </div>
+   <div class="modal" id="myFineModal">
+    <div class="modal-dialog" >
+      <div class="modal-content contented" style=" background-color: lightgrey; ">
+        <div class="modal-header"  style="border-bottom: 0px; padding-bottom: 0px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body" >
+            <h4 class="centered_item"  style="color:#3d3a3a; margin-top: 2%; margin-bottom: 5%; width:100%;">Are you sure you want to pay a fine of? &nbsp; <span id='finecost'></span></h4>
+            <h4 class="centered_item"  style="color:#3d3a3a; margin-top: 2%; margin-bottom: 5%; width:100%;">Fine description: &nbsp; <span id='finereason'></span></h4>
+            <button type="button" id="payReservation" data-dismiss="modal" style="width: 100%; color:white;" class="btn btn-success centered_item" onclick="payReservation(this);" >Yes</button>
+            <button type="button" data-dismiss="modal" style="width: 100%;color:white;" class="btn btn-danger centered_item">No</button>
         </div>
       </div>
-     </div>
+    </div>
+   </div>
    <!-- The Report Modal -->
    <div class="modal" id="myReportModal">
      <div class="modal-dialog">
@@ -2044,8 +2054,8 @@ $.ajax({
             <div class="input-group " style="width:100%; margin-top:5%;margin-bottom: 3%;">
                  <form>
                   <textarea class="form-control" id="customerreport" aria-label="With textarea" placeholder="Report an issue" style=" margin-bottom: 1%;" required></textarea>
-                   <button type="submit"  id="myBtnSubmitReport" data-dismiss="modal" class="btn btn-success" onclick="sendReport(this);" style="width: 100%;">Submit</button>
-
+                  <p id="desc"></p>
+                  <input style='width: 100%;' class="btn btn-success" type='submit' id="myBtnSubmitReport" value='Submit' onclick='sendReport(this)'/>
                  </form>
              </div>
              <div>
