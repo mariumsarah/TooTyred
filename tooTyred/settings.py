@@ -142,7 +142,7 @@ STATIC_ROOT ='/home/toootyred/TooTyred'
 
 LOGIN_REDIRECT_URL='/login_success/'
 LOGIN_REDIRECT_EMP_URL='/operator/log/'
-LOGIN_REDIRECT_MAN_URL='/manager/log/'
+LOGIN_REDIRECT_MAN_URL='/manager/dailyreports/'
 LOGOUT_REDIRECT_URL='/home/'
 
 LOGIN_URL = '/home/login/'
