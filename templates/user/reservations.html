@@ -151,6 +151,34 @@ $("#whichtrip").text(feedbackreservation);
         //var btn = $(e).find("button");
         //$(btn).prop("disabled", true);
         //$(btn).html("Feedback sent");
+        var validdesc;
+        var valid;
+    event.preventDefault();
+    var inpObj = document.getElementById("customerfeedback");
+    var inpObj1 = document.getElementById("customerrating");
+
+       if (!inpObj.checkValidity() ) {
+         document.getElementById("desc").style.color = "#FFA07A";
+         document.getElementById("desc").innerHTML = inpObj.validationMessage;
+
+  } else {
+    document.getElementById("desc").style.color = "#00FF00";
+    document.getElementById("desc").innerHTML = " description is valid!";
+    validdesc=true;
+  }
+
+  if ( !inpObj1.checkValidity()) {
+    document.getElementById("valid").style.color = "#FFA07A";
+   document.getElementById("valid").innerHTML = inpObj1.validationMessage;
+  } else {
+    document.getElementById("valid").style.color = "#00FF00";
+    document.getElementById("valid").innerHTML = "rating is valid!";
+    valid=true;
+  }
+
+  if(!validdesc || !valid)
+    return;
+
         feedbacktext=document.getElementById("customerfeedback").value;
         ratingnumber=document.getElementById("customerrating").value;
         event.preventDefault();
@@ -164,6 +192,24 @@ $("#whichtrip").text(feedbackreservation);
              //var btn = $(e).find("button");
              //$(btn).prop("disabled", true);
              //$(btn).html("Feedback sent");
+        var validdesc;
+
+    event.preventDefault();
+    var inpObj = document.getElementById("customerreport");
+
+
+       if (!inpObj.checkValidity() ) {
+         document.getElementById("desc").style.color = "#FFA07A";
+         document.getElementById("desc").innerHTML = inpObj.validationMessage;
+
+  } else {
+    document.getElementById("desc").style.color = "#00FF00";
+    document.getElementById("desc").innerHTML = " description is valid!";
+    validdesc=true;
+  }
+
+  if(!validdesc )
+    return;
 
 
              report=document.getElementById("customerreport").value;
@@ -1139,7 +1185,9 @@ transition:0.3s;
 
 
                     <input max="5" min="1"  type="number" class="form-control" id="customerrating" placeholder="Rating of your reservation" required/><br><br><br>
+                    <p id="valid"></p>
                     <textarea class="form-control"  id="customerfeedback" aria-label="With textarea" placeholder="Feedback or report a bike" style=" margin-bottom: 1%;" required></textarea>
+                    <p id="desc"></p>
                     <input style='width: 100%;' type='submit' class="btn btn-success" id="myBtnSubmitFeedback" value='Submit' onclick='sendFeedback(this);'/>
                   </form>
               </div>
