@@ -1464,6 +1464,7 @@ function minutesToString(i)
       $('#cyclecost').text(Number($('#totalcost').text())-Number($('#cost').text()));
   }
   function resetSelect(){
+    document.getElementById("displayavailable").style.display="none";
     populateDate('#select_start_date','Select Start date',14,new Date); // use selector for your select
     disable("select_end_date");
     disable("select_end_time");

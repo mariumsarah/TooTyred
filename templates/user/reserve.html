@@ -1120,6 +1120,7 @@ function displayBikeInfoClose(selector) {
     }
 //--------------------------------------------------------------------
     function resetSelect(){
+      document.getElementById("displayavailable").style.display="none";
       populateDate('#select_start_date','Select Start date',{{ reservationdays }},new Date); // use selector for your select
       disable("select_end_date");
       disable("select_end_time");
