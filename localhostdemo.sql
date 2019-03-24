@@ -1,7 +1,6 @@
-
-DROP DATABASE toootyred$tootyred;
-CREATE DATABASE toootyred$tootyred;
-USE toootyred$tootyred;
+DROP DATABASE tootyred;
+CREATE DATABASE tootyred;
+USE tootyred;
 SET NAMES utf8 ;
 DROP TABLE IF EXISTS `auth_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -422,3 +421,170 @@ LOCK TABLES `station_on_reservation` WRITE;
 INSERT INTO `station_on_reservation` VALUES (24,4),(24,7),(37,8),(31,9),(88,10),(43,11),(80,12),(27,13),(72,14),(26,15),(17,16),(85,17),(54,18),(61,19),(40,20),(3,21),(73,22),(30,23),(14,24),(25,25),(3,26),(27,27),(28,28),(63,29),(36,30),(29,31),(93,32),(63,33),(93,34),(98,35),(53,36),(73,37),(72,38),(43,39),(21,40),(30,41),(91,42),(5,43),(8,44),(72,45),(13,46),(27,47),(29,48),(87,49),(68,50),(40,51),(93,52),(3,53),(27,54),(62,55),(28,56),(28,57),(91,58),(5,59),(62,60),(84,61),(27,62),(21,63),(69,64),(83,65),(96,66),(42,67),(97,68),(12,69),(81,70),(13,71),(63,72),(21,73),(5,74),(10,75),(93,76),(27,77),(29,78),(21,79),(27,80),(3,81),(63,82),(21,83),(23,84),(23,85),(30,86),(21,87),(28,88),(63,89),(63,90),(83,91),(5,92),(30,93),(73,94),(33,95),(93,96),(63,97),(29,98),(53,99),(14,100),(36,101),(27,102),(80,103),(76,104),(72,105),(21,106),(73,107),(29,108),(21,109),(27,110),(94,111),(69,112),(62,113),(83,114),(33,115),(72,116),(24,117),(28,118),(27,119),(13,120),(53,121),(53,122),(24,123),(99,131);
 /*!40000 ALTER TABLE `station_on_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
+
+#sets global scheduler to enable mysql events, events allow us to have a function that would run in a specific time specified by user
+SET GLOBAL event_scheduler = ON;
+
+#sets the delimiter to something else than ";", this allows us to write multiple statements inside an event function
+DELIMITER $$
+
+#drops event, used for testing
+DROP EVENT IF EXISTS autoupdate$$
+/* ---------------CHANGE ---------------*/
+CREATE EVENT autoupdate
+ON SCHEDULE EVERY 15 MINUTE
+STARTS '2019-03-24 9:30:00'
+DO
+BEGIN
+
+DECLARE n INT DEFAULT 0;
+DECLARE i INT DEFAULT 0;
+DECLARE res_id INT DEFAULT 0;
+DECLARE res_id_station INT DEFAULT 0;
+DECLARE res_id_starttime DATETIME DEFAULT NOW();
+DECLARE bi_id INT DEFAULT 0;
+DECLARE bi_id_type INT DEFAULT 0;
+DECLARE new_bi_id INT DEFAULT 0;
+DECLARE ins_t_count INT DEFAULT 0;
+DECLARE ins_c_count INT DEFAULT 0;
+DECLARE ins_c_type INT DEFAULT 0;
+DECLARE done INT DEFAULT FALSE;
+DECLARE bikes_in_res CURSOR FOR Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+
+#changes reservations that did not unlock on time to past reservation and giving fine if the user did not unlock after 15 minutes of their starting reservation time
+UPDATE reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for start of reservation, did not unlock bike on time', fined_at = now() WHERE now() >= DATE_ADD(starttime, INTERVAL 15 MINUTE) AND res_type = 3;
+
+#changes reservations that did not lock on time to past reservation and giving fine if the user did not lock after 15 minutes of their ending reservation time
+UPDATE reservation SET res_type = 1, fine_cost = 5, fine_desc = 'late for end of reservation, did not lock bike on time', fined_at = now() WHERE now() >= DATE_ADD(endtime, INTERVAL 15 MINUTE) AND res_type = 2;
+
+
+
+Select count(*) FROM reservation WHERE (now() >= endtime AND res_type = 2) OR (now() >= starttime AND res_type = 3) INTO n;
+
+SET i = 0;
+
+WHILE i < n DO
+SET res_id = (Select reservation_id FROM reservation WHERE (now() >= endtime AND res_type = 2) OR (now() >= starttime AND res_type = 3) LIMIT i,1);
+SET res_id_station = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id);
+SET res_id_starttime = (SELECT starttime FROM reservation WHERE reservation_id = res_id);
+SELECT concat('Current Reservation Id being checked: ', res_id);
+Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+
+	IF (SELECT res_type FROM reservation WHERE reservation_id = res_id) = 3 THEN
+	OPEN bikes_in_res;
+	read_loop: LOOP
+		FETCH bikes_in_res INTO bi_id;
+		SET bi_id_type = (Select bike_type FROM bike WHERE bike_id = bi_id);
+
+		IF done THEN
+      			LEAVE read_loop;
+    		END IF;
+
+		IF (SELECT count(*) FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id) AND bike_type = bi_id_type  AND bike_status = 1) > 0 THEN
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_stationedat = (SELECT end_station_id FROM stationroutes, station_on_reservation WHERE sor_route_id = route_id AND sor_reservation_id = res_id) AND bike_type = bi_id_type  AND bike_status = 1 LIMIT 1);
+
+		ELSEIF (SELECT count(*) FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status = 1) > 0 THEN
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_id NOT IN (SELECT bike_id FROM bike, reservation, bike_on_reservation WHERE bor_bike_id = bike_id AND bor_reservation_id = reservation_id  AND (res_type = 2 OR res_type = 3)) AND bike_type = bi_id_type AND bike_status = 1 LIMIT 1);
+
+		UPDATE bike SET bike_stationedat = res_id_station WHERE bike_id = new_bi_id;
+
+
+		ELSE
+
+		SET new_bi_id = (SELECT bike_id FROM bike WHERE bike_status = 4 AND bike_type = bi_id_type LIMIT 1);
+
+		UPDATE bike SET bike_stationedat = res_id_station, bike_status = 1 WHERE bike_id = new_bi_id;
+
+		END IF;
+
+	SELECT concat('Current Bike ID being changed: ', bi_id);
+	SELECT concat('Bike ID of Current Bike ID being changed: ', bi_id_type);
+	SELECT concat('Current New Bike ID being changed: ', new_bi_id);
+
+
+	UPDATE bike_on_reservation, reservation SET bor_bike_id = new_bi_id WHERE reservation_id = bor_reservation_id AND starttime >= (SELECT endtime FROM reservation WHERE reservation_id = res_id) AND bor_bike_id = bi_id;
+
+	UPDATE bike SET bike_status = 5 WHERE bike_id = bi_id;
+
+	Select bor_bike_id FROM bike_on_reservation WHERE bor_reservation_id = res_id;
+
+	END LOOP read_loop;
+	CLOSE bikes_in_res;
+	SET done = FALSE;
+
+	ELSE
+	OPEN bikes_in_res;
+	read_loop: LOOP
+		FETCH bikes_in_res INTO bi_id;
+
+		IF done THEN
+    	  		LEAVE read_loop;
+    		END IF;
+
+    	IF (SELECT count(*) FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > res_id_starttime AND bor_bike_id = bi_id ORDER BY starttime LIMIT 1) > 0 THEN
+
+ 	UPDATE bike SET bike_stationedat = res_id_station WHERE bike_id = bi_id;
+		END IF;
+
+	END LOOP read_loop;
+	CLOSE bikes_in_res;
+	SET done = FALSE;
+	END IF;
+
+SET i = i + 1;
+END WHILE;
+
+
+select count(*) FROM type_of_bike INTO ins_t_count;
+SET ins_c_count = 0;
+
+
+WHILE ins_c_count < ins_t_count DO
+
+	SET ins_c_type = (select bike_type_id FROM type_of_bike LIMIT ins_c_count,1);
+	IF (Select count(*) FROM bike WHERE bike_status = 4 AND bike_type = ins_c_type) < 20 THEN
+
+	INSERT INTO `bike` (bike_type,travel_count,bike_status,bike_stationedat) VALUES
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL),
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL),
+	(ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL), (ins_c_type,0,4,NULL);
+
+	END IF;
+	SET ins_c_count = ins_c_count + 1;
+END WHILE;
+
+
+#checks if the last fine was given more than 7 days, set account as inactive, i used SECOND instead of DAY to check since there are cases where the user was fined at 3:00 pm, but when the seventh day comes, he would set as inactive directly at 12:00 am. The user would be fined at 6 days and 15 hours instead of 7
+UPDATE auth_user SET is_active = 0 WHERE id = (select c_id FROM reservation WHERE TIMESTAMPDIFF(SECOND, fined_at, now) > 604800 GROUP BY c_id);
+
+
+END$$
+
+DELIMITER ;
+
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136541,3,9.00,'2019-03-14 11:00:00'
+/* CHANGE THIS TO AN UNLOCK TIME THAT SHOULD BE MISSED -----------------------*/
+,'2019-03-30 21:45:00'
+,'2019-03-27 03:00:00',19);
+insert into station_on_reservation VALUES (14,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+/* FUTURE RESERVATION WAY IN THE FUTURE */
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (192437,3,9.00,'2019-03-14 11:20:00'
+,'2019-03-29 14:45:00','2019-03-29 18:00:00',19);
+insert into station_on_reservation VALUES (35,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+
+UPDATE bike SET bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 68);
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120783,2,255.00,'2019-03-24 11:30:00','2019-03-26 06:15:00'
+/* CHANGE THIS TO A LOCK TIME THAT SHOULD BE MISSED----------------------------- */
+,'2019-03-26 18:00:00',17);
+insert into station_on_reservation VALUES (92,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (68,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136542,3,9.00,'2019-03-14 11:45:00'
+,'2019-03-30 14:45:00','2019-03-30 15:00:00',19);
+insert into station_on_reservation VALUES (25,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (68,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
