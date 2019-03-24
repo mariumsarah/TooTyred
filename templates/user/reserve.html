@@ -24,7 +24,7 @@
        top: 0;
        bottom: 0;
        width: 100%;
-       z-index:1;
+       z-index:-1;
     }
    .footer{
      height:80px;
@@ -1546,7 +1546,7 @@ function myloc(){
  window.pos = pos;
   var loc = new google.maps.Marker({
         position: pos,
-         icon: "{% static 'icons/yourloc.png' %}",
+         icon: "{% static 'icons/yourlocation.png' %}",
          animation: google.maps.Animation.DROP,
          map: map
      });

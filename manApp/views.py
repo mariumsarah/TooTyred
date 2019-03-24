@@ -6,6 +6,7 @@ from datetime import datetime, timedelta,timezone
 import pytz
 utc=pytz.UTC
 import json
+from django.utils import timezone
 
 def manUsagereports(request):
 
@@ -71,11 +72,11 @@ def manUsagereports(request):
 	 tresPY = json.dumps(totalreservpastyear)
 
 	 #Retriving Stations with max usage Heatmap
-	 getStationHMAP=Station.objects.raw('SELECT station_id, name FROM station')
+	 getStationHMAP=Reservation.objects.raw('SELECT reservation_id FROM reservation')
 	 stationlonlat=[]
 	 for testobj in getStationHMAP:
 	 	#print('testobject2 %s',[testobj.station_id])
-	 	looptest1=Station.objects.raw('SELECT station_id, lon, lat ,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes WHERE sor_route_id=route_id AND station_id=start_station_id  AND station_id=%s',[testobj.station_id])
+	 	looptest1=Reservation.objects.raw('SELECT reservation_id,lon,lat FROM station, station_on_reservation, stationroutes,reservation WHERE  reservation_id = sor_reservation_id AND sor_route_id = route_id AND start_station_id = station_id AND reservation_id= %s',[testobj.reservation_id])
 	 	lat=looptest1[0].lat
 	 	lon=looptest1[0].lon
 	 	if lat is not None:
@@ -83,7 +84,7 @@ def manUsagereports(request):
 	 	if lon is not None:
 	 		lon = float(lon)
 	 		stationlonlat.append((lat,lon))
-	 #print(stationlonlat)
+	# print(stationlonlat)
 
 	 count=Bike.objects.all().count()
 	 Bikes=Bike.objects.all()
@@ -271,23 +272,38 @@ def manDailyreport(request):
 	 	tresWTD = json.dumps(totalreservperDOW)
 
 	 #Retriving Stations with max usage Heatmap
-	 getStationHMAPTD=Station.objects.raw('SELECT station_id, name FROM station')
+	 getStationHMAPTD=Reservation.objects.raw('SELECT reservation_id,DATE(starttime) FROM reservation')
 	 stationlonlatTD=[]
 	 for testobj in getStationHMAPTD:
 	 	#print('testobject2 %s',[testobj.station_id])
-	 	looptest1=Station.objects.raw('SELECT station_id, lon, lat,count(start_station_id)AS countnum FROM station, station_on_reservation, stationroutes, reservation WHERE sor_route_id = route_id AND station_id = start_station_id AND sor_reservation_id = reservation_id AND DATE(starttime) = CURDATE() AND station_id=%s',[testobj.station_id])
-	 	lat=looptest1[0].lat
-	 	lon=looptest1[0].lon
-	 	if lat is not None:
-	 		lat = float(lat)
-	 	if lon is not None:
-	 		lon = float(lon)
-	 		stationlonlatTD.append((lat,lon))
+	 	looptest1=Reservation.objects.raw('SELECT reservation_id,DATE(starttime),lon,lat FROM station, station_on_reservation, stationroutes,reservation WHERE  reservation_id = sor_reservation_id AND sor_route_id = route_id AND start_station_id = station_id AND DATE(starttime) = CURRENT_DATE() AND reservation_id= %s',[testobj.reservation_id])
+	 	for loop in looptest1:
+		 	lon=looptest1[0].lon
+		 	lat=looptest1[0].lat
+		 	if lat is not None:
+		 		lat = float(lat)
+		 	if lon is not None:
+		 		lon = float(lon)
+		 		stationlonlatTD.append((lat,lon))
 	 #print(stationlonlatTD)
 
 	 how_many_days = 1
-	 reservations=Reservation.objects.filter(endtime__gte=datetime.now()-timedelta(days=how_many_days))
+	 reservations=Reservation.objects.filter(starttime__gte=datetime.now())
 	 bike=Bike.objects.raw("select b.bike_id as bike_id, b.bike_type as bike_type,br.bor_reservation_id as bor_reservation_id from bike as b, bike_on_reservation as br where b.bike_id = br.bor_bike_id");
-	 count=Reservation.objects.filter(endtime__gte=datetime.now()-timedelta(days=how_many_days)).count()
+	 counter=Reservation.objects.filter(starttime__gte=datetime.now()).count()
 
-	 return render(request, 'manager/dailyreport.html',{"stationByStartTimeTD":sbtTD,"StationnameTD":stnameTD,"totalreservperDOW":tresWTD,"stationlonlatTD":stationlonlatTD,'reservations':reservations , 'bike':bike,'count':count})
+     #Ratings Max
+	 getRatings=Reservation.objects.raw('SELECT reservation_id,c_rating FROM reservation');
+	 Ratings=[]
+	 Rate= 5
+	 count = 0
+	 while count < Rate:
+	 	count += 1
+	 	getRatingsQuery = Reservation.objects.raw('SELECT reservation_id, count(c_rating) AS twcount FROM reservation WHERE DATE(starttime) = CURRENT_DATE() AND c_rating=%s', [count])
+	 	getRatings=getRatingsQuery[0].twcount
+	 	Ratings.append(getRatings)
+	 	Rating= json.dumps(Ratings)
+
+
+
+	 return render(request, 'manager/dailyreport.html',{"stationByStartTimeTD":sbtTD,"StationnameTD":stnameTD,"totalreservperDOW":tresWTD,"stationlonlatTD":stationlonlatTD,'reservations':reservations , 'bike':bike,'counter':counter,'Rating':Rating})
