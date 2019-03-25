@@ -142,13 +142,13 @@ def reservations(request):
                     # and then transfer the bikes to their location as needed for future reservations
                     oldbikes = {}
                     for i in range(len(TypeOfBike.objects.all())):
-                        getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                        getoldbiketypecount = Bike.objects.raw('SELECT bike_id, count(*) AS count1 FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservation.reservation_id])
                         oldbikes[i] = getoldbiketypecount[0].count1
                         print('getoldbiketypecount: ', getoldbiketypecount[0].count1)
 
                     bikestodelete = set()
                     for i in range(len(TypeOfBike.objects.all())):
-                        getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservationnumber])
+                        getoldbikespertype = Bike.objects.raw('SELECT bike_id FROM bike_on_reservation, bike WHERE bike_id = bor_bike_id AND bike_type = %s AND bor_reservation_id = %s',[i+1, reservation.reservation_id])
                         for oldbike in getoldbikespertype:
                             bike_check_resquery = Reservation.objects.raw('SELECT reservation_id FROM bike_on_reservation, reservation WHERE bor_reservation_id = reservation_id AND res_type = 3 AND starttime > %s AND bor_bike_id = %s ORDER BY starttime LIMIT 1', [reservation.starttime, oldbike.bike_id])
                             if bike_check_resquery:

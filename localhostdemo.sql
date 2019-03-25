@@ -173,10 +173,10 @@ UNLOCK TABLES;
 -- Table structure for table `contactus`
 --
 
-DROP TABLE IF EXISTS `contactus`;
+DROP TABLE IF EXISTS `contactUs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `contactus` (
+CREATE TABLE `contactUs` (
   `mail_id` int(11) NOT NULL AUTO_INCREMENT,
   `fn` varchar(30) NOT NULL,
   `ln` varchar(40) NOT NULL,
@@ -187,13 +187,13 @@ CREATE TABLE `contactus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contactus`
+-- Dumping data for table `contactUs`
 --
 
-LOCK TABLES `contactus` WRITE;
-/*!40000 ALTER TABLE `contactus` DISABLE KEYS */;
-INSERT INTO `contactus` VALUES (1,'Marium','Sarah','sarahm13654@gmail.com','Hi there, \r\nI would like to know if you offer bike sservices outside of Edinburgh?\r\nDo let me know, thank you'),(2,'Humaira','Tasneem','humaira_tasneem@ymail.com','Hi TooTyred!\r\nHow much does it cost if i want to go from Ravelston to Saughton...I want to go with three of my friends do i have to register?'),(4,'Amina','Anjum','amina.anjum@yahoo.com','Hi there, \r\nIs there a limit to the amount of times i can make reservations?\r\nthanks'),(5,'Mohammed','Mubashir','mhd.mubashir25@gmail.com','Hi there, I would like to know how much it would cost if i want to take a bike to another location outside of Edinburgh...Is this possible?');
-/*!40000 ALTER TABLE `contactus` ENABLE KEYS */;
+LOCK TABLES `contactUs` WRITE;
+/*!40000 ALTER TABLE `contactUs` DISABLE KEYS */;
+INSERT INTO `contactUs` VALUES (1,'Marium','Sarah','sarahm13654@gmail.com','Hi there, \r\nI would like to know if you offer bike sservices outside of Edinburgh?\r\nDo let me know, thank you'),(2,'Humaira','Tasneem','humaira_tasneem@ymail.com','Hi TooTyred!\r\nHow much does it cost if i want to go from Ravelston to Saughton...I want to go with three of my friends do i have to register?'),(4,'Amina','Anjum','amina.anjum@yahoo.com','Hi there, \r\nIs there a limit to the amount of times i can make reservations?\r\nthanks'),(5,'Mohammed','Mubashir','mhd.mubashir25@gmail.com','Hi there, I would like to know how much it would cost if i want to take a bike to another location outside of Edinburgh...Is this possible?');
+/*!40000 ALTER TABLE `contactUs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -430,10 +430,11 @@ DELIMITER $$
 
 #drops event, used for testing
 DROP EVENT IF EXISTS autoupdate$$
-/* ---------------CHANGE ---------------*/
+
 CREATE EVENT autoupdate
 ON SCHEDULE EVERY 15 MINUTE
-STARTS '2019-03-24 9:30:00'
+/* ---------------CHANGETHIS ---------------*/
+STARTS '2019-03-25 8:45:00'
 DO
 BEGIN
 
@@ -574,24 +575,24 @@ insert into station_on_reservation VALUES (47,(SELECT reservation_id FROM reserv
 insert into bike_on_reservation VALUES (7,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136541,3,9.00,'2019-03-14 11:00:00'
-/* CHANGE THIS TO AN UNLOCK TIME THAT SHOULD BE MISSED -----------------------*/
-,'2019-03-30 21:45:00'
-,'2019-03-27 03:00:00',19);
+/* ---------------CHANGETHIS TO UNLOCK TIME THAT SHOULD BE MISSED ---------------*/
+,'2019-03-26 13:00:00'
+,'2019-03-26 20:00:00',19);
 insert into station_on_reservation VALUES (14,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 /* FUTURE RESERVATION WAY IN THE FUTURE */
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (192437,3,9.00,'2019-03-14 11:20:00'
-,'2019-03-29 14:45:00','2019-03-29 18:00:00',19);
+,'2019-03-29 14:45:00','2019-03-29 18:00:00',17);
 insert into station_on_reservation VALUES (35,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 
 UPDATE bike SET bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 68);
-insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120756,2,255.00,'2019-03-24 11:30:00','2019-03-26 06:15:00'
-/* CHANGE THIS TO A LOCK TIME THAT SHOULD BE MISSED----------------------------- */
-,'2019-03-26 18:00:00',17);
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120756,2,255.00,'2019-03-24 11:30:00','2019-03-25 06:15:00'
+/* ---------------CHANGETHIS TO LOCK TIME THAT SHOULD BE MISSED---------------*/
+,'2019-03-26 13:00:00',19);
 insert into station_on_reservation VALUES (92,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (68,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136542,3,9.00,'2019-03-14 11:45:00'
-,'2019-03-30 14:45:00','2019-03-30 15:00:00',19);
+,'2019-03-30 14:45:00','2019-03-30 15:00:00',17);
 insert into station_on_reservation VALUES (25,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (68,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));

@@ -170,13 +170,13 @@ UNLOCK TABLES;
 --
 
 --
--- Table structure for table `contactus`
+-- Table structure for table `contactUs`
 --
 
-DROP TABLE IF EXISTS `contactus`;
+DROP TABLE IF EXISTS `contactUs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `contactus` (
+CREATE TABLE `contactUs` (
   `mail_id` int(11) NOT NULL AUTO_INCREMENT,
   `fn` varchar(30) NOT NULL,
   `ln` varchar(40) NOT NULL,
@@ -187,13 +187,13 @@ CREATE TABLE `contactus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contactus`
+-- Dumping data for table `contactUs`
 --
 
-LOCK TABLES `contactus` WRITE;
-/*!40000 ALTER TABLE `contactus` DISABLE KEYS */;
-INSERT INTO `contactus` VALUES (1,'Marium','Sarah','sarahm13654@gmail.com','Hi there, \r\nI would like to know if you offer bike sservices outside of Edinburgh?\r\nDo let me know, thank you'),(2,'Humaira','Tasneem','humaira_tasneem@ymail.com','Hi TooTyred!\r\nHow much does it cost if i want to go from Ravelston to Saughton...I want to go with three of my friends do i have to register?'),(4,'Amina','Anjum','amina.anjum@yahoo.com','Hi there, \r\nIs there a limit to the amount of times i can make reservations?\r\nthanks'),(5,'Mohammed','Mubashir','mhd.mubashir25@gmail.com','Hi there, I would like to know how much it would cost if i want to take a bike to another location outside of Edinburgh...Is this possible?');
-/*!40000 ALTER TABLE `contactus` ENABLE KEYS */;
+LOCK TABLES `contactUs` WRITE;
+/*!40000 ALTER TABLE `contactUs` DISABLE KEYS */;
+INSERT INTO `contactUs` VALUES (1,'Marium','Sarah','sarahm13654@gmail.com','Hi there, \r\nI would like to know if you offer bike sservices outside of Edinburgh?\r\nDo let me know, thank you'),(2,'Humaira','Tasneem','humaira_tasneem@ymail.com','Hi TooTyred!\r\nHow much does it cost if i want to go from Ravelston to Saughton...I want to go with three of my friends do i have to register?'),(4,'Amina','Anjum','amina.anjum@yahoo.com','Hi there, \r\nIs there a limit to the amount of times i can make reservations?\r\nthanks'),(5,'Mohammed','Mubashir','mhd.mubashir25@gmail.com','Hi there, I would like to know how much it would cost if i want to take a bike to another location outside of Edinburgh...Is this possible?');
+/*!40000 ALTER TABLE `contactUs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

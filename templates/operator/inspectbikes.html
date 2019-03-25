@@ -862,7 +862,6 @@ Bike Tracking
       });
 //--------------------------------------------------------------------------------------------------
 $('.viewreservations').click(function(){
-  $('#selectionID').text("You have selected bike no."+json[0]['bike_id']);
   event.preventDefault();
   $.ajax({
     url : "/operator/log/", // the endpoint
@@ -927,6 +926,7 @@ function viewBikes(json) {
 //--------------------------------------------------------------------------------------------------
 function viewReservations(json) {
   $('#ReservationsTable').find('tbody').empty();
+    $('#selectionID').text("You have selected bike no."+json[0]['bike_id']);
     if(json[1]!=null){
       for (var i = 1; i < Object.keys(json).length; i++) {
         str='';
