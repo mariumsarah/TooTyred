@@ -359,7 +359,7 @@ Bike Tracking
   firebase.initializeApp(config);
 var  BID;
 var  UID;
-var st
+var st;
 function start(){
 st = setInterval(function() {initialize(UID,BID)},8000);
 }
@@ -481,7 +481,6 @@ google.maps.event.addDomListener(window, "load", initialize);
 }
 
 function trackbtn(){
-  alert("sdfsdf");
   document.getElementById("stoptrack").style.display="block";
 }
 
