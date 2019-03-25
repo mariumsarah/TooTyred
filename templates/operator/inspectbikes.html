@@ -10,17 +10,38 @@
         position: absolute;
         top: 10%;
         bottom: 0;
-        width: 40%;
+        width: 38%;
         height: 79%;
         right:2%;
         border: 1px solid white;
         z-index:1;
       }
+      /* <!--
+      Bike Tracking
+       -->*/
+
+            #stoptrack{
+
+              font-size: 14px;
+              position: absolute;
+              z-index: 99;
+              left: 85.2%;
+              top:11%;
+      display: none;
+
+            }
+      /*       <!--
+      Bike Tracking
+       -->*/
       .bikeButton{
         background: gray;
         box-shadow: 0px 0px 0px transparent;
         border: 0px solid transparent;
         text-shadow: 0px 0px 0px transparent;border-radius:5px;
+      }
+      .bikeButton:active{
+        background:white;
+
       }
        .table-design > tbody > tr > td{
          text-align: left; /* Left-align text */
@@ -52,14 +73,52 @@
         float:left; background-color: #3d3a3a;
         position:absolute;
         right:89%;
-        top:10%;
+        top:20%;
         left:2%;
-        height: 79%;
+        height: 69%;
         padding:5px;
         overflow: scroll;
         z-index:4;
+        width: 14%;
       }
-      ::-webkit-scrollbar {
+
+      .contain::-webkit-scrollbar {
+        width: 10px;
+        height: 8px;
+        background-color: white; /* or add it to the track */
+      }
+
+      .contain::-webkit-scrollbar:horizontal{
+        display: none;
+      }
+
+      .contain::-webkit-scrollbar-corner {
+      width: 8px;
+       }
+
+
+      /* Add a thumb */
+      .contain::-webkit-scrollbar-thumb {
+          background: #000;
+      }
+      .contain::-webkit-scrollbar-corner{
+              display: none;
+            }
+
+
+      #reservations::-webkit-scrollbar{
+        width: 10px;
+        height: 8px;
+        background-color: white;
+      }
+      #reservations::-webkit-scrollbar:horizontal{
+        display:none;
+
+      }
+      #reservations::-webkit-scrollbar-thumb{
+        background: #000;
+      }
+      #reservations::-webkit-scrollbar-corner{
         display: none;
       }
       #search {
@@ -68,15 +127,15 @@
         background-position: 10px 12px; /* Position the search icon */
         background-repeat: no-repeat;
          /* Do not repeat the icon image */
-        width:27%;
+        width:14%;
         font-size: 16px; /* Increase font-size */
         padding: 12px 20px 12px 40px; /* Add some padding */
         border: 1px solid #ddd; /* Add a grey border */
         border-radius:5px;
         color:black;
-        right:15%;
+        left: 2%;
         top:11%;
-        z-index:12;
+        z-index:2;
       }
       #reservationSearch {
         position:fixed;
@@ -91,22 +150,23 @@
         border-radius:5px;
         color:black;
         z-index:5;
+        top:130px;
       }
       #reservations{
         background-color:#3d3a3a;
         border-radius:12px;
         position: absolute;
-        top: 10%;
+        top: 31%;
         bottom: 0;
         width: 45%;
-        height: 79%;
-        left:12%;
+        height: 58%;
+        left:18%;
         overflow: scroll;
         z-index:1;
       }
       .questionmark{
         position:absolute;
-        left:54%;
+        left:10%;
         z-index:4;
         color:black;
       }
@@ -114,11 +174,11 @@
         position:absolute;
         background-color:#3d3a3a;
         top: 90%;
-        width: 96%;
+        width: 80%;
         height: 9%;
         right:2%;
-        left:2%;
-        border-radius:20px;
+        left:18%;
+
         padding:5px;
         display:flex;
       }
@@ -127,16 +187,31 @@
       }
       .viewreservations{
         position:absolute;
-        left:40%;
+        left:43%;
+
         z-index:4;
         color:black;
       }
       .viewbikes{
         position:absolute;
-        left:3%;
-        top:5%;
+        float:right;
+        left: 12.5%;
+        top:11%;
         z-index:4;
         color:black;
+      }
+      .refreshbikes{
+          position:absolute;
+        float:right;
+        left: 1.5%;
+        bottom: 1.5%;
+        width: 14%;
+        z-index:10;
+        color:black;
+
+      }
+      .popover{
+        color: black;
       }
       .reservationBikeImage{
         width:50px;
@@ -153,46 +228,46 @@
         color:white;
         font-size:20px;
       }
+      .scrollable {
 
-/* <!--
-Bike Tracking
- -->*/
-
-      #stoptrack{
-
-        font-size: 14px;
-        position: absolute;
-        z-index: 99;
-        left: 85.2%;
-        top:11%;
-display: none;
-
-      }
-/*       <!--
-Bike Tracking
- -->*/
+  overflow-y: scroll;
+}
      </style>
 {% endblock %}
 {% block body %}
-<div>
-      <div class="container">
+<body style="background-color: lightgrey;">
+<div >
+      <div class="container" >
+        <script type="text/javascript">
+          $(document).ready(function() {
+   $('[data-toggle="popover"]').popover({
+      placement: 'bottom',
+      trigger: 'hover'
+   });
+});
+        </script>>
+
           <button id='addmarker'></button>
-            <button class="btn btn-success viewbikes">&#8635;</button>
-            <button class="btn btn-success viewreservations">View all reservations</button>
-            <button class="btn btn-light questionmark">?</button>
-            <input type="text" id="search" onkeyup="searchFun()" placeholder="Search for bikes based on...">
-             <!--
-Bike Tracking
- -->
-            <button id="stoptrack" 14px;" class="btn btn-info" onclick="stop();initMap();trackbtnoff();">Stop Tracking</button>
+             <button class="btn btn-success refreshbikes">&#8635; Refresh</button>
+             <input type="text" id="reservationSearch" style="border-radius:0px; width: 25%;left:18%;  " onkeyup="reservationSearchFun()" placeholder="Search for reservations...">
+            <button class="btn btn-success viewreservations" style="margin-top: 3px; top: 21%; ">View all reservations</button>
+            <span id="selectionID" style="color: #3d3a3a;position:fixed;left: 17.5%; font-size: 28px;z-index: 20; top:12%;" > You have not made a selection yet. </span>
+            <button class="btn btn-light questionmark"  style="margin-top: 3px;left: 39.5%; z-index: 5; top: 21%;" id="reservationsOptionsHelp" data-toggle="popover" title="Search Past Reservations Help" data-content="The magic Indian is a mysterious spiritual force, and we're going to Cathedral Rock, and that's the vortex of the heart.">?</button>
 
-             <!--
-Bike Tracking
- -->
+            <button class="btn btn-light viewbikes"  id="bikesOptionsHelp" data-toggle="popover" title="Search Bikes Help" data-content="" >?</button>
 
+            <input type="text" id="search" onkeyup="searchFun()"  placeholder="Search..">
+            <!--
+Bike Tracking
+-->
+           <button id="stoptrack" 14px;" class="btn btn-info" onclick="stop();initMap();trackbtnoff();">Stop Tracking</button>
+
+            <!--
+Bike Tracking
+-->
           <div id="map_canvas">
           </div>
-          <div class="contain">
+          <div class="contain scrollable">
             <table id="BikeTable" class="table table-design table-dark">
               <!-- <theader>
                   <tr class="header">
@@ -212,26 +287,27 @@ Bike Tracking
                           style='background-color: #3d3a3a;color:#3dcacd;'
                         {% endif %}>
                         <td class='hidden'>{{ bike.bike_type.bike_type }}</td>
-                        <td><button class='bikeButton' style="width: 105px;" name='{{ bike.bike_id }}'>{{ bike.bike_id }} .
-                          <img style="width:60px;height:60px;padding-left: 3px;-webkit-filter: drop-shadow(1px 1px 0 black)
+                        <td style="width: 100%;"><button class='bikeButton' style="width: 100%; height:20%; background-color: grey;color:white;" name='{{ bike.bike_id }}'>
+                          <img style="float:left;width:45px;height:60px;-webkit-filter: drop-shadow(1px 1px 0 black)
                                       drop-shadow(-1px -1px 0 darkgrey);
                                       filter: drop-shadow(1px 1px 0 darkgrey)
-                                      drop-shadow(-1px -1px 0 darkgrey);
-                                      " src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">
+                                      drop-shadow(-1px -1px 0 darkgrey);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">
+                                  <span style="float:right;">   Bike ID: {{ bike.bike_id }}
+                                     <br>
+                                     Bike Type:<br> {{ bike.bike_type.bike_type}}</span>
                                       </button>
-                                       <!--
+                                      <!--
 Bike Tracking
- -->
- {% if bike.bike_id == 7 %}
+-->
+{% if bike.bike_id == 7 %}
 <button style="font-size: 14px;" onclick="initialize('{{bike.UID}}','{{bike.bike_id}}'); start(); trackbtn(); " class="btn btn-danger">
-                          Track Bike
-                                      </button>
-  {% endif %}
-                                       <!--
+                         Track Bike
+                                     </button>
+ {% endif %}
+                                      <!--
 Bike Tracking
- -->
-     </td>
-
+-->
+                        </td>
                         <td class='hidden'>{{ bike.bike_stationedat.name }}</td>
                         <td class='hidden'>{{ bike.bike_status.bike_status_name }}</td>
                     </tr>
@@ -241,271 +317,357 @@ Bike Tracking
           </div>
         </div>
         <div id='bikeoptions'>
-            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal">TRANSFER <span class='bikeid'></span></button>
+            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal">TRANSFER </button>
 <!-- Modal -->
-            <div class="modal fade firstModal" id="myModal" >
-              <div class="modal-dialog">
+            <div class="modal fade firstModal" id="myModal" style="height: 350px;" >
+              <div class="modal-dialog" style="height: 100%; background-color: lightgrey;">
 
                 <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Transfer</h4>
-                  </div>
-                  <div class="modal-body">
-                    <p >Transfer bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp;from enter the time below:</p>
-                    <select id='station' style='color:black;'>
+                <div class="modal-content" style="height: 100%;background-color: lightgrey;">
+
+
+
+
+                  <div class="modal-body" style="background-color: lightgrey;">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <div style="margin-top: 5%; margin-left: 8%; color: black;"> <p >You have selected bike no.<span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span>&nbsp; to be transfered</p>
+                    <p>If you would like to proceed please select the destination station and press on submit</p>
+                  <br> <select id='station' style='color:black;  width: 92%;'>
                        <option selected="true" value="" disabled="disabled">Select station to transfer to</option>
                        <option value="0">Storage</option>
                       {% for stat in station %}
                       <option value="{{ stat.station_id }}">{{ stat.name }}</option>
                       {% endfor %}
                     </select>
-                    <input style='border-radius:5px;color:black' type='submit' onclick='transferModal()'/>
+                    <br><br>
+                    <input style='border-radius:5px;color:black;  width: 90%;'class="btn btn-success" type='submit' onclick='transferModal()'/>
+                  </div>
                   </div>
 
                 </div>
 
               </div>
             </div>
-            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal2">REPLACE <span class='bikeid'></span></button>
+            <button style='color:black;' type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal2">REPLACE </button>
 <!-- Modal -->
           <div class="modal fade secondModal" id="myModal2" >
             <div class="modal-dialog">
 
               <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Replace</h4>
-                </div>
+              <div class="modal-content" style="background-color: lightgrey;">
+
                 <div class="modal-body">
-                  <p >Replace bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                <div style="margin-left: 5%;color: black;">  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                  <p >You have selected bike no.<span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
                   Would you like to confirm replacement of this bike?<br><br>
-                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='replaceModal()'/>
-                </div>
+                  <input style='border-radius:5px;color:black; width: 90%;' type='submit' class="btn btn-success"value='Confirm' onclick='replaceModal()'/>
+                </div></div>
               </div>
             </div>
           </div>
-                   <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
-            	<button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal3">BLOCK <span class='bikeid'></span></button>
+            <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
+            	<button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal3">BLOCK </button>
 <!-- Modal -->
           <div class="modal fade" id="myModal3" >
             <div class="modal-dialog">
 
               <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">BLOCK</h4>
-                </div>
+              <div class="modal-content" style="background-color: lightgrey;">
+
                 <div class="modal-body">
-                  <p >Block bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                  <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+                 <div style="margin-left: 5%; color: black;">
+                  <p >You have selected bike no.<span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
                     Would you like to confirm blocking of this bike?<br><br>
-                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='blockBikeModal()'/>
+                  <input style='border-radius:5px;color:black; width: 90%;' type='submit'class="btn btn-success" value='Confirm' onclick='blockBikeModal()'/>
 
                 </div>
-
+</div>
               </div>
 
             </div>
           </div>
-          <button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK <span class='bikeid'></span></button>
+          <button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal4">UNBLOCK </button>
 
         <!-- Modal -->
           <div class="modal fade" id="myModal4" >
             <div class="modal-dialog">
 
               <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">UNBLOCK</h4>
-                </div>
+              <div class="modal-content" style="background-color: lightgrey;">
+
                 <div class="modal-body">
-                  <p >Unblock bike <span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
+                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <div style="margin-left: 5%; color: black;">
+                  <p >You have selected bike no.<span class='bikeid'>document.getElementsByClassName("bikeid")[0].innerText;</span></p>
                     Would you like to confirm unblocking of this bike?<br><br>
-                  <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='unblockBikeModal()'/>
-                </div>
+                  <input style='border-radius:5px;color:black; width: 90%; ' type='submit' value='Confirm' class="btn btn-success" onclick='unblockBikeModal()'/>
+                </div></div>
               </div>
             </div>
           </div>
         </div>
-        <div id='reservations'>
+        <div id='reservations' style="border-radius:0px; width: 41%; ">
           <table id="ReservationsTable" class="table table-design2 table-dark">
-            <input type="text" id="reservationSearch" onkeyup="reservationSearchFun()" placeholder="Search for reservations based on...">
-            <tbody style="height: 10px !important;">
+
+            <tbody id ="tbody" style="height: 10px !important; background-color: white;color:black; ">
             </tbody>
           </table>
         </div>
     </div>
- <!--
-Bike Tracking
- -->
+    <!--
+   Bike Tracking
+    -->
 
-<script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js"></script>
-<script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+   <script src="https://maps.googleapis.com/maps/api/js"></script>
+   <script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
 
-    <script>
-    var config = {
-    apiKey: "AIzaSyBCa-MhtE2n9Sk8pNdkqhLjdw70Jr8fCZ4",
-    authDomain: "tootyred-1547136785316.firebaseapp.com",
-    databaseURL: "https://tootyred-1547136785316.firebaseio.com",
-    projectId: "tootyred-1547136785316",
-    storageBucket: "tootyred-1547136785316.appspot.com",
-    messagingSenderId: "18355823328"
-  };
-  firebase.initializeApp(config);
-var  BID;
-var  UID;
-var st;
-function start(){
-st = setInterval(function() {initialize(UID,BID)},8000);
-}
+       <script>
+       var config = {
+       apiKey: "AIzaSyBCa-MhtE2n9Sk8pNdkqhLjdw70Jr8fCZ4",
+       authDomain: "tootyred-1547136785316.firebaseapp.com",
+       databaseURL: "https://tootyred-1547136785316.firebaseio.com",
+       projectId: "tootyred-1547136785316",
+       storageBucket: "tootyred-1547136785316.appspot.com",
+       messagingSenderId: "18355823328"
+     };
+     firebase.initializeApp(config);
+   var  BID;
+   var  UID;
+   var st;
+   function start(){
+   st = setInterval(function() {initialize(UID,BID)},8000);
+   }
 
-function stop(){
-clearInterval(st);
-}
+   function stop(){
+   clearInterval(st);
+   }
 
-function initialize(uid,bid){
+   function initialize(uid,bid){
 
-  UID = uid;
-   BID = bid;
+     UID = uid;
+      BID = bid;
 
- // var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);
- //            var endLatLng = new google.maps.LatLng(55.939940000000000,-3.1918600000000000);
-          map = new google.maps.Map(document.getElementById("map_canvas"),{
-                      center: {lat:55.94136542,lng:-3.18470478},
-                      zoom: 12,
-                      maxZoom: 15,
-                      zoomControl: false,
-                      streetViewControl:false,
-                      styles:
-                      [
-                    {
-                      "featureType": 'poi',
-                      "stylers": [{"visibility": 'off'}]
-                    },
-                        {
-                            "featureType": "all",
-                            "elementType": "all",
-                            "stylers": [
-                                {
-                                    "hue": "#ff0000"
-                                },
-                                {
-                                    "saturation": -100
-                                },
-                                {
-                                    "lightness": -30
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.fill",
-                            "stylers": [
-                                {
-                                    "color": "#ffffff"
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.stroke",
-                            "stylers": [
-                                {
-                                    "color": "#353535"
-                                }
-                            ]
-                        },
-                      ]
-                    });
-                    var bikeLayer = new google.maps.BicyclingLayer();
-                    bikeLayer.setMap(map);
-                    var allowedBounds = new google.maps.LatLngBounds(
-                        new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
-                        new google.maps.LatLng(56.042897365961046,-2.918450843462324));
-                        google.maps.event.addListener(map, 'dragend', function() {
-                            if (allowedBounds.contains(map.getCenter())) return;
-                            // Out of bounds - Move the map back within the bounds
-                            var c = map.getCenter(),
-                                x = c.lng(),
-                                y = c.lat(),
-                                maxX = allowedBounds.getNorthEast().lng(),
-                                maxY = allowedBounds.getNorthEast().lat(),
-                                minX = allowedBounds.getSouthWest().lng(),
-                                minY = allowedBounds.getSouthWest().lat();
-                            if (x < minX) x = minX;
-                            if (x > maxX) x = maxX;
-                            if (y < minY) y = minY;
-                            if (y > maxY) y = maxY;
-                            map.setCenter(new google.maps.LatLng(y, x));
-                          });
+    // var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);
+    //            var endLatLng = new google.maps.LatLng(55.939940000000000,-3.1918600000000000);
+             map = new google.maps.Map(document.getElementById("map_canvas"),{
+                         center: {lat:55.94136542,lng:-3.18470478},
+                         zoom: 12,
+                         maxZoom: 15,
+                         zoomControl: false,
+                         streetViewControl:false,
+                         styles:
+                         [
+                       {
+                         "featureType": 'poi',
+                         "stylers": [{"visibility": 'off'}]
+                       },
+                           {
+                               "featureType": "all",
+                               "elementType": "all",
+                               "stylers": [
+                                   {
+                                       "hue": "#ff0000"
+                                   },
+                                   {
+                                       "saturation": -100
+                                   },
+                                   {
+                                       "lightness": -30
+                                   }
+                               ]
+                           },
+                           {
+                               "featureType": "all",
+                               "elementType": "labels.text.fill",
+                               "stylers": [
+                                   {
+                                       "color": "#ffffff"
+                                   }
+                               ]
+                           },
+                           {
+                               "featureType": "all",
+                               "elementType": "labels.text.stroke",
+                               "stylers": [
+                                   {
+                                       "color": "#353535"
+                                   }
+                               ]
+                           },
+                         ]
+                       });
+                       var bikeLayer = new google.maps.BicyclingLayer();
+                       bikeLayer.setMap(map);
+                       var allowedBounds = new google.maps.LatLngBounds(
+                           new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
+                           new google.maps.LatLng(56.042897365961046,-2.918450843462324));
+                           google.maps.event.addListener(map, 'dragend', function() {
+                               if (allowedBounds.contains(map.getCenter())) return;
+                               // Out of bounds - Move the map back within the bounds
+                               var c = map.getCenter(),
+                                   x = c.lng(),
+                                   y = c.lat(),
+                                   maxX = allowedBounds.getNorthEast().lng(),
+                                   maxY = allowedBounds.getNorthEast().lat(),
+                                   minX = allowedBounds.getSouthWest().lng(),
+                                   minY = allowedBounds.getSouthWest().lat();
+                               if (x < minX) x = minX;
+                               if (x > maxX) x = maxX;
+                               if (y < minY) y = minY;
+                               if (y > maxY) y = maxY;
+                               map.setCenter(new google.maps.LatLng(y, x));
+                             });
 
-     var infowindow = new google.maps.InfoWindow;
- var icon = { url: "{% static 'icons/bikeongoing.png' %}", // url
-              scaledSize: new google.maps.Size(30, 30), // scaled size
-                 };
-  //Create a node at firebase location to add locations as child keys
-  var bounds = new google.maps.LatLngBounds();
-  var locationsRef = firebase.database().ref("Bikes");
-  var locRef = locationsRef.child(UID);
-  locRef.once('value', function(snapshot)
-   {
-    var data = snapshot.val();
-    console.log(data);
+        var infowindow = new google.maps.InfoWindow;
+    var icon = { url: "{% static 'icons/bikeongoing.png' %}", // url
+                 scaledSize: new google.maps.Size(30, 30), // scaled size
+                    };
+     //Create a node at firebase location to add locations as child keys
+     var bounds = new google.maps.LatLngBounds();
+     var locationsRef = firebase.database().ref("Bikes");
+     var locRef = locationsRef.child(UID);
+     locRef.once('value', function(snapshot)
+      {
+       var data = snapshot.val();
+       console.log(data);
 
-    var marker = new google.maps.Marker({
-      position: {
-        lat: data.latitude,
-        lng: data.longitude
-      },
-      icon: icon,
-      map: map
-    });
-    bounds.extend(marker.getPosition());
-
-
-    marker.addListener('click', (function(data) {
-      return function(e) {
-       infowindow.setContent("Bike ID :" + BID+ "<br>" +this.getPosition().toUrlValue(4));
-        infowindow.open(map, this);
-      }
-    }(data)));
-    map.fitBounds(bounds);
-  });
-
-google.maps.event.addDomListener(window, "load", initialize);
-}
-
-function trackbtn(){
-  document.getElementById("stoptrack").style.display="block";
-}
-
-function trackbtnoff(){
-  document.getElementById("stoptrack").style.display="none";
-}
+       var marker = new google.maps.Marker({
+         position: {
+           lat: data.latitude,
+           lng: data.longitude
+         },
+         icon: icon,
+         map: map
+       });
+       bounds.extend(marker.getPosition());
 
 
-    </script>
+       marker.addListener('click', (function(data) {
+         return function(e) {
+          infowindow.setContent("Bike ID :" + BID+ "<br>" +this.getPosition().toUrlValue(4));
+           infowindow.open(map, this);
+         }
+       }(data)));
+       map.fitBounds(bounds);
+     });
 
- <!--
-Bike Tracking
- -->
+   google.maps.event.addDomListener(window, "load", initialize);
+   }
 
-   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ ---->
+   function trackbtn(){
+     document.getElementById("stoptrack").style.display="block";
+   }
 
+   function trackbtnoff(){
+     document.getElementById("stoptrack").style.display="none";
+   }
+
+
+       </script>
+
+    <!--
+   Bike Tracking
+    -->
+   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
+
+   <button style='color:black;' id='fined' type="button" data-toggle="modal" data-target="#myModal8">FINED</button>
+
+   <div class="modal fade" id="myModal8" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content" style="background-color: lightgrey;">
+
+         <div class="modal-body">
+
+
+<button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+            <div style="margin-left: 5%; color: black; margin-top: 3%; ">
+
+            In order to confirm the addition of a fine to the bike,  please fill in the field below and select submit<br>
+            <br>
+              Reason for the fine:
+             <textarea name="comment" id='finedesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter reason for a fine' required></textarea><br>
+              <p id="desc"></p>
+
+              Fine amount:<br>
+              <input type="number" id='finecost'   style='color:black;border-radius:5px;width:100%;' placeholder='Enter fine amount' min="0.00" max="10000.00" step="0.01" required /><br>
+              <p id="cost"></p>
+             <br>
+               <input style='border-radius:5px;color:black; width: 90%;' class="btn btn-success" type='submit' id="start_button" value='Confirm' onclick='send()'/>
+             </div>
+
+
+         </div>
+
+       </div>
+
+     </div>
+   </div>
+
+
+
+   <button style='color:black;' id='refunded' type="button" data-toggle="modal" data-target="#myModal10">CONFIRMED</button>
+
+   <div class="modal fade" id="myModal10" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content" style="background-color: lightgrey;">
+
+
+         <div class="modal-body" style="background-color: lightgrey; color: #3d3a3a; ">
+          <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+<div style="margin-top:4%; margin-left: 2%; margin-right: 2%;">
+             Would you like to confirm refund of the reservation cost?<br><br>
+              <textarea name="comment" id='refunddesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter reason for refund' onkeyup="stoppedTyping()" required></textarea><br>
+              <p id="reason"></p>
+
+
+               <input style='border-radius:5px;color:black; width:100%;' class="btn btn-success" type='submit' value='Confirm' id="start_button" onclick='send()'/>
+
+
+         </div>
+</div>
+       </div>
+
+     </div>
+   </div>
+
+
+   <button style='color:black;' id='cancelled' type="button" data-toggle="modal" data-target="#myModal9"> CANCELLED </button>
+
+   <div class="modal fade" id="myModal9" >
+     <div class="modal-dialog">
+
+       <!-- Modal content-->
+       <div class="modal-content" style="background-color: lightgrey; color: #3d3a3a;">
+
+
+         <div class="modal-body">   <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
+<div style="margin-top: 4%; margin-left: 2%; margin-right: 2%;">
+             Would you like to confirm cancellation of this reservation?<br><br>
+             <textarea name="comment" id='canceldesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for cancelation' required></textarea><br>
+              <p id="canldesc"></p>
+
+               <input style='border-radius:5px;color:black; width: 100%;' class="btn btn-success" type='submit' value='Confirm' onclick='send()'/>
+         </div>
+</div>
+       </div>
+
+     </div>
+   </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg&libraries=geometry&sensor=false">
     </script>
-
-
     <script type="text/javascript">
-
-
-
       document.getElementById('bikeoptions').style.visibility='hidden';
+      document.getElementById('fined').style.display='none';
+      document.getElementById('cancelled').style.display='none';
+      document.getElementById('refunded').style.display='none';
+
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
         // Declare variables
@@ -677,6 +839,10 @@ Bike Tracking
             //alert('Sorry, there are no other times you can change, other reservations occupied')
             //document.getElementById('pleaseclose').click();
             document.getElementById('bikeoptions').style.visibility='visible';
+
+
+
+          //  document.getElementsByClassName('bikeButton').style.b
             $('.bikeid').text(json[0]['bike_id']);
             viewReservations(json);
             if(json[0]['type']==1)
@@ -767,18 +933,26 @@ function viewReservations(json) {
           var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bikes_on_reservation'][x]['bike_image']);
             str+='<button class="bikeButton" name="'+json[i]['bikes_on_reservation'][x]['bike_id']+'" disabled><img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 white);filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);" src="'+url_mask+'">'+json[i]['bikes_on_reservation'][x]['bike_id']+'</button>';
               }
-        $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
+              var d='';
+                if(json[i]['res_type'].toUpperCase()=='FUTURE')
+                  d='<button type="button" style="color:black; width:98%;" class="refund btn btn-success" onclick="processRefund(\''
+                      +json[i]['reservation_id']+'\')">Process Refund</button>' + '<button type="button" style="width:98%;" class="cancel btn btn-danger" onclick="cancelModal(\''
+                    +json[i]['reservation_id']+'\')">Cancel</button>';
+              //ADD FINE ONLY WHEN PAST RESERVATION
+              var y='';
+              if(json[i]['res_type'].toUpperCase()=='PAST')
+                y='<button type="button" style="color:black; width:98%;" class="fine btn btn-danger" onclick="addFineModal(\''
+                  +json[i]['reservation_id']+'\')">Add fine</button>';
+
+        $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;color:white;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
             '</h4>Reserved on: '+json[i]['res_date']+'&nbsp; &nbsp; &nbsp; &nbsp;  Paid: '+json[i]['res_cost']+'</td>'
             +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
             +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
               json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
-              +'<td style="color:white;display: block;">'+'<div style="border:1px solid black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span><button class="btn btn-danger" onclick="blockModal(\''
-                +json[i]['c_id'].split(' ')[0]+'\')">Block</button></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
-            '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
-            '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
-            +'<td style="display: block;width:100%;"><button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
-              +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
-              +json[i]['reservation_id']+'\')">Process Refund</button>'+'</td></tr>');
+              +'<td style="color:black;display: block;">'+'<div style="color:black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+            '</td><td style="display: block;color:black;">FEEDBACK: '+json[i]['feedback']+'</td>'+
+            '<td style="display: block;color:black;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
+            +'<td style="display: block;width:100%;">'+y+d+'</td></tr>');
       }
     }
 
@@ -818,22 +992,32 @@ function viewbik(name){
   });
 }
 //--------------------------------------------------------------------------------------------------
-
+var nam;
+var type='';
 function cancelModal(name){
-  alert(name);
+nam=name;
+type="cancel";
+document.getElementById('canldesc').innerHTML = "";
+    document.getElementById('canceldesc').value = "";
+    document.getElementById('cancelled').click();
 }
 //--------------------------------------------------------------------------------------------------
 function addFineModal(name){
-  alert(name);
+  nam=name;
+  type="fine";
+  document.getElementById('desc').innerHTML = "";
+  document.getElementById('cost').innerHTML = "";
+  document.getElementById('finedesc').value = "";
+  document.getElementById('finecost').value = "";
+    document.getElementById('fined').click();
 }
 //--------------------------------------------------------------------------------------------------
 function processRefund(name){
-  alert(name);
-}
-//--------------------------------------------------------------------------------------------------
-function blockModal(name){
-
-  alert(name);
+  nam=name;
+  type="refund";
+    document.getElementById('reason').innerHTML = "";
+    document.getElementById('refunddesc').value = "";
+    document.getElementById('refunded').click();
 }
 //--------------------------------------------------------------------------------------------------
 function transferModal(){
@@ -883,6 +1067,125 @@ function reload_page()
 {
   window.location.reload(true);
 }
+//--------------------------------------------------------------------------------------------------
+
+
+
+function send(){
+  if(type=="fine")
+  {
+    var validdesc;
+    var validcost;
+    event.preventDefault();
+    var inpObj = document.getElementById("finedesc");
+    var inpObj1 = document.getElementById("finecost");
+       if (!inpObj.checkValidity() ) {
+         document.getElementById("desc").style.color = "#FFA07A";
+         document.getElementById("desc").innerHTML = inpObj.validationMessage;
+
+  } else {
+    document.getElementById("desc").style.color = "#00FF00";
+    document.getElementById("desc").innerHTML = "Fine description is valid!";
+    validdesc=true;
+  }
+  if ( !inpObj1.checkValidity()) {
+    document.getElementById("cost").style.color = "#FFA07A";
+   document.getElementById("cost").innerHTML = inpObj1.validationMessage;
+  } else {
+    document.getElementById("cost").style.color = "#00FF00";
+    document.getElementById("cost").innerHTML = "Fine cost is valid!";
+    validcost=true;
+  }
+  if(!validdesc || !validcost)
+    return;
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: type, reservationnumber:nam,finecost:document.getElementById('finecost').value,finedesc:document.getElementById('finedesc').value}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The Fine cannot be placed'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The fine was successfully added'); // remove t // remove the value from the input
+           reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
+  }
+  else if(type=="cancel")
+  {
+    event.preventDefault();
+     var inpObj2 = document.getElementById("canceldesc");
+  if (!inpObj2.checkValidity() ) {
+    document.getElementById("canldesc").style.color = "#FFA07A";
+    document.getElementById("canldesc").innerHTML = inpObj2.validationMessage;
+    return;
+  } else {
+    document.getElementById("canldesc").style.color = "#00FF00";
+    document.getElementById("canldesc").innerHTML = "Cancel description accepted";
+
+  }
+
+    $.ajax({
+      url : "/operator/log/", // the endpoint
+      type : "POST", // http method
+      data : { formtype: type, reservationnumber:nam,reservationmessage:document.getElementById('canceldesc').value}, // data sent with the post fo
+      // handle a successful response
+      success : function(json) {
+        if(json[0]==0){
+            alert('The reservation could not be cancelled!'); // remove t // remove the value from the input
+            reload_page();}
+        else
+        {  alert('The reservation was sucessfully cancelled!'); // remove t // remove the value from the input
+           reload_page();}
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+              }
+    });
+  }
+  else {
+      event.preventDefault();
+   var inpObj3 = document.getElementById("refunddesc");
+  if (!inpObj3.checkValidity() ) {
+    document.getElementById("reason").style.color = "#FFA07A";
+    document.getElementById("reason").innerHTML = inpObj3.validationMessage;
+    return;
+  } else {
+    document.getElementById("reason").style.color = "#00FF00";
+    document.getElementById("reason").innerHTML = "Refund description is valid";
+
+  }
+
+      $.ajax({
+        url : "/operator/log/", // the endpoint
+        type : "POST", // http method
+        data : { formtype: type, reservationnumber:nam,refundmessage: document.getElementById('refunddesc').value}, // data sent with the post fo
+        // handle a successful response
+        success : function(json) {
+          if(json[0]==0){
+              alert('The reservation was not refunded'); // remove t // remove the value from the input
+              reload_page();}
+          else
+          {  alert('The reservation was refunded!'); // remove t // remove the value from the input
+             reload_page();}
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+                }
+      });
+    }
+}
+
+
+
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
@@ -950,10 +1253,10 @@ function replaceModal(){
         //alert('Sorry, there are no other times you can change, other reservations occupied')
         //document.getElementById('pleaseclose').click();
            if(json[0]==0){
-             alert('The bike was not replaced because its active or being tracked'); // remove t // remove the value from the input
+             alert('The bike was not replaced becaause it is not stationed, or there were no available bikes in storage'); // remove t // remove the value from the input
                reload_page();}
            else
-           {  alert('The bike was successfully replaced'); // remove t // remove the value from the input
+           {  alert('The bike was successfully replaced by the bike of id'+json[1]); // remove t // remove the value from the input
              reload_page();}
       },
 
@@ -1094,7 +1397,7 @@ document.getElementById('addmarker').style.display="none";
                if(str[0]=='1'){
                 icon = {
                    url: "{% static 'icons/bike.png' %}", // url
-                   scaledSize: new google.maps.Size(30, 30), // scaled size
+                   scaledSize: new google.maps.Size(50, 50), // scaled size
                  };
                marker = new google.maps.Marker({
                    position: {lat:parseFloat(str[1]),lng:parseFloat(str[2])},
@@ -1230,5 +1533,9 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+
     </script>
+  </body>
 {% endblock %}
