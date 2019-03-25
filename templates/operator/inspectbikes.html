@@ -862,6 +862,7 @@ Bike Tracking
       });
 //--------------------------------------------------------------------------------------------------
 $('.viewreservations').click(function(){
+  $('#selectionID').text("You have selected bike no."+json[0]['bike_id']);
   event.preventDefault();
   $.ajax({
     url : "/operator/log/", // the endpoint
