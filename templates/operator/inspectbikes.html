@@ -76,7 +76,7 @@
         color:black;
         right:15%;
         top:11%;
-        z-index:2;
+        z-index:12;
       }
       #reservationSearch {
         position:fixed;
@@ -127,15 +127,14 @@
       }
       .viewreservations{
         position:absolute;
-        left:39%;
+        left:40%;
         z-index:4;
         color:black;
       }
       .viewbikes{
         position:absolute;
-        float:right;
-        right:15%;
-        top:11%;
+        left:3%;
+        top:5%;
         z-index:4;
         color:black;
       }
@@ -154,6 +153,24 @@
         color:white;
         font-size:20px;
       }
+
+/* <!--
+Bike Tracking
+ -->*/
+
+      #stoptrack{
+
+        font-size: 14px;
+        position: absolute;
+        z-index: 99;
+        left: 85.2%;
+        top:11%;
+display: none;
+
+      }
+/*       <!--
+Bike Tracking
+ -->*/
      </style>
 {% endblock %}
 {% block body %}
@@ -164,6 +181,15 @@
             <button class="btn btn-success viewreservations">View all reservations</button>
             <button class="btn btn-light questionmark">?</button>
             <input type="text" id="search" onkeyup="searchFun()" placeholder="Search for bikes based on...">
+             <!--
+Bike Tracking
+ -->
+            <button id="stoptrack" 14px;" class="btn btn-info" onclick="stop();initMap();trackbtnoff();">Stop Tracking</button>
+
+             <!--
+Bike Tracking
+ -->
+
           <div id="map_canvas">
           </div>
           <div class="contain">
@@ -186,13 +212,26 @@
                           style='background-color: #3d3a3a;color:#3dcacd;'
                         {% endif %}>
                         <td class='hidden'>{{ bike.bike_type.bike_type }}</td>
-                        <td><button class='bikeButton' name='{{ bike.bike_id }}'>.{{ bike.bike_id }}.
-                          <img style="width:60px;height:60px;-webkit-filter: drop-shadow(1px 1px 0 black)
+                        <td><button class='bikeButton' style="width: 105px;" name='{{ bike.bike_id }}'>{{ bike.bike_id }} .
+                          <img style="width:60px;height:60px;padding-left: 3px;-webkit-filter: drop-shadow(1px 1px 0 black)
                                       drop-shadow(-1px -1px 0 darkgrey);
                                       filter: drop-shadow(1px 1px 0 darkgrey)
-                                      drop-shadow(-1px -1px 0 darkgrey);" src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">
+                                      drop-shadow(-1px -1px 0 darkgrey);
+                                      " src="{% static 'bikes/'|add:bike.bike_type.bike_image %}">
                                       </button>
-                        </td>
+                                       <!--
+Bike Tracking
+ -->
+ {% if bike.bike_id == 7 %}
+<button style="font-size: 14px;" onclick="initialize('{{bike.UID}}','{{bike.bike_id}}'); start(); trackbtn(); " class="btn btn-danger">
+                          Track Bike
+                                      </button>
+  {% endif %}
+                                       <!--
+Bike Tracking
+ -->
+     </td>
+
                         <td class='hidden'>{{ bike.bike_stationedat.name }}</td>
                         <td class='hidden'>{{ bike.bike_status.bike_status_name }}</td>
                     </tr>
@@ -248,7 +287,7 @@
               </div>
             </div>
           </div>
-            <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
+                   <!-- <button class="btn btn-danger form-control" onclick='blockBikeModal()'> -->
             	<button style='color:black;' type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#myModal3">BLOCK <span class='bikeid'></span></button>
 <!-- Modal -->
           <div class="modal fade" id="myModal3" >
@@ -300,107 +339,173 @@
           </table>
         </div>
     </div>
-   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ --->
+ <!--
+Bike Tracking
+ -->
 
-   <button style='color:black;' id='fined' type="button" data-toggle="modal" data-target="#myModal8">FINED</button>
+<script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script src="https://cdn.firebase.com/libs/geofire/4.1.2/geofire.min.js"></script>
 
-   <div class="modal fade" id="myModal8" >
-     <div class="modal-dialog">
+    <script>
+    var config = {
+    apiKey: "AIzaSyBCa-MhtE2n9Sk8pNdkqhLjdw70Jr8fCZ4",
+    authDomain: "tootyred-1547136785316.firebaseapp.com",
+    databaseURL: "https://tootyred-1547136785316.firebaseio.com",
+    projectId: "tootyred-1547136785316",
+    storageBucket: "tootyred-1547136785316.appspot.com",
+    messagingSenderId: "18355823328"
+  };
+  firebase.initializeApp(config);
+var  BID;
+var  UID;
+var st
+function start(){
+st = setInterval(function() {initialize(UID,BID)},8000);
+}
 
-       <!-- Modal content-->
-       <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-           <h4 class="modal-title">Add Fine</h4>
-         </div>
-         <div class="modal-body">
+function stop(){
+clearInterval(st);
+}
+
+function initialize(uid,bid){
+
+  UID = uid;
+   BID = bid;
+
+ // var startLatlng = new google.maps.LatLng(55.966530000000000,-3.2143800000000000);
+ //            var endLatLng = new google.maps.LatLng(55.939940000000000,-3.1918600000000000);
+          map = new google.maps.Map(document.getElementById("map_canvas"),{
+                      center: {lat:55.94136542,lng:-3.18470478},
+                      zoom: 12,
+                      maxZoom: 15,
+                      zoomControl: false,
+                      streetViewControl:false,
+                      styles:
+                      [
+                    {
+                      "featureType": 'poi',
+                      "stylers": [{"visibility": 'off'}]
+                    },
+                        {
+                            "featureType": "all",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "saturation": -100
+                                },
+                                {
+                                    "lightness": -30
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.fill",
+                            "stylers": [
+                                {
+                                    "color": "#ffffff"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#353535"
+                                }
+                            ]
+                        },
+                      ]
+                    });
+                    var bikeLayer = new google.maps.BicyclingLayer();
+                    bikeLayer.setMap(map);
+                    var allowedBounds = new google.maps.LatLngBounds(
+                        new google.maps.LatLng(55.87194684844871,-3.4801332165092163),
+                        new google.maps.LatLng(56.042897365961046,-2.918450843462324));
+                        google.maps.event.addListener(map, 'dragend', function() {
+                            if (allowedBounds.contains(map.getCenter())) return;
+                            // Out of bounds - Move the map back within the bounds
+                            var c = map.getCenter(),
+                                x = c.lng(),
+                                y = c.lat(),
+                                maxX = allowedBounds.getNorthEast().lng(),
+                                maxY = allowedBounds.getNorthEast().lat(),
+                                minX = allowedBounds.getSouthWest().lng(),
+                                minY = allowedBounds.getSouthWest().lat();
+                            if (x < minX) x = minX;
+                            if (x > maxX) x = maxX;
+                            if (y < minY) y = minY;
+                            if (y > maxY) y = maxY;
+                            map.setCenter(new google.maps.LatLng(y, x));
+                          });
+
+     var infowindow = new google.maps.InfoWindow;
+ var icon = { url: "{% static 'icons/bikeongoing.png' %}", // url
+              scaledSize: new google.maps.Size(30, 30), // scaled size
+                 };
+  //Create a node at firebase location to add locations as child keys
+  var bounds = new google.maps.LatLngBounds();
+  var locationsRef = firebase.database().ref("Bikes");
+  var locRef = locationsRef.child(UID);
+  locRef.once('value', function(snapshot)
+   {
+    var data = snapshot.val();
+    console.log(data);
+
+    var marker = new google.maps.Marker({
+      position: {
+        lat: data.latitude,
+        lng: data.longitude
+      },
+      icon: icon,
+      map: map
+    });
+    bounds.extend(marker.getPosition());
 
 
+    marker.addListener('click', (function(data) {
+      return function(e) {
+       infowindow.setContent("Bike ID :" + BID+ "<br>" +this.getPosition().toUrlValue(4));
+        infowindow.open(map, this);
+      }
+    }(data)));
+    map.fitBounds(bounds);
+  });
+
+google.maps.event.addDomListener(window, "load", initialize);
+}
+
+function trackbtn(){
+  document.getElementById("stoptrack").style.display="block";
+}
+
+function trackbtnoff(){
+  document.getElementById("stoptrack").style.display="none";
+}
 
 
-             Would you like to confirm adding fine?<br>
-              <textarea name="comment" id='finedesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter fine description' required></textarea><br>
-              <p id="desc"></p>
-              <br>
-              <input type="number" id='finecost'   style='color:black;border-radius:5px;width:50%;' placeholder='Enter Fine Cost' min="0.00" max="10000.00" step="0.01" required /><br>
-              <p id="cost"></p>
-              <br><br>
-               <input style='border-radius:5px;color:black' type='submit' id="start_button" value='Confirm' onclick='send()'/>
+    </script>
 
+ <!--
+Bike Tracking
+ -->
 
-         </div>
+   <!--- need to load the geometry library for calculating distances, see http://www.svennerberg.com/2011/04/calculating-distances-and-areas-in-google-maps-api-3/ ---->
 
-       </div>
-
-     </div>
-   </div>
-
-
-
-   <button style='color:black;' id='refunded' type="button" data-toggle="modal" data-target="#myModal10">CONFIRMED</button>
-
-   <div class="modal fade" id="myModal10" >
-     <div class="modal-dialog">
-
-       <!-- Modal content-->
-       <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-           <h4 class="modal-title">Confirm Refund</h4>
-         </div>
-         <div class="modal-body">
-
-
-
-
-             Would you like to confirm refund of the reservation cost?<br><br>
-              <textarea name="comment" id='refunddesc' style='color:black;border-radius:5px;width:100%;' placeholder='Enter reason for refund' onkeyup="stoppedTyping()" required></textarea><br>
-              <p id="reason"></p>
-              <br>
-
-               <input style='border-radius:5px;color:black' type='submit' value='Confirm' id="start_button" onclick='send()'/>
-
-
-         </div>
-
-       </div>
-
-     </div>
-   </div>
-
-
-   <button style='color:black;' id='cancelled' type="button" data-toggle="modal" data-target="#myModal9"> CANCELLED </button>
-
-   <div class="modal fade" id="myModal9" >
-     <div class="modal-dialog">
-
-       <!-- Modal content-->
-       <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
-           <h4 class="modal-title">Cancel Reservation</h4>
-         </div>
-         <div class="modal-body">
-
-             Would you like to confirm cancellation of this reservation?<br><br>
-             <textarea name="comment" id='canceldesc' style='font-size:15px;color:black;border-radius:5px;width:100%' placeholder='Enter reason for cancelation' required></textarea><br>
-              <p id="canldesc"></p>
-              <br>
-               <input style='border-radius:5px;color:black' type='submit' value='Confirm' onclick='send()'/>
-         </div>
-
-       </div>
-
-     </div>
-   </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_ItPKqeOzT7ZXw3pQOAIiHRWXo63Q7Qg&libraries=geometry&sensor=false">
     </script>
-    <script type="text/javascript">
-      document.getElementById('bikeoptions').style.visibility='hidden';
-      document.getElementById('fined').style.display='none';
-      document.getElementById('cancelled').style.display='none';
-      document.getElementById('refunded').style.display='none';
 
+
+    <script type="text/javascript">
+
+
+
+      document.getElementById('bikeoptions').style.visibility='hidden';
 //--------------------------------------------------------------------------------------------------------
       function searchFun() {
         // Declare variables
@@ -662,26 +767,18 @@ function viewReservations(json) {
           var url_mask = "{% static 'bikes/12345' %}".replace(/12345/, json[i]['bikes_on_reservation'][x]['bike_image']);
             str+='<button class="bikeButton" name="'+json[i]['bikes_on_reservation'][x]['bike_id']+'" disabled><img style="width:50px;height:50px;-webkit-filter: drop-shadow(1px 1px 0 black)drop-shadow(-1px -1px 0 white);filter: drop-shadow(1px 1px 0 white)drop-shadow(-1px -1px 0 black);" src="'+url_mask+'">'+json[i]['bikes_on_reservation'][x]['bike_id']+'</button>';
               }
-              //CANCEL AND PROCESS REFUND ONLY WHEN FUTURE RESERVATION
-            var d='';
-              if(json[i]['res_type'].toUpperCase()=='FUTURE')
-                d='<button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
-                  +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
-                    +json[i]['reservation_id']+'\')">Process Refund</button>';
-            //ADD FINE ONLY WHEN PAST RESERVATION
-            var y='';
-            if(json[i]['res_type'].toUpperCase()=='PAST')
-              y='<button type="button" style="color:black" class="fine btn btn-danger" onclick="addFineModal(\''
-                +json[i]['reservation_id']+'\')">Add fine</button>';
         $('#ReservationsTable').find('tbody').append('<tr><td style="text-shadow:none;color:#3d3a3a;;display: block;height:50px;">sdfsd</td><td class="hidden">'+json[i]['res_type'].toUpperCase()+'</td><td style="display: block;background-color:gray;color:black;"><h4>'+json[i]['res_type'].toUpperCase()+' Reservation: '+json[i]['res_code']+
             '</h4>Reserved on: '+json[i]['res_date']+'&nbsp; &nbsp; &nbsp; &nbsp;  Paid: '+json[i]['res_cost']+'</td>'
             +'<td style="display: block;width:100%;font-size:15px;background-color:green;border-radius:2px;">Start:'
             +json[i]['startname']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Start time:'+json[i]['starttime']+'</td><td style="display: block;width:100%;font-size:15px;background-color:#B22222;">End: '+json[i]['endname']+'&nbsp; &nbsp; &nbsp; &nbsp; End time:'+
               json[i]['endtime']+'</td><td style="display: block;"colspan="2">'+str+'</td>'
-              +'<td style="color:white;display: block;">'+'<div style="border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
+              +'<td style="color:white;display: block;">'+'<div style="border:1px solid black;border-radius:2px;display:inline-block;"> USER ID:'+json[i]['c_id'].split(' ')[0]+'<span class="hidden">'+json[i]['c_id'].split(' ')[1]+'</span><button class="btn btn-danger" onclick="blockModal(\''
+                +json[i]['c_id'].split(' ')[0]+'\')">Block</button></div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RATING:'+json[i]['c_rating']+'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FINE COST:  '+json[i]['fine_cost']+
             '</td><td style="display: block;color:white;">FEEDBACK: '+json[i]['feedback']+'</td>'+
             '<td style="display: block;color:white;">FINE DESCRIPTION: '+json[i]['fine_desc']+'</td>'
-            +'<td style="display: block;width:100%;">'+d+y+'</td></tr>');
+            +'<td style="display: block;width:100%;"><button type="button"  class="cancel btn btn-danger" onclick="cancelModal(\''
+              +json[i]['reservation_id']+'\')">Cancel</button>'+'<button type="button" style="color:black" class="refund btn btn-success" onclick="processRefund(\''
+              +json[i]['reservation_id']+'\')">Process Refund</button>'+'</td></tr>');
       }
     }
 
@@ -721,32 +818,22 @@ function viewbik(name){
   });
 }
 //--------------------------------------------------------------------------------------------------
-var nam;
-var type='';
+
 function cancelModal(name){
-nam=name;
-type="cancel";
-document.getElementById('canldesc').innerHTML = "";
-    document.getElementById('canceldesc').value = "";
-    document.getElementById('cancelled').click();
+  alert(name);
 }
 //--------------------------------------------------------------------------------------------------
 function addFineModal(name){
-  nam=name;
-  type="fine";
-  document.getElementById('desc').innerHTML = "";
-  document.getElementById('cost').innerHTML = "";
-  document.getElementById('finedesc').value = "";
-  document.getElementById('finecost').value = "";
-    document.getElementById('fined').click();
+  alert(name);
 }
 //--------------------------------------------------------------------------------------------------
 function processRefund(name){
-  nam=name;
-  type="refund";
-    document.getElementById('reason').innerHTML = "";
-    document.getElementById('refunddesc').value = "";
-    document.getElementById('refunded').click();
+  alert(name);
+}
+//--------------------------------------------------------------------------------------------------
+function blockModal(name){
+
+  alert(name);
 }
 //--------------------------------------------------------------------------------------------------
 function transferModal(){
@@ -796,125 +883,6 @@ function reload_page()
 {
   window.location.reload(true);
 }
-//--------------------------------------------------------------------------------------------------
-
-
-
-function send(){
-  if(type=="fine")
-  {
-    var validdesc;
-    var validcost;
-    event.preventDefault();
-    var inpObj = document.getElementById("finedesc");
-    var inpObj1 = document.getElementById("finecost");
-       if (!inpObj.checkValidity() ) {
-         document.getElementById("desc").style.color = "#FFA07A";
-         document.getElementById("desc").innerHTML = inpObj.validationMessage;
-
-  } else {
-    document.getElementById("desc").style.color = "#00FF00";
-    document.getElementById("desc").innerHTML = "Fine description is valid!";
-    validdesc=true;
-  }
-  if ( !inpObj1.checkValidity()) {
-    document.getElementById("cost").style.color = "#FFA07A";
-   document.getElementById("cost").innerHTML = inpObj1.validationMessage;
-  } else {
-    document.getElementById("cost").style.color = "#00FF00";
-    document.getElementById("cost").innerHTML = "Fine cost is valid!";
-    validcost=true;
-  }
-  if(!validdesc || !validcost)
-    return;
-    $.ajax({
-      url : "/operator/log/", // the endpoint
-      type : "POST", // http method
-      data : { formtype: type, reservationnumber:nam,finecost:document.getElementById('finecost').value,finedesc:document.getElementById('finedesc').value}, // data sent with the post fo
-      // handle a successful response
-      success : function(json) {
-        if(json[0]==0){
-            alert('The Fine cannot be placed'); // remove t // remove the value from the input
-            reload_page();}
-        else
-        {  alert('The fine was successfully added'); // remove t // remove the value from the input
-           reload_page();}
-      },
-
-      // handle a non-successful response
-      error : function(xhr,errmsg,err) {
-              }
-    });
-  }
-  else if(type=="cancel")
-  {
-    event.preventDefault();
-     var inpObj2 = document.getElementById("canceldesc");
-  if (!inpObj2.checkValidity() ) {
-    document.getElementById("canldesc").style.color = "#FFA07A";
-    document.getElementById("canldesc").innerHTML = inpObj2.validationMessage;
-    return;
-  } else {
-    document.getElementById("canldesc").style.color = "#00FF00";
-    document.getElementById("canldesc").innerHTML = "Cancel description accepted";
-
-  }
-
-    $.ajax({
-      url : "/operator/log/", // the endpoint
-      type : "POST", // http method
-      data : { formtype: type, reservationnumber:nam,reservationmessage:document.getElementById('canceldesc').value}, // data sent with the post fo
-      // handle a successful response
-      success : function(json) {
-        if(json[0]==0){
-            alert('The reservation could not be cancelled!'); // remove t // remove the value from the input
-            reload_page();}
-        else
-        {  alert('The reservation was sucessfully cancelled!'); // remove t // remove the value from the input
-           reload_page();}
-      },
-
-      // handle a non-successful response
-      error : function(xhr,errmsg,err) {
-              }
-    });
-  }
-  else {
-      event.preventDefault();
-   var inpObj3 = document.getElementById("refunddesc");
-  if (!inpObj3.checkValidity() ) {
-    document.getElementById("reason").style.color = "#FFA07A";
-    document.getElementById("reason").innerHTML = inpObj3.validationMessage;
-    return;
-  } else {
-    document.getElementById("reason").style.color = "#00FF00";
-    document.getElementById("reason").innerHTML = "Refund description is valid";
-
-  }
-
-      $.ajax({
-        url : "/operator/log/", // the endpoint
-        type : "POST", // http method
-        data : { formtype: type, reservationnumber:nam,refundmessage: document.getElementById('refunddesc').value}, // data sent with the post fo
-        // handle a successful response
-        success : function(json) {
-          if(json[0]==0){
-              alert('The reservation was not refunded'); // remove t // remove the value from the input
-              reload_page();}
-          else
-          {  alert('The reservation was refunded!'); // remove t // remove the value from the input
-             reload_page();}
-        },
-
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-                }
-      });
-    }
-}
-
-
-
 //--------------------------------------------------------------------------------------------------
 function blockBikeModal(){
   var bikeID = document.getElementsByClassName("bikeid")[0].innerText;
@@ -982,10 +950,10 @@ function replaceModal(){
         //alert('Sorry, there are no other times you can change, other reservations occupied')
         //document.getElementById('pleaseclose').click();
            if(json[0]==0){
-             alert('The bike was not replaced becaause it is not stationed, or there were no available bikes in storage'); // remove t // remove the value from the input
+             alert('The bike was not replaced because its active or being tracked'); // remove t // remove the value from the input
                reload_page();}
            else
-           {  alert('The bike was successfully replaced by the bike of id'+json[1]); // remove t // remove the value from the input
+           {  alert('The bike was successfully replaced'); // remove t // remove the value from the input
              reload_page();}
       },
 
@@ -1126,7 +1094,7 @@ document.getElementById('addmarker').style.display="none";
                if(str[0]=='1'){
                 icon = {
                    url: "{% static 'icons/bike.png' %}", // url
-                   scaledSize: new google.maps.Size(50, 50), // scaled size
+                   scaledSize: new google.maps.Size(30, 30), // scaled size
                  };
                marker = new google.maps.Marker({
                    position: {lat:parseFloat(str[1]),lng:parseFloat(str[2])},
@@ -1262,8 +1230,5 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-
-
-
     </script>
 {% endblock %}

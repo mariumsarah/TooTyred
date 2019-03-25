@@ -422,7 +422,7 @@ INSERT INTO `station_on_reservation` VALUES (24,4),(24,7),(37,8),(31,9),(88,10),
 /*!40000 ALTER TABLE `station_on_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
-/* CHANGE THIS PART */
+/* CHANGE THIS PART NOT REALLY */
 ALTER TABLE bike ADD UID varchar(255);
 UPDATE bike SET UID = 'PaxDOxg1gAdRFRtiig1XQ4xxDjl2',bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 7);
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120783,2,255.00,'2019-03-24 11:00:00'

@@ -566,6 +566,13 @@ END$$
 
 DELIMITER ;
 
+ALTER TABLE bike ADD UID varchar(255);
+UPDATE bike SET UID = 'PaxDOxg1gAdRFRtiig1XQ4xxDjl2',bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 7);
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120783,2,255.00,'2019-03-24 11:00:00'
+,'2019-03-26 06:15:00','2019-03-26 18:00:00',20);
+insert into station_on_reservation VALUES (47,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (7,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136541,3,9.00,'2019-03-14 11:00:00'
 /* CHANGE THIS TO AN UNLOCK TIME THAT SHOULD BE MISSED -----------------------*/
 ,'2019-03-30 21:45:00'
@@ -579,7 +586,7 @@ insert into station_on_reservation VALUES (35,(SELECT reservation_id FROM reserv
 insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 
 UPDATE bike SET bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 68);
-insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120783,2,255.00,'2019-03-24 11:30:00','2019-03-26 06:15:00'
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120756,2,255.00,'2019-03-24 11:30:00','2019-03-26 06:15:00'
 /* CHANGE THIS TO A LOCK TIME THAT SHOULD BE MISSED----------------------------- */
 ,'2019-03-26 18:00:00',17);
 insert into station_on_reservation VALUES (92,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
