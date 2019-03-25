@@ -199,6 +199,7 @@ def bikes(request):
                     response_date[i]['bike_status']=each.bike_status.bike_status_name
                     response_date[i]['bike_image']=each.bike_type.bike_image
                     response_date[i]['bike_type']=each.bike_type.bike_type
+                    response_date[i]['UID']=each.UID
                     if(each.bike_stationedat!=None):
                         response_date[i]['bike_stationedat_name']=each.bike_stationedat.name
                     i=i+1
