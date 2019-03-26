@@ -429,3 +429,9 @@ insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c
 ,'2019-03-26 06:15:00','2019-03-26 18:00:00',20);
 insert into station_on_reservation VALUES (47,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (7,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+/* This is the reservation to Edit */
+insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (129723,3,36.00,'2019-03-14 11:00:00'
+,'2019-03-28 22:00:00'
+,'2019-03-28 23:00:00',19);
+insert into station_on_reservation VALUES (64,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
+insert into bike_on_reservation VALUES (28,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1)),(29,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
