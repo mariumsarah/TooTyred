@@ -1,3 +1,4 @@
+#This file contains the update query for fines that was used
 
 #sets global scheduler to enable mysql events, events allow us to have a function that would run in a specific time specified by user
 SET GLOBAL event_scheduler = ON;

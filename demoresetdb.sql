@@ -1,3 +1,5 @@
+/* This document is the initial database that was reset and used with alot of past reservations for statistics in
+the managers interface */
 DROP DATABASE toootyred$tootyred;
 CREATE DATABASE toootyred$tootyred;
 USE toootyred$tootyred;

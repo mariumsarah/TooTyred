@@ -1,3 +1,5 @@
+/* This document is the mysql database and event handler for update queries and the reservations used for the
+purpose of demonstration */
 DROP DATABASE tootyred;
 CREATE DATABASE tootyred;
 USE tootyred;
@@ -434,7 +436,7 @@ DROP EVENT IF EXISTS autoupdate$$
 CREATE EVENT autoupdate
 ON SCHEDULE EVERY 15 MINUTE
 /* ---------------CHANGETHIS ---------------*/
-STARTS '2019-03-25 8:45:00'
+STARTS '2019-03-26 18:30:00'
 DO
 BEGIN
 
@@ -566,6 +568,8 @@ UPDATE auth_user SET is_active = 0 WHERE id = (select c_id FROM reservation WHER
 END$$
 
 DELIMITER ;
+/* THE FOLLOWING WERE USED FOR THE DEMONSTRATION
+/*
 
 ALTER TABLE bike ADD UID varchar(255);
 UPDATE bike SET UID = 'PaxDOxg1gAdRFRtiig1XQ4xxDjl2',bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 7);
@@ -575,12 +579,12 @@ insert into station_on_reservation VALUES (47,(SELECT reservation_id FROM reserv
 insert into bike_on_reservation VALUES (7,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136541,3,9.00,'2019-03-14 11:00:00'
-/* ---------------CHANGETHIS TO UNLOCK TIME THAT SHOULD BE MISSED ---------------*/
-,'2019-03-26 13:00:00'
+/* ---------------CHANGETHIS TO UNLOCK TIME THAT SHOULD BE MISSED ---------------
+,'2019-03-26 19:00:00'
 ,'2019-03-26 20:00:00',19);
 insert into station_on_reservation VALUES (14,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
-/* FUTURE RESERVATION WAY IN THE FUTURE */
+/* FUTURE RESERVATION WAY IN THE FUTURE
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (192437,3,9.00,'2019-03-14 11:20:00'
 ,'2019-03-29 14:45:00','2019-03-29 18:00:00',17);
 insert into station_on_reservation VALUES (35,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
@@ -588,8 +592,8 @@ insert into bike_on_reservation VALUES (15,(SELECT reservation_id FROM reservati
 
 UPDATE bike SET bike_stationedat=NULL,bike_status=3 WHERE (bike_id = 68);
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (120756,2,255.00,'2019-03-24 11:30:00','2019-03-25 06:15:00'
-/* ---------------CHANGETHIS TO LOCK TIME THAT SHOULD BE MISSED---------------*/
-,'2019-03-26 13:00:00',19);
+/* ---------------CHANGETHIS TO LOCK TIME THAT SHOULD BE MISSED---------------
+,'2019-03-26 18:45:00',19);
 insert into station_on_reservation VALUES (92,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into bike_on_reservation VALUES (68,(SELECT reservation_id FROM reservation ORDER BY reservation_id DESC LIMIT 1));
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136542,3,9.00,'2019-03-14 11:45:00'

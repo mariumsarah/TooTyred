@@ -1,4 +1,6 @@
-#EDGAR THE ONLY VALUES YOU WILL NEED TO CHANGE IS 13:00:00
+# The following are the demonstration examples used to show the locking and unlocking of bikes in the expo presentation
+# this was done in the background by Edgar
+#THE ONLY VALUES YOU WILL NEED TO CHANGE IS 13:00:00
 #UNLOCK AND LOCK BIKE
 insert into reservation (res_code,res_type,res_cost,res_date,starttime,endtime,c_id) VALUES (136542,3,9.00,'2019-03-14 11:00:00'
 #CHANGE THIS TO TIME TO UNLOCK
