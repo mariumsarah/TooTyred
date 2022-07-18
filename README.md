@@ -1,9 +1,9 @@
----------------------INSTALLATIONS------------------------------------------
+# Installations 
 py -m pip install mysql
 py -m pip install django-bootstrap3
-----------------------------------------------------------------------------
-Guide to run on localhost
-----------------------------------------------------------------------------
+
+# Guide to run on localhost
+
 1. Initialize database by importing localhostdemo.sql to phpAdmin
    or by copy pasting the content of localhostdemo.sql to the mySql Command line
 2. Ctrl^F "STARTS" and change the date after 'STARTS' in the file to a
