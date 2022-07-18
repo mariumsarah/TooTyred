@@ -1,3 +1,7 @@
+
+This website is coded in Python and uses the Django Web Framework. For this project, the website was hosted on pythonanywhere.com which allows for a mySQL database integration. 
+
+
 # Installations 
 py -m pip install mysql
 py -m pip install django-bootstrap3
